@@ -1,0 +1,7 @@
+<html>
+  <title> Redirecting </title>
+  <meta http-equiv="refresh" content="0; url=/lab_temp">
+  <body>
+    <h1> Hello From template! {{ message }}! </h1>
+  </body>
+</html>
