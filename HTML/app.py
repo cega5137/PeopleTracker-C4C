@@ -3,7 +3,8 @@ import random
 import time
 import datetime
 import arrow
-
+import subprocess
+import sqlite3
 
 app = Flask(__name__)
 
@@ -14,10 +15,30 @@ def index():
 
 @app.route("/lab_temp")
 def lab_temp():
-	humidity = random.randint(1,100)
-	temperature = random.randint(30,80)
-	return render_template("lab_temp.html",temp=temperature,hum=humidity)
+#	temperature, humidity, timezone, from_date_str, to_date_str = get_records()
 
+#	time_adjusted_temperatures = []
+#	time_adjusted_humidities   = []
+	
+	T = datetime.datetime.now()
+	conn = sqlite3.connect('/var/www/html/lab_app.db')
+	curs = conn.cursor()
+	curs.execute("SELECT * FROM temperatures")
+#	curs.execute("SELECT * FROM temperatures WHERE rDateTime ?", (T))
+	temperature = curs.fetchall()
+	print "FUCK"
+	print temperature
+	print "One more light"
+	L = len(temperature)
+	tempe = temperature[L-1]
+	print "YEAH!!!!", tempe[2]
+	
+	humidity = random.randint(1,100)
+#	temperature = random.randint(30,80)
+	return render_template("lab_temp.html",temp=tempe[2],hum=humidity)
+
+#@app.route("/station_time")
+#def station_time
 
 @app.route("/lab_env_db", methods=['GET'])
 def lab_env_db():
@@ -124,28 +145,30 @@ def to_plotly():
 																						  #so that Plotly respects it
 		time_series_humidity_values.append(round(record[2],2))
 
+
+## Start Persian plot ###
 	temp = Scatter(
         		x=time_series_adjusted_tempreratures,
         		y=time_series_temprerature_values,
-        		name='People'
+        		name= 'Number of People'
     				)
 #	hum = Scatter(
 #        		x=time_series_adjusted_humidities,
 #        		y=time_series_humidity_values,
 #        		name='Humidity',
 #        		yaxis='y2'
-#    				)
+#			)
 
-	data = Data([temp, hum])
+	data = Data([temp]) # change from Data([temp, hum]) --> Data([temp])
 
 	layout = Layout(
-					title="Amount of people every 15 minutes",
+					title="Persian Station",
 				    xaxis=XAxis(
 				        type='date',
 				        autorange=True
 				    ),
 				    yaxis=YAxis(
-				    	title='Number People',
+				    	title='Number of People',
 				        type='linear',
 				        autorange=True
 				    ),
@@ -161,7 +184,33 @@ def to_plotly():
 	fig = Figure(data=data, layout=layout)
 	plot_url = py.plot(fig, filename='lab_temp_hum')
 
-	return plot_url
+###### Asian Plot ####
+
+	hum = Scatter(
+		x = time_series_adjusted_humidities,
+		y = time_series_humidity_values,
+		name = 'HUM'
+	)
+
+	data2 = Data([hum])
+
+	layout2 = Layout(
+			title="Asian station",
+			xaxis=XAxis(
+					type='date',
+					autorange=True
+				),
+			yaxis=YAxis(
+					title='Number of People',
+					type='linear',
+					autorange=True
+				),
+			)
+
+	fig2 = Figure(data=data2,layout=layout2)
+	plot_url2 = py.plot(fig2,filename='lab_temp_hum2')
+
+	return plot_url2
 
 def validate_date(d):
 	try:
@@ -171,5 +220,13 @@ def validate_date(d):
 		return False
 
 if __name__ == '__main__':
-	app.run(debug=True, host='10.0.0.151',port=4996)
+	# change the ip address everytime
+	arg = 'ip route list'
+	p = subprocess.Popen(arg,shell = True, stdout = subprocess.PIPE)
+	data = p.communicate()
+	split_data = data[0].split()
+	ipaddr = split_data[split_data.index('src')+1]
+	my_ip = '%s' % ipaddr
+
+	app.run(debug=True, host=my_ip,port=4996) # '10.0.0.151'
 
