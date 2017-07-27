@@ -67,7 +67,7 @@ while 1:
 	##### Sending data
 	Sc.listen(5)
 	q, addr= Sc.accept()
-	msg = "{} {} ".format(previousTimeCount, masterCount)
+	msg = "Persian {} {} ".format(previousTimeCount, masterCount)
 	q.send(msg)
 	Sc.close
 	previousTimeCount = masterCount	
