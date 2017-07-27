@@ -21,21 +21,50 @@ def lab_temp():
 #	time_adjusted_humidities   = []
 	
 	T = datetime.datetime.now()
-	conn = sqlite3.connect('/var/www/html/lab_app.db')
-	curs = conn.cursor()
-	curs.execute("SELECT * FROM temperatures")
-#	curs.execute("SELECT * FROM temperatures WHERE rDateTime ?", (T))
-	temperature = curs.fetchall()
-	print "FUCK"
-	print temperature
-	print "One more light"
-	L = len(temperature)
-	tempe = temperature[L-1]
-	print "YEAH!!!!", tempe[2]
+#	conn = sqlite3.connect('/var/www/html/mainDatabase.db')
+#	curs = conn.cursor()
 	
+	# Get data for Asian
+#	curs.execute("SELECT * FROM Asian")
+#	temperature = curs.fetchall()
+#	print "FUCK"
+#	print temperature
+#	print "One more light"
+#	L = len(temperature)
+#	tempe = temperature[L-1]
+#	print "YEAH!!!!", tempe[2]
+	
+	Asia = getLastTotal('Asian')
+	amer = getLastTotal('American')
+	per = getLastTotal('Persian')
+	ita = getLastTotal('Italian')
+	Latin =  getLastTotal('Latin')
+
 	humidity = random.randint(1,100)
 #	temperature = random.randint(30,80)
-	return render_template("lab_temp.html",temp=tempe[2],hum=humidity)
+#	if Asia is not None or amer is not None or per is not None or ita is not None or Latin is not None:
+#		print "Fuck this shit"
+#		return render_template("lab_temp.html",America=amer,asian=Asia,latin=Latin,italian=ita,persian=per )
+#	else:
+	return render_template("lab_temp.html",America=humidity,asian=humidity,latin=humidity,italian=humidity,persian=humidity )
+
+def getLastTotal(Station):
+	conn = sqlite3.connect('/var/www/html/mainDatabase.db')
+	curs = conn.cursor()
+
+	# Select station
+	switcher = {	
+		'Asian':curs.execute("SELECT * FROM Asian"),
+		'American':curs.execute("SELECT * FROM American"),
+		'Persian':curs.execute("SELECT * FROM Persian"),
+		'Italian':curs.execute("SELECT * FROM Persian"),
+		'Latin':curs.execute("SELECT * FROM Latin")
+	}
+	return switcher.get(Station,"Fail to grab last date")
+	data = curs.fetchall()
+	L = len(data)
+	Total = data[L-1]
+	return Total
 
 #@app.route("/station_time")
 #def station_time

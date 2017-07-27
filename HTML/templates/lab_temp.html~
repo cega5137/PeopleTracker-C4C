@@ -1,7 +1,7 @@
 <html>
   <meta charset="utf-8">
   <title>Current conditions</title>
-  <meta http-equiv="refresh" content="10"> <!-- Change this to 15 minutes or 900 sec -->
+  <meta http-equiv="refresh" content="900"> <!-- Change this to 15 minutes or 900 sec -->
   <meta name="description" content="Conditions ">
   <meta name="author" content="Cesar Galan">
     <!-- Mobile Specific Metas
@@ -22,9 +22,12 @@
   <div class="container">
     <div class="row">
       <div class="two-third column" style="margin-top: 5%">
-	<h2>Real time conditions</h2>
-	<h1>Amount of people since last refresh: {{"{0:0.1f}".format(temp) }}</h1>
-	<h1>Total amount of people today: {{"{0:0.1f}".format(hum)}}</h1>
+	<h2>Total amount of people today:</h2>
+	<h1>American Station: {{"{0:0.1f}".format(merica) }}</h1>
+	<h1>Asian Station: {{"{0:0.1f}".format(asian)}}</h1>
+	<h1>Latin Station: {{"{0:0.1f}".format(latin)}}</h1>
+	<h1>Italian Station: {{"{0:0.1f}".format(italian)}}</h1>
+	<h1>Persian Station: {{"{0:0.1f}".format(persian)}}</h1>
 	<p>This page refreshes every 15 minutes</p>
       </div>
     </div>
