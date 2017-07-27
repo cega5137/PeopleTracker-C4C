@@ -2,6 +2,7 @@ print "Register GPIO"
 import RPi.GPIO as GPIO
 import time
 import datetime
+from socket import *
 
 GPIO.setmode(GPIO.BCM)
 
@@ -12,7 +13,7 @@ GPIO.setup(TRIG,GPIO.OUT)
 GPIO.setup(ECHO,GPIO.IN)
 GPIO.output(TRIG, False)
 
-print "Starting Application"
+print "Starting Application..."
 time.sleep(2)
 
 #Determines if person is standing in range or not
@@ -27,14 +28,22 @@ Counter_Person = 0
 isPerson = 0
 
 # Timer
+T = datetime.datetime.time(datetime.datetime.now())
 t_start = time.time()
 t_actual = t_start
 n = 1
 update_time = 1 # minutes
+print "The on time is ", T
+
+# Set up host
+host = "10.0.0.227"
+port = 4446
+Sc=socket(AF_INET, SOCK_STREAM)
+Sc.bind((host, port))
 
 # Open File
 now = datetime.datetime.now()
-s = "/home/pi/WRTG_Proj/pi_counter_%d_%d_%d_%d.txt" % (now.month, now.day, now.year, now.minute)
+s = "/home/pi/WRTG_Proj/main_code/database/pi_counter_%d_%d_%d_%d.txt" % (now.month, now.day, now.year, now.minute)
 
 FID = open(s, 'a', 0)
 s = "Date: %d/%d/%d  %d:%d:%d" % (now.month, now.day, now.year,now.hour, now.minute, now.second)
@@ -45,16 +54,28 @@ FID.write(s)
 
 #Start of Loop
 while 1:
-    t_actual = time.time()
-    if t_actual - t_start >= (update_time * 60) * n:
-        n = n + 1
+    T = datetime.datetime.time(datetime.datetime.now())
+#    if t_actual - t_start >= (update_time * 15) * n:
+    if  (T.microsecond/1000) < 300 and T.minute == 0 or T.minute == 15 or T.minute == 30 or T.minute == 45:
+	n = n + 1
         previousTimeCount = masterCount - previousTimeCount;
         #Print previousTimeCount and masterCount to file
-        s ="\t\t\t\t%d \t\t\t %d \t\t\t %d\n" % ((t_actual-t_start)/60,  previousTimeCount, masterCount)
+        s ="\t\t\t\t%d \t\t\t %d \t\t\t %d\n" % (T.minute,  previousTimeCount, masterCount)
         FID.write(s)
-        previousTimeCount = masterCount
+	print "Saving time is: ", T
+#        previousTimeCount = masterCount
+	##### Sending data
+	Sc.listen(5)
+	q, addr= Sc.accept()
+	msg = "{} {} ".format(previousTimeCount, masterCount)
+	q.send(msg)
+	Sc.close
+	previousTimeCount = masterCount	
+#	Sc = socket(AF_INET,SOCK_STREAM)
+#	Sc.bind((host, port))
 
-    print "Begining of Main Loop"
+
+    print "Begining of Main Loop", T
     print "count = ", masterCount
     time.sleep(0.2)
     GPIO.output(TRIG, True)
@@ -76,6 +97,7 @@ while 1:
     if distance > 400:
         continue
 
+#Commenting line
     print "Distance:",distance,"cm"
     #    print "isPerson:", isPerson, "tol_dist =", tol_dist
     # No person previously standing in front of sensor
