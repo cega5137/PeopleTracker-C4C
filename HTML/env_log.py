@@ -76,14 +76,14 @@ def log_values(Header, currn, total):
 import random
 from socket import *
 import time
-
+import datetime
 
 print "Startin application"
 
 host = "10.0.0.227"
 port = 4446
 s=socket(AF_INET,SOCK_STREAM)
-
+i = 0
 print "Done set up port and host"
 while True:
 	while True:
@@ -99,11 +99,13 @@ while True:
 	msg=s.recv(1024)
 	print "Message receive"
 	print "Number of People " + msg
+	i = i + 1
+	print "Counting i = ", i, "at ", datetime.datetime.now()
 
-#	s.close
+	s.close
 	
 	time.sleep(1)
-	s=socket(AF_INET,SOCK_STREAM)
+#	s=socket(AF_INET,SOCK_STREAM)
 
 	data = msg.split(" ")
 
