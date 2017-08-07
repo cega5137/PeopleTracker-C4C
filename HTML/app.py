@@ -27,7 +27,6 @@ def lab_temp():
 	# Get data for Asian
 #	curs.execute("SELECT * FROM Asian")
 #	temperature = curs.fetchall()
-#	print "FUCK"
 #	print temperature
 #	print "One more light"
 #	L = len(temperature)
