@@ -7,6 +7,7 @@ import subprocess
 import sqlite3
 
 app = Flask(__name__)
+dataBaseLink = '/var/www/html/lab_app.db'
 
 @app.route('/')
 def index():
@@ -42,14 +43,13 @@ def lab_temp():
 
 	humidity = random.randint(1,100)
 #	temperature = random.randint(30,80)
-#	if Asia is not None or amer is not None or per is not None or ita is not None or Latin is not None:
-#		print "Fuck this shit"
+#	if Asia is not None or amer is not None or per is not None or ita is not None or Latin is not N
 #		return render_template("lab_temp.html",America=amer,asian=Asia,latin=Latin,italian=ita,persian=per )
 #	else:
 	return render_template("lab_temp.html",America=humidity,asian=humidity,latin=humidity,italian=humidity,persian=humidity )
 
 def getLastTotal(Station):
-	conn = sqlite3.connect('/var/www/html/mainDatabase.db')
+	conn = sqlite3.connect('/var/www/html/mainDatabase.db') ## Change the database to not magic number
 	curs = conn.cursor()
 
 	# Select station
@@ -61,13 +61,16 @@ def getLastTotal(Station):
 		'Latin':curs.execute("SELECT * FROM Latin")
 	}
 	return switcher.get(Station,"Fail to grab last date")
+
 	data = curs.fetchall()
 	L = len(data)
 	Total = data[L-1]
 	return Total
 
-#@app.route("/station_time")
-#def station_time
+@app.route("/station_time")
+def station_time():
+	restartDate = datetime.time()
+	
 
 @app.route("/lab_env_db", methods=['GET'])
 def lab_env_db():
@@ -138,7 +141,7 @@ def get_records():
 		from_date_utc   = arrow.get(from_date_obj, timezone).to('Etc/UTC').strftime("%Y-%m-%d %H:%M")	
 		to_date_utc     = arrow.get(to_date_obj, timezone).to('Etc/UTC').strftime("%Y-%m-%d %H:%M")
 
-	conn 			    = sqlite3.connect('/var/www/html/lab_app.db')
+	conn 			    = sqlite3.connect('/var/www/html/lab_app.db') ### Change this database
 	curs 			    = conn.cursor()
 	curs.execute("SELECT * FROM temperatures WHERE rDateTime BETWEEN ? AND ?", (from_date_utc.format('YYYY-MM-DD HH:mm'), to_date_utc.format('YYYY-MM-DD HH:mm')))
 	temperatures 	    = curs.fetchall()
