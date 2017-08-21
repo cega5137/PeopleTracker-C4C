@@ -22,12 +22,12 @@
   <div class="container">
     <div class="row">
       <div class="two-third column" style="margin-top: 5%">
-	<h2>Total amount of people today:</h2>
-	<h1>American Station: {{"{0:0.1f}".format(America)}}</h1> 
-	<h1>Asian Station: {{"{0:0.1f}".format(asian)}}</h1>
-	<h1>Latin Station: {{"{0:0.1f}".format(latin)}}</h1>
-	<h1>Italian Station: {{"{0:0.1f}".format(italian)}}</h1>
-	<h1>Persian Station: {{"{0:0.1f}".format(persian)}}</h1>
+	<h1>Total amount of people today:</h1>
+	<h2>American Station: {{"{0:0.0f}".format(America)}}</h2> 
+	<h2>Asian Station:    {{"{0:0.0f}".format(asian)}}</h2>
+	<h2>Latin Station:    {{"{0:0.0f}".format(latin)}}</h2>
+	<h2>Italian Station:  {{"{0:0.0f}".format(italian)}}</h2>
+	<h2>Persian Station:  {{"{0:0.0f}".format(persian)}}</h2>
 	<p>This page refreshes every 15 minutes</p>
       </div>
     </div>
@@ -36,7 +36,7 @@
 	<form id="range_select" action = "/lab_env_db" method="GET">
 	  <input type="hidden" class="timezone" name="timezone" />
 	  <div class="one column">
-	    <a href="/lab_env_db" style="position:relative;top:15px">Historic</a>
+	    <a href="/lab_env_db" style="position:relative;top:15px">Historic Data</a>
 	  </div>
 	</form>
       </div>

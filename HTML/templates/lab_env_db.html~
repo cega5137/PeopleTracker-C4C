@@ -53,12 +53,13 @@
       </div>
       <div class="row">
 	<div class="eleven columns">
-	  <div class="one column">
+	 <!-- <div class="one column">
 	    <div class="one column">
-	      <a href="" id="plotly" style="position:relative;top:15px">Plotly</a>
+	      <a href="" id="plotly" style="position:relative;top:15px">Plot_data</a>
 	    </div>
-	    <a href="/lab_temp" style="position:relative;top:15px">Current</a>
-	  </div>
+	    <a href="/lab_temp" style="position:relative;top:15px">Today's_Total</a>
+	  </div> -->
+	  
 	  <form id="range_select" action = "/lab_env_db" method="GET">
 	    <input type="hidden" class="timezone" name="timezone" />
 
@@ -78,9 +79,19 @@
 	  </form>
 	</div>
       </div>
+
       <div class="row">
+        <div class="row">
+	  <div class="row">
+	    <a href="" id="plotly" style="position:relative;top:15px">Plot_data</a>
+	  </div>
+	  <a href="/lab_temp" style="position:relative;top:15px">Today's_Total</a>
+        </div>
+            
+    <!--  <div class="row"> -->
 	<a href="" id="plotly_url" target="_blank"></a><span id="plotly_wait"></span>
       </div>
+      
       <div class="row">
 	<div class="one-third column" style="margin-top: 5%">
 	  <strong>Showing all records</strong>
@@ -199,10 +210,18 @@
 	 </p>
 
 	 <!-- Insert Asian plot here -->
-		<div>
-		  <a href="https://plot.ly/~cega5137/0/?share_key=WQTP5kamnmffBzBwqTE6oT" target="_blank" title="lab_temp_hum" style="display: block; text-align: center;"><img src="https://plot.ly/~cega5137/0.png?share_key=WQTP5kamnmffBzBwqTE6oT" alt="lab_temp_hum" style="max-width: 100%;width: 600px;"  width="600" onerror="this.onerror=null;this.src='https://plot.ly/404.png';" /></a>
+	 <div>
+
+	   <div>
+	     <a href="https://plot.ly/~cega5137/38/?share_key=hHkn7y6IU1RFuD8RSFxAi9" target="_blank" title="lab_temp_hum2" style="display: block; text-align: center;"><img src="https://plot.ly/~cega5137/38.png?share_key=hHkn7y6IU1RFuD8RSFxAi9" alt="lab_temp_hum2" style="max-width: 100%;width: 600px;"  width="600" onerror="this.onerror=null;this.src='https://plot.ly/404.png';" /></a>
+	     <script data-plotly="cega5137:38" sharekey-plotly="hHkn7y6IU1RFuD8RSFxAi9" src="https://plot.ly/embed.js" async></script>
+	   </div>
+	   
+<!--		  <a href="https://plot.ly/~cega5137/0/?share_key=WQTP5kamnmffBzBwqTE6oT" target="_blank" title="lab_temp_hum" style="display: block; text-align: center;"><img src="https://plot.ly/~cega5137/0.png?share_key=WQTP5kamnmffBzBwqTE6oT" alt="lab_temp_hum" style="max-width: 100%;width: 600px;"  width="600" onerror="this.onerror=null;this.src='https://plot.ly/404.png';" /></a>
 		  <script data-plotly="cega5137:0" sharekey-plotly="WQTP5kamnmffBzBwqTE6oT" src="https://plot.ly/embed.js" async></script>
-		</div>
+-->
+	 </div>
+	 
 
 	 <p class="Plot-space">
 	 </p>
@@ -308,7 +327,7 @@
   </script>
 
   
-   Humidity 
+<!--   Humidity --> 
   <script>
     google.load('visualization', '1', {packages: ['corechart']});
     google.setOnLoadCallback(drawChart);
@@ -339,6 +358,6 @@
     var chart = new google.visualization.LineChart(document.getElementById('chart_humid'));
     chart.draw(data, options);
     }
-  </script> -->
+  </script> <!-- -->
 </html>
 

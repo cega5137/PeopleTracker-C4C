@@ -28,7 +28,6 @@ def lab_temp():
 	# Get data for Asian
 #	curs.execute("SELECT * FROM Asian")
 #	temperature = curs.fetchall()
-#	print "FUCK"
 #	print temperature
 #	print "One more light"
 #	L = len(temperature)
@@ -241,6 +240,18 @@ def to_plotly():
 
 	fig2 = Figure(data=data2,layout=layout2)
 	plot_url2 = py.plot(fig2,filename='lab_temp_hum2')
+
+##### Italian Station #####
+
+
+#### American Station ####
+
+
+#### Latin Station ##### 
+
+
+
+
 
 	return plot_url2
 
