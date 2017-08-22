@@ -8,6 +8,8 @@ import sqlite3
 
 app = Flask(__name__)
 
+databasePath = 'var/www/html/mainDatabase.db'
+
 @app.route('/')
 def index():
 	message = random.randint(1,100)
@@ -48,7 +50,7 @@ def lab_temp():
 	return render_template("lab_temp.html",America=humidity,asian=humidity,latin=humidity,italian=humidity,persian=humidity )
 
 def getLastTotal(Station):
-	conn = sqlite3.connect('/var/www/html/mainDatabase.db')
+	conn = sqlite3.connect(databasePath)
 	curs = conn.cursor()
 
 	# Select station
@@ -137,11 +139,11 @@ def get_records():
 		from_date_utc   = arrow.get(from_date_obj, timezone).to('Etc/UTC').strftime("%Y-%m-%d %H:%M")	
 		to_date_utc     = arrow.get(to_date_obj, timezone).to('Etc/UTC').strftime("%Y-%m-%d %H:%M")
 
-	conn 			    = sqlite3.connect('/var/www/html/lab_app.db')
+	conn 			    = sqlite3.connect(databasePath) # '/var/www/html/lab_app.db'
 	curs 			    = conn.cursor()
-	curs.execute("SELECT * FROM temperatures WHERE rDateTime BETWEEN ? AND ?", (from_date_utc.format('YYYY-MM-DD HH:mm'), to_date_utc.format('YYYY-MM-DD HH:mm')))
+	curs.execute("SELECT * FROM Asian WHERE rDateTime BETWEEN ? AND ?", (from_date_utc.format('YYYY-MM-DD HH:mm'), to_date_utc.format('YYYY-MM-DD HH:mm')))
 	temperatures 	    = curs.fetchall()
-	curs.execute("SELECT * FROM humidities WHERE rDateTime BETWEEN ? AND ?", (from_date_utc.format('YYYY-MM-DD HH:mm'), to_date_utc.format('YYYY-MM-DD HH:mm')))
+	curs.execute("SELECT * FROM American WHERE rDateTime BETWEEN ? AND ?", (from_date_utc.format('YYYY-MM-DD HH:mm'), to_date_utc.format('YYYY-MM-DD HH:mm')))
 	humidities 		    = curs.fetchall()
 	conn.close()
 
