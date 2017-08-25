@@ -139,15 +139,21 @@ def get_records():
 		from_date_utc   = arrow.get(from_date_obj, timezone).to('Etc/UTC').strftime("%Y-%m-%d %H:%M")	
 		to_date_utc     = arrow.get(to_date_obj, timezone).to('Etc/UTC').strftime("%Y-%m-%d %H:%M")
 
-	conn 			    = sqlite3.connect('/var/www/html/PeopleTracker-C4C/HTML/mainDatabase.db')
-	curs 			    = conn.cursor()
+	conn 			= sqlite3.connect('/var/www/html/PeopleTracker-C4C/HTML/mainDatabase.db')
+	curs 			= conn.cursor()
 	curs.execute("SELECT * FROM Asian WHERE date BETWEEN ? AND ?", (from_date_utc.format('YYYY-MM-DD HH:mm'), to_date_utc.format('YYYY-MM-DD HH:mm')))
-	temperatures 	    = curs.fetchall()
+	Asian			= curs.fetchall()
 	curs.execute("SELECT * FROM American WHERE date BETWEEN ? AND ?", (from_date_utc.format('YYYY-MM-DD HH:mm'), to_date_utc.format('YYYY-MM-DD HH:mm')))
-	humidities 		    = curs.fetchall()
+	American		= curs.fetchall()
+	curs.execute("SELECT * FROM Persian WHERE date BETWEEN ? AND ?", (from_date_utc.format('YYYY-MM-DD HH:mm'), to_date_utc.format('YYYY-MM-DD HH:mm')))
+        Persian			= curs.fetchall()
+	curs.execute("SELECT * FROM Italian WHERE date BETWEEN ? AND ?", (from_date_utc.format('YYYY-MM-DD HH:mm'), to_date_utc.format('YYYY-MM-DD HH:mm')))
+        Italian         	= curs.fetchall()
+	curs.execute("SELECT * FROM Latin WHERE date BETWEEN ? AND ?", (from_date_utc.format('YYYY-MM-DD HH:mm'), to_date_utc.format('YYYY-MM-DD HH:mm')))
+        Latin			= curs.fetchall()	 
 	conn.close()
 
-	return [temperatures, humidities, timezone, from_date_str, to_date_str]
+	return [Asian, American, Persian, Italian, Latin, timezone, from_date_str, to_date_str]
 
 @app.route("/to_plotly", methods=['GET'])
 def to_plotly():
@@ -156,30 +162,29 @@ def to_plotly():
   	import plotly.tools as pyTools
 	pyTools.set_credentials_file(username='cega5137', api_key='jLRlCzSOlSOKuUtvknqD')
 
-	temperatures, humidities, timezone, from_date_str, to_date_str = get_records()
+	Asian, American, Persian, Italian, Latin, timezone, from_date_str, to_date_str = get_records()
 
 	# Create new record tables so that datetimes are adjusted back to the user browser's time zone.
-	time_series_adjusted_tempreratures  = []
-	time_series_adjusted_humidities 	= []
-	time_series_temprerature_values 	= []
-	time_series_humidity_values 		= []
+	time_series_adjusted_Persian  = []
+	time_series_adjusted_Asian 	= []
+	time_series_Persian_values 	= []
+	time_series_Asian_values 		= []
 
 	for record in temperatures:
 		local_timedate = arrow.get(record[0], "YYYY-MM-DD HH:mm").to(timezone)
-		time_series_adjusted_tempreratures.append(local_timedate.format('YYYY-MM-DD HH:mm'))
-		time_series_temprerature_values.append(round(record[2],2))
+		time_series_adjusted_Persian.append(local_timedate.format('YYYY-MM-DD HH:mm'))
+		time_series_Persian_values.append(round(record[2],2))
 
 	for record in humidities:
 		local_timedate = arrow.get(record[0], "YYYY-MM-DD HH:mm").to(timezone)
-		time_series_adjusted_humidities.append(local_timedate.format('YYYY-MM-DD HH:mm')) #Best to pass datetime in text
-																						  #so that Plotly respects it
-		time_series_humidity_values.append(round(record[2],2))
+		time_series_adjusted_Asian.append(local_timedate.format('YYYY-MM-DD HH:mm')) #Best to pass datetime in text																			  #so that Plotly respects it
+		time_series_Asian_values.append(round(record[2],2))
 
 
-## Start Persian plot ###
-	temp = Scatter(
-        		x=time_series_adjusted_tempreratures,
-        		y=time_series_temprerature_values,
+#################### Start Persian plot ##################
+	per = Scatter(
+        		x=time_series_adjusted_Persian,
+        		y=time_series_Persian_values,
         		name= 'Number of People'
     				)
 #	hum = Scatter(
@@ -189,7 +194,7 @@ def to_plotly():
 #        		yaxis='y2'
 #			)
 
-	data = Data([temp]) # change from Data([temp, hum]) --> Data([temp])
+	data = Data([per]) # change from Data([temp, hum]) --> Data([temp])
 
 	layout = Layout(
 					title="Persian Station",
@@ -214,7 +219,7 @@ def to_plotly():
 	fig = Figure(data=data, layout=layout)
 	plot_url = py.plot(fig, filename='lab_temp_hum')
 
-###### Asian Plot ####
+############## Asian Plot ######################
 
 	hum = Scatter(
 		x = time_series_adjusted_humidities,
@@ -222,7 +227,8 @@ def to_plotly():
 		name = 'HUM'
 	)
 
-	data2 = Data([hum])
+	data2 = Data([Asian])
+
 
 	layout2 = Layout(
 			title="Asian station",
@@ -241,13 +247,55 @@ def to_plotly():
 	plot_url2 = py.plot(fig2,filename='lab_temp_hum2')
 
 ##### Italian Station #####
-
+	layout3 = Layout(
+			title="Italian Station"
+			xaxis=XAxis(
+					type='date',
+					autorange=True
+				),
+			yaxis=YAxis(
+					title='Number of People'
+					type='linear'
+					autorange=True
+				),
+			)
+	
+	fig3 = Figure(data=data3,layout=layout3)
+        plot_url3 = py.plot(fig3,filename='lab_temp_hum2')
 
 #### American Station ####
+	layout4 = Layout(
+                        title="American Station"
+                        xaxis=XAxis(
+                                        type='date',
+                                        autorange=True
+                                ),
+                        yaxis=YAxis(
+                                        title='Number of People'
+                                        type='linear'
+                                        autorange=True
+                                ),
+                        )
 
+	fig4 = Figure(data=data4,layout=layout4)
+        plot_url4 = py.plot(fig4,filename='lab_temp_hum2')
 
 #### Latin Station ##### 
+	layout5 = Layout(
+                        title="Latin Station"
+                        xaxis=XAxis(
+                                        type='date',
+                                        autorange=True
+                                ),
+                        yaxis=YAxis(
+                                        title='Number of People'
+                                        type='linear'
+                                        autorange=True
+                                ),
+                        )
 
+	fig5 = Figure(data=dat5,layout=layout5)
+        plot_url5 = py.plot(fig5,filename='lab_temp_hum2')
 
 
 
