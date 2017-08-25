@@ -8,7 +8,7 @@ import sqlite3
 
 app = Flask(__name__)
 
-databasePath = 'var/www/html/mainDatabase.db'
+databasePath = 'var/www/html/PeopleTracker-C4C/HTML/mainDatabase.db'
 
 @app.route('/')
 def index():
@@ -50,7 +50,7 @@ def lab_temp():
 	return render_template("lab_temp.html",America=humidity,asian=humidity,latin=humidity,italian=humidity,persian=humidity )
 
 def getLastTotal(Station):
-	conn = sqlite3.connect(databasePath)
+	conn = sqlite3.connect("/var/www/html/PeopleTracker-C4C/HTML/mainDatabase.db")
 	curs = conn.cursor()
 
 	# Select station
@@ -117,7 +117,7 @@ def get_records():
 
 	print "Received from browser: %s, %s, %s, %s" % (from_date_str, to_date_str, timezone, range_h_int)
 	
-	if not validate_date(from_date_str):			# Validate date before sending it to the DB
+	if not validate_date(from_date_str):	# Validate date before sending it to the DB
 		from_date_str 	= time.strftime("%Y-%m-%d 00:00")
 	if not validate_date(to_date_str):
 		to_date_str 	= time.strftime("%Y-%m-%d %H:%M")		# Validate date before sending it to the DB
@@ -139,11 +139,11 @@ def get_records():
 		from_date_utc   = arrow.get(from_date_obj, timezone).to('Etc/UTC').strftime("%Y-%m-%d %H:%M")	
 		to_date_utc     = arrow.get(to_date_obj, timezone).to('Etc/UTC').strftime("%Y-%m-%d %H:%M")
 
-	conn 			    = sqlite3.connect(databasePath) # '/var/www/html/lab_app.db'
+	conn 			    = sqlite3.connect('/var/www/html/PeopleTracker-C4C/HTML/mainDatabase.db')
 	curs 			    = conn.cursor()
-	curs.execute("SELECT * FROM Asian WHERE rDateTime BETWEEN ? AND ?", (from_date_utc.format('YYYY-MM-DD HH:mm'), to_date_utc.format('YYYY-MM-DD HH:mm')))
+	curs.execute("SELECT * FROM Asian WHERE date BETWEEN ? AND ?", (from_date_utc.format('YYYY-MM-DD HH:mm'), to_date_utc.format('YYYY-MM-DD HH:mm')))
 	temperatures 	    = curs.fetchall()
-	curs.execute("SELECT * FROM American WHERE rDateTime BETWEEN ? AND ?", (from_date_utc.format('YYYY-MM-DD HH:mm'), to_date_utc.format('YYYY-MM-DD HH:mm')))
+	curs.execute("SELECT * FROM American WHERE date BETWEEN ? AND ?", (from_date_utc.format('YYYY-MM-DD HH:mm'), to_date_utc.format('YYYY-MM-DD HH:mm')))
 	humidities 		    = curs.fetchall()
 	conn.close()
 
