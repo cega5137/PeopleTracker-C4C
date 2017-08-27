@@ -308,56 +308,53 @@ def to_plotly():
 	'''
 	return plot_url2
 
-def getPlotStation(Persian):
+def getPlotStation(Data,plotTitle):
 	import plotly.plotly as py
-        from plotly.graph_objs import *
-        import plotly.tools as pyTools
-        pyTools.set_credentials_file(username='cega5137', api_key='jLRlCzSOlSOKuUtvknqD')
+    from plotly.graph_objs import *
+    import plotly.tools as pyTools
+	pyTools.set_credentials_file(username='cega5137', api_key='jLRlCzSOlSOKuUtvknqD')
 	
-	time_series_adjusted_Persian  = []
-	time_series_Persian_values                = []
+	time_series_adjusted  = []
+	time_series_values    = []
 
-        for record in Persian:
+        for record in Data:
                 local_timedate = arrow.get(record[0], "YYYY-MM-DD HH:mm").to(timezone)
-                time_series_adjusted_Persian.append(local_timedate.format('YYYY-MM-DD HH:mm'))
-                time_series_Persian_values.append(round(record[2],2))
+                time_series_adjusted.append(local_timedate.format('YYYY-MM-DD HH:mm'))
+                time_series_values.append(round(record[2],2))
 
 
         per = Scatter(
-                        x=time_series_adjusted_Persian,
-                        y=time_series_Persian_values,
+                        x=time_series_adjusted,
+                        y=time_series_values,
                         name= 'Number of People'
                                 )
-#       hum = Scatter(
-#                       x=time_series_adjusted_humidities,
-#                       y=time_series_humidity_values,
-#                       name='Humidity',
-#                       yaxis='y2'
-#                       )
 
         data = Data([per]) # change from Data([temp, hum]) --> Data([temp])
 
-        layout = Layout(title="Persian Station",
+        layout = Layout(title=plotTitle,
                         xaxis=XAxis(
-					type='date',
-                 			autorange=True
+										type='date',
+                 						autorange=True
                                    ),
                         yaxis=YAxis(
 		        		title='Number of People',
                                         type='linear',
                                         autorange=True
                                     ),
-#                                   yaxis2=YAxis(
-#                                       title='Percent',
-#                                       type='linear',
-#                                       autorange=True,
-#                                       overlaying='y',
-#                                       side='right'
-#                                   )
-
-                                        )
+                                    )
         fig = Figure(data=data, layout=layout)
-        plot_url = py.plot(fig, filename='lab_temp_hum')
+		
+		{
+			"Persian Station":plot_url = py.plot(fig, filename='persian_station_C4C')
+			"Asian Station":plot_url = py.plot(fig, filename='asian_station_C4C')
+			"Italian Station":plot_url = py.plot(fig, filename='italian_station_C4C')
+			"American Station":plot_url = py.plot(fig, filename='american_station_C4C)
+			"Latin Station":plot_url = py.plot(fig, filename='latin_staion_C4C')
+			
+		}[plotTitle]
+		
+		
+  #      plot_url = py.plot(fig, filename='lab_temp_hum')
 	return plot_url
 	
 
