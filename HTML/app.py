@@ -5,6 +5,7 @@ import datetime
 import arrow
 import subprocess
 import sqlite3
+from switch import Switch 	
 
 app = Flask(__name__)
 
@@ -17,24 +18,9 @@ def index():
 
 @app.route("/lab_temp")
 def lab_temp():
-#	temperature, humidity, timezone, from_date_str, to_date_str = get_records()
-
-#	time_adjusted_temperatures = []
-#	time_adjusted_humidities   = []
-	
 	T = datetime.datetime.now()
-#	conn = sqlite3.connect('/var/www/html/mainDatabase.db')
-#	curs = conn.cursor()
 	
-	# Get data for Asian
-#	curs.execute("SELECT * FROM Asian")
-#	temperature = curs.fetchall()
-#	print temperature
-#	print "One more light"
-#	L = len(temperature)
-#	tempe = temperature[L-1]
-#	print "YEAH!!!!", tempe[2]
-	
+	print "Get the last total"
 	Asia = getLastTotal('Asian')
 	amer = getLastTotal('American')
 	per = getLastTotal('Persian')
@@ -42,30 +28,41 @@ def lab_temp():
 	Latin =  getLastTotal('Latin')
 
 	humidity = random.randint(1,100)
-#	temperature = random.randint(30,80)
-#	if Asia is not None or amer is not None or per is not None or ita is not None or Latin is not None:
-#		print "Fuck this shit"
-#		return render_template("lab_temp.html",America=amer,asian=Asia,latin=Latin,italian=ita,persian=per )
-#	else:
-	return render_template("lab_temp.html",America=humidity,asian=humidity,latin=humidity,italian=humidity,persian=humidity )
+	return render_template("lab_temp.html",America=amer,asian=Asia,latin=Latin,italian=ita,persian=per )
 
 def getLastTotal(Station):
 	conn = sqlite3.connect("/var/www/html/PeopleTracker-C4C/HTML/mainDatabase.db")
-	curs = conn.cursor()
+	curs = conn.cursor()	
+	with Switch(Station) as case:
+		if case('Asian'):
+			curs.execute("SELECT * FROM Asian")
+			data = curs.fetchall()
+			print "getting asian"
+		if case('American'):
+			curs.execute("SELECT * FROM American")
+			data = curs.fetchall()
+			print "getting american"
+		if case('Persian'):
+			curs.execute("SELECT * FROM Persian")
+			data = curs.fetchall()
+			print "getting Persian"
+		if case('Italian'):
+			curs.execute("SELECT * FROM Italian"),
+			data = curs.fetchall()
+			print "getting Italian"
+		if case('Latin'):
+			curs.execute("SELECT * FROM Latin")
+			data = curs.fetchall()
+			print "getting Latin"
 
-	# Select station
-	switcher = {	
-		'Asian':curs.execute("SELECT * FROM Asian"),
-		'American':curs.execute("SELECT * FROM American"),
-		'Persian':curs.execute("SELECT * FROM Persian"),
-		'Italian':curs.execute("SELECT * FROM Persian"),
-		'Latin':curs.execute("SELECT * FROM Latin")
-	}
-	return switcher.get(Station,"Fail to grab last date")
-	data = curs.fetchall()
+
+	print "about to get data"
 	L = len(data)
-	Total = data[L-1]
-	return Total
+	print "length: ", L
+	Total = data[L-1]	
+	print "Station: ", Station 
+	print "Total,: ", Total[2]
+	return Total[2]
 
 #@app.route("/station_time")
 #def station_time
@@ -173,18 +170,19 @@ def to_plotly():
 	time_series_Persian_values 	= []
 	time_series_Asian_values 		= []
 
-	for record in Persian:
-		local_timedate = arrow.get(record[0], "YYYY-MM-DD HH:mm").to(timezone)
-		time_series_adjusted_Persian.append(local_timedate.format('YYYY-MM-DD HH:mm'))
-		time_series_Persian_values.append(round(record[2],2))
+#	for record in Persian:
+#		local_timedate = arrow.get(record[0], "YYYY-MM-DD HH:mm").to(timezone)
+#		time_series_adjusted_Persian.append(local_timedate.format('YYYY-MM-DD HH:mm'))
+#		time_series_Persian_values.append(round(record[2],2))
 
-	for record in Asian:
-		local_timedate = arrow.get(record[0], "YYYY-MM-DD HH:mm").to(timezone)
-		time_series_adjusted_Asian.append(local_timedate.format('YYYY-MM-DD HH:mm')) #Best to pass datetime in text																			  #so that Plotly respects it
-		time_series_Asian_values.append(round(record[2],2))
+#	for record in Asian:
+#		local_timedate = arrow.get(record[0], "YYYY-MM-DD HH:mm").to(timezone)
+#		time_series_adjusted_Asian.append(local_timedate.format('YYYY-MM-DD HH:mm')) #Best to pass datetime in text																			  #so that Plotly respects it
+#		time_series_Asian_values.append(round(record[2],2))
 
 
 #################### Start Persian plot ##################
+	print "About to start getting into the functions"
 	plot_url = getPlotStation(Persian,"Persian Station")
 	plot_url2 = getPlotStation(Asian,"Asian Station")
 	plot_url3 = getPlotStation(Italian,"Italian Station")
@@ -312,16 +310,16 @@ def to_plotly():
 	'''
 	return plot_url2
 
-def getPlotStation(Data,plotTitle):
+def getPlotStation(pers, plotTitle):
 	import plotly.plotly as py
-    from plotly.graph_objs import *
-    import plotly.tools as pyTools
+    	from plotly.graph_objs import *
+    	import plotly.tools as pyTools
 	pyTools.set_credentials_file(username='cega5137', api_key='jLRlCzSOlSOKuUtvknqD')
 	
 	time_series_adjusted  = []
 	time_series_values    = []
 
-        for record in Data:
+        for record in pers:
                 local_timedate = arrow.get(record[0], "YYYY-MM-DD HH:mm").to(timezone)
                 time_series_adjusted.append(local_timedate.format('YYYY-MM-DD HH:mm'))
                 time_series_values.append(round(record[2],2))
@@ -348,15 +346,13 @@ def getPlotStation(Data,plotTitle):
                                     )
         fig = Figure(data=data, layout=layout)
 		
-		{
-			"Persian Station":plot_url = py.plot(fig, filename='persian_station_C4C')
-			"Asian Station":plot_url = py.plot(fig, filename='asian_station_C4C')
-			"Italian Station":plot_url = py.plot(fig, filename='italian_station_C4C')
-			"American Station":plot_url = py.plot(fig, filename='american_station_C4C)
-			"Latin Station":plot_url = py.plot(fig, filename='latin_staion_C4C')
-			
-		}[plotTitle]
-		
+	switcher = {"Persian Station":py.plot(fig, filename='persian_station_C4C'),
+			"Asian Station":py.plot(fig, filename='asian_station_C4C'),
+			"Italian Station":py.plot(fig, filename='italian_station_C4C'),
+			"American Station":py.plot(fig, filename='american_station_C4C'),
+			"Latin Station":py.plot(fig, filename='latin_staion_C4C'),			
+	}
+	plot_url = switcher[plotTitle]	
 		
   #      plot_url = py.plot(fig, filename='lab_temp_hum')
 	return plot_url
