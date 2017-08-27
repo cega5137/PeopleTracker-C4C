@@ -173,19 +173,19 @@ def to_plotly():
 	time_series_Persian_values 	= []
 	time_series_Asian_values 		= []
 
-	for record in temperatures:
+	for record in Persian:
 		local_timedate = arrow.get(record[0], "YYYY-MM-DD HH:mm").to(timezone)
 		time_series_adjusted_Persian.append(local_timedate.format('YYYY-MM-DD HH:mm'))
 		time_series_Persian_values.append(round(record[2],2))
 
-	for record in humidities:
+	for record in Asian:
 		local_timedate = arrow.get(record[0], "YYYY-MM-DD HH:mm").to(timezone)
 		time_series_adjusted_Asian.append(local_timedate.format('YYYY-MM-DD HH:mm')) #Best to pass datetime in text																			  #so that Plotly respects it
 		time_series_Asian_values.append(round(record[2],2))
 
 
 #################### Start Persian plot ##################
-	plot_url = getPlotStation()
+	plot_url = getPlotStation(Persian)
 	'''
 	per = Scatter(
         		x=time_series_adjusted_Persian,
@@ -227,12 +227,12 @@ def to_plotly():
 ############## Asian Plot ######################
 
 	hum = Scatter(
-		x = time_series_adjusted_humidities,
-		y = time_series_humidity_values,
+		x = time_series_adjusted_Asian,
+		y = time_series_Asian_values,
 		name = 'HUM'
 	)
 
-	data2 = Data([Asian])
+	data2 = Data([hum])
 
 
 	layout2 = Layout(
@@ -308,7 +308,21 @@ def to_plotly():
 	'''
 	return plot_url2
 
-def getPlotStation():
+def getPlotStation(Persian):
+	import plotly.plotly as py
+        from plotly.graph_objs import *
+        import plotly.tools as pyTools
+        pyTools.set_credentials_file(username='cega5137', api_key='jLRlCzSOlSOKuUtvknqD')
+	
+	time_series_adjusted_Persian  = []
+	time_series_Persian_values                = []
+
+        for record in Persian:
+                local_timedate = arrow.get(record[0], "YYYY-MM-DD HH:mm").to(timezone)
+                time_series_adjusted_Persian.append(local_timedate.format('YYYY-MM-DD HH:mm'))
+                time_series_Persian_values.append(round(record[2],2))
+
+
         per = Scatter(
                         x=time_series_adjusted_Persian,
                         y=time_series_Persian_values,
