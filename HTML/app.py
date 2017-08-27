@@ -74,12 +74,13 @@ def getLastTotal(Station):
 
 @app.route("/lab_env_db", methods=['GET'])
 def lab_env_db():
-	temperatures, humidities, timezone, from_date_str, to_date_str = get_records()
+	Asian, American, Persian, Italian, Latin, timezone, from_date_str, to_date_str = get_records()	
+#	temperatures, humidities, timezone, from_date_str, to_date_str = get_records()
 	
 	time_adjusted_temperatures = []
 	time_adjusted_humidities   = []
 
-	for record in temperatures:
+	for record in Persian:
 		local_timedate = arrow.get(record[0], "YYYY-MM-DD HH:mm").to(timezone)
 		time_adjusted_temperatures.append([local_timedate.format('YYYY-MM-DD HH:mm'), round(record[2],2)])
 
@@ -184,6 +185,8 @@ def to_plotly():
 
 
 #################### Start Persian plot ##################
+	plot_url = getPlotStation()
+	'''
 	per = Scatter(
         		x=time_series_adjusted_Persian,
         		y=time_series_Persian_values,
@@ -220,7 +223,7 @@ def to_plotly():
 					)
 	fig = Figure(data=data, layout=layout)
 	plot_url = py.plot(fig, filename='lab_temp_hum')
-
+	'''
 ############## Asian Plot ######################
 
 	hum = Scatter(
@@ -248,7 +251,7 @@ def to_plotly():
 	fig2 = Figure(data=data2,layout=layout2)
 	plot_url2 = py.plot(fig2,filename='lab_temp_hum2')
 
-'''
+	'''
 ##### Italian Station #####
 	layout3 = Layout(
 			title="Italian Station"
@@ -302,8 +305,47 @@ def to_plotly():
 
 
 
-'''
+	'''
 	return plot_url2
+
+def getPlotStation():
+        per = Scatter(
+                        x=time_series_adjusted_Persian,
+                        y=time_series_Persian_values,
+                        name= 'Number of People'
+                                )
+#       hum = Scatter(
+#                       x=time_series_adjusted_humidities,
+#                       y=time_series_humidity_values,
+#                       name='Humidity',
+#                       yaxis='y2'
+#                       )
+
+        data = Data([per]) # change from Data([temp, hum]) --> Data([temp])
+
+        layout = Layout(title="Persian Station",
+                        xaxis=XAxis(
+					type='date',
+                 			autorange=True
+                                   ),
+                        yaxis=YAxis(
+		        		title='Number of People',
+                                        type='linear',
+                                        autorange=True
+                                    ),
+#                                   yaxis2=YAxis(
+#                                       title='Percent',
+#                                       type='linear',
+#                                       autorange=True,
+#                                       overlaying='y',
+#                                       side='right'
+#                                   )
+
+                                        )
+        fig = Figure(data=data, layout=layout)
+        plot_url = py.plot(fig, filename='lab_temp_hum')
+	return plot_url
+	
 
 def validate_date(d):
 	try:
