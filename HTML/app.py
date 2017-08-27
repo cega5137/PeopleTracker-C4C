@@ -67,8 +67,10 @@ def getLastTotal(Station):
 	Total = data[L-1]
 	return Total
 
-#@app.route("/station_time")
-#def station_time
+@app.route("/station_time")
+def station_time
+	
+
 
 @app.route("/lab_env_db", methods=['GET'])
 def lab_env_db():
