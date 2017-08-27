@@ -185,7 +185,11 @@ def to_plotly():
 
 
 #################### Start Persian plot ##################
-	plot_url = getPlotStation(Persian)
+	plot_url = getPlotStation(Persian,"Persian Station")
+	plot_url2 = getPlotStation(Asian,"Asian Station")
+	plot_url3 = getPlotStation(Italian,"Italian Station")
+	plot_url4 = getPlotStation(American,"Persian Station")
+	plot_url5 = getPlotStation(Latin,"Latin Station")
 	'''
 	per = Scatter(
         		x=time_series_adjusted_Persian,
@@ -223,7 +227,7 @@ def to_plotly():
 					)
 	fig = Figure(data=data, layout=layout)
 	plot_url = py.plot(fig, filename='lab_temp_hum')
-	'''
+	
 ############## Asian Plot ######################
 
 	hum = Scatter(
@@ -251,7 +255,7 @@ def to_plotly():
 	fig2 = Figure(data=data2,layout=layout2)
 	plot_url2 = py.plot(fig2,filename='lab_temp_hum2')
 
-	'''
+	
 ##### Italian Station #####
 	layout3 = Layout(
 			title="Italian Station"
