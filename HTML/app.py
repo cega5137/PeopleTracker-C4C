@@ -248,6 +248,7 @@ def to_plotly():
 	fig2 = Figure(data=data2,layout=layout2)
 	plot_url2 = py.plot(fig2,filename='lab_temp_hum2')
 
+'''
 ##### Italian Station #####
 	layout3 = Layout(
 			title="Italian Station"
@@ -301,7 +302,7 @@ def to_plotly():
 
 
 
-
+'''
 	return plot_url2
 
 def validate_date(d):
