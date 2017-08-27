@@ -37,23 +37,18 @@ def getLastTotal(Station):
 		if case('Asian'):
 			curs.execute("SELECT * FROM Asian")
 			data = curs.fetchall()
-			print "getting asian"
 		if case('American'):
 			curs.execute("SELECT * FROM American")
 			data = curs.fetchall()
-			print "getting american"
 		if case('Persian'):
 			curs.execute("SELECT * FROM Persian")
 			data = curs.fetchall()
-			print "getting Persian"
 		if case('Italian'):
 			curs.execute("SELECT * FROM Italian"),
 			data = curs.fetchall()
-			print "getting Italian"
 		if case('Latin'):
 			curs.execute("SELECT * FROM Latin")
 			data = curs.fetchall()
-			print "getting Latin"
 
 
 	print "about to get data"
@@ -81,9 +76,9 @@ def lab_env_db():
 		local_timedate = arrow.get(record[0], "YYYY-MM-DD HH:mm").to(timezone)
 		time_adjusted_temperatures.append([local_timedate.format('YYYY-MM-DD HH:mm'), round(record[2],2)])
 
-#	for record in humidities:
-#		local_timedate = arrow.get(record[0], "YYYY-MM-DD HH:mm").to(timezone)
-#		time_adjusted_humidities.append([local_timedate.format('YYYY-MM-DD HH:mm'), round(record[2],2)])
+	for record in humidities:
+		local_timedate = arrow.get(record[0], "YYYY-MM-DD HH:mm").to(timezone)
+		time_adjusted_humidities.append([local_timedate.format('YYYY-MM-DD HH:mm'), round(record[2],2)])
 
 	
 #	humidity = random.randint(1,100)
