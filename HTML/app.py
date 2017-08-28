@@ -177,7 +177,7 @@ def to_plotly():
 	plot_url = getPlotStation(Persian,"Persian Station",timezone)
 	plot_url2 = getPlotStation(Asian,"Asian Station",timezone)
 	plot_url3 = getPlotStation(Italian,"Italian Station",timezone)
-	plot_url4 = getPlotStation(American,"Persian Station",timezone)
+	plot_url4 = getPlotStation(American,"American Station",timezone)
 	plot_url5 = getPlotStation(Latin,"Latin Station",timezone)
 	'''
 	per = Scatter(
@@ -299,7 +299,7 @@ def to_plotly():
 
 
 	'''
-	return plot_url2
+	return plot_url5
 
 def getPlotStation(pers, plotTitle,timezone):
 	import plotly.plotly as py
