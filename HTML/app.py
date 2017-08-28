@@ -75,9 +75,9 @@ def lab_env_db():
 		local_timedate = arrow.get(record[0], "YYYY-MM-DD HH:mm").to(timezone)
 		time_adjusted_temperatures.append([local_timedate.format('YYYY-MM-DD HH:mm'), round(record[2],2)])
 
-	for record in humidities:
-		local_timedate = arrow.get(record[0], "YYYY-MM-DD HH:mm").to(timezone)
-		time_adjusted_humidities.append([local_timedate.format('YYYY-MM-DD HH:mm'), round(record[2],2)])
+#	for record in Asian:
+#		local_timedate = arrow.get(record[0], "YYYY-MM-DD HH:mm").to(timezone)
+#		time_adjusted_humidities.append([local_timedate.format('YYYY-MM-DD HH:mm'), round(record[2],2)])
 
 	return render_template("lab_env_db.html",timezone	= timezone,
 						temp			= time_adjusted_temperatures,
@@ -86,7 +86,7 @@ def lab_env_db():
 						to_date 		= to_date_str,
 						temp_items 		= len(Persian),           #len(temperatures),
 						query_string 	= request.query_string,
-						hum_items 		= len(humidities) )         #len(humidities))
+						hum_items 		= len(Persian) )         #len(humidities))
 
 
 def get_records():
@@ -174,11 +174,11 @@ def to_plotly():
 
 #################### Start Persian plot ##################
 	print "About to start getting into the functions"
-	plot_url = getPlotStation(Persian,"Persian Station")
-	plot_url2 = getPlotStation(Asian,"Asian Station")
-	plot_url3 = getPlotStation(Italian,"Italian Station")
-	plot_url4 = getPlotStation(American,"Persian Station")
-	plot_url5 = getPlotStation(Latin,"Latin Station")
+	plot_url = getPlotStation(Persian,"Persian Station",timezone)
+	plot_url2 = getPlotStation(Asian,"Asian Station",timezone)
+	plot_url3 = getPlotStation(Italian,"Italian Station",timezone)
+	plot_url4 = getPlotStation(American,"Persian Station",timezone)
+	plot_url5 = getPlotStation(Latin,"Latin Station",timezone)
 	'''
 	per = Scatter(
         		x=time_series_adjusted_Persian,
@@ -301,7 +301,7 @@ def to_plotly():
 	'''
 	return plot_url2
 
-def getPlotStation(pers, plotTitle):
+def getPlotStation(pers, plotTitle,timezone):
 	import plotly.plotly as py
     	from plotly.graph_objs import *
     	import plotly.tools as pyTools
@@ -349,15 +349,8 @@ def getPlotStation(pers, plotTitle):
 		if case("Latin Station"):
 			plot_url = py.plot(fig, filename='latin_staion_C4C')
 	
-#	switcher = {"Persian Station":py.plot(fig, filename='persian_station_C4C'),
-#			"Asian Station":py.plot(fig, filename='asian_station_C4C'),
-#			"Italian Station":py.plot(fig, filename='italian_station_C4C'),
-#			"American Station":py.plot(fig, filename='american_station_C4C'),
-#			"Latin Station":py.plot(fig, filename='latin_staion_C4C'),			
-#	}
-#	plot_url = switcher[plotTitle]	
-		
-  #      plot_url = py.plot(fig, filename='lab_temp_hum')
+	print "Finishing ", plotTitle
+
 	return plot_url
 	
 
