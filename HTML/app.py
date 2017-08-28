@@ -67,7 +67,6 @@ def getLastTotal(Station):
 @app.route("/lab_env_db", methods=['GET'])
 def lab_env_db():
 	Asian, American, Persian, Italian, Latin, timezone, from_date_str, to_date_str = get_records()	
-#	temperatures, humidities, timezone, from_date_str, to_date_str = get_records()
 	
 	time_adjusted_temperatures = []
 	time_adjusted_humidities   = []
@@ -80,17 +79,14 @@ def lab_env_db():
 		local_timedate = arrow.get(record[0], "YYYY-MM-DD HH:mm").to(timezone)
 		time_adjusted_humidities.append([local_timedate.format('YYYY-MM-DD HH:mm'), round(record[2],2)])
 
-	
-#	humidity = random.randint(1,100)
-#       temperature = random.randint(30.80)
 	return render_template("lab_env_db.html",timezone	= timezone,
-						temp	= time_adjusted_temperatures,
-						hum 	= time_adjusted_humidities,
-						from_date = from_date_str,
-						to_date = to_date_str,
-						temp_items = random.randint,#len(temperatures),
-						query_string = request.query_string,
-						hum_items = random.randint)#len(humidities))
+						temp			= time_adjusted_temperatures,
+						hum 			= time_adjusted_humidities,
+						from_date 		= from_date_str,
+						to_date 		= to_date_str,
+						temp_items 		= len(Persian),           #len(temperatures),
+						query_string 	= request.query_string,
+						hum_items 		= len(humidities) )         #len(humidities))
 
 
 def get_records():
