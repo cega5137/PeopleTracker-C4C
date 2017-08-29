@@ -93,9 +93,12 @@ def lab_env_db():
 						lati			= lati_adjusted
 						from_date 		= from_date_str,
 						to_date 		= to_date_str,
-						temp_items 		= len(Persian),           #len(temperatures),
+						asia_items 		= len(Asia),           #len(temperatures),
 						query_string 	= request.query_string,
-						hum_items 		= len(Persian) )         #len(humidities))
+						amer_items 		= len(American),
+						pers_items		= len(Persian)
+						ital_items		= len(Italian)
+						lati_items 		= len(Latin))         #len(humidities))
 
 def convertRecords(station):
 	time_adjusted = []
