@@ -68,11 +68,11 @@ def getLastTotal(Station):
 def lab_env_db():
 	Asian, American, Persian, Italian, Latin, timezone, from_date_str, to_date_str = get_records()	
 
-	asia_adjusted = convertRecords(Asian)
-	amer_adjusted = convertRecords(American)
-	pers_adjusted = convertRecords(Persian)
-	ital_adjusted = convertRecords(Italian)
-	lati_adjusted = convertRecords(Latin)
+	asia_adjusted = convertRecords(Asian,timezone)
+	amer_adjusted = convertRecords(American,timezone)
+	pers_adjusted = convertRecords(Persian,timezone)
+	ital_adjusted = convertRecords(Italian,timezone)
+	lati_adjusted = convertRecords(Latin,timezone)
 		
 	time_adjusted_temperatures = []
 	time_adjusted_humidities   = []
@@ -90,14 +90,14 @@ def lab_env_db():
 						amer 			= amer_adjusted,
 						pers			= pers_adjusted,
 						ital			= ital_adjusted,
-						lati			= lati_adjusted
+						lati			= lati_adjusted,
 						from_date 		= from_date_str,
 						to_date 		= to_date_str,
 						temp_items 		= len(Persian),           #len(temperatures),
 						query_string 	= request.query_string,
 						hum_items 		= len(Persian) )         #len(humidities))
 
-def convertRecords(station):
+def convertRecords(station,timezone):
 	time_adjusted = []
 	
 	for record in station:
