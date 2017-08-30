@@ -239,7 +239,7 @@
     	<a href="https://plot.ly/~cega5137/46/" target="_blank" title="persian_station_C4C" style="display: block; text-align: center;"><img src="https://plot.ly/~cega5137/46.png" alt="persian_station_C4C" style="max-width: 100%;width: 600px;"  width="600" onerror="this.onerror=null;this.src='https://plot.ly/404.png';" /></a>
     	<script data-plotly="cega5137:46" src="https://plot.ly/embed.js" async></script>
 	</div>
-	
+	        <div id="chart_temps"></div>
 		<div id="chart_humid"></div>  
 	      </div> 
 <!--	    </div> 
@@ -310,12 +310,12 @@
     height: 563,
     hAxis: {
     title: "Date",
-    gridlines: { count: {{asia_items}}, color: '#CCC' },
+    gridlines: { count: {{temp_items}}, color: '#CCC' },
     format: 'dd-MMM-yyyy HH:mm' },
     vAxis: {
-    title: 'Degrees'
+    title: 'Number of People'
     },
-    title: 'Temperature',
+    title: 'Asia',
     curveType: 'function'  //Makes line curved
     };
     var chart = new google.visualization.LineChart(document.getElementById('chart_temps'));
@@ -415,7 +415,7 @@
     }    
   </script>
   
-<!--   Humidity 
+<!--   Humidity --> 
   <script>
     google.load('visualization', '1', {packages: ['corechart']});
     google.setOnLoadCallback(drawChart);
