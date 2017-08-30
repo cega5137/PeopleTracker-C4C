@@ -107,10 +107,10 @@
 	      </tr>
 	    </thead>
 	    <tbody style="height:450px; overflow:scroll; display:block;">
-	      {% for row in hum %}
+	      {% for row in amer %}
 	      <tr>
 		<td>{{row[0]}}</td>
-		<td>{{'0.2f%'|format(row[1])}}</td>
+		<td>{{'%0.2f' |format(row[1])  }}</td>
 	      </tr>
 	      {% endfor %}
 	    </tbody>
@@ -143,10 +143,10 @@
               </tr>
 	    </thead>
 	    <tbody style="height:450px; overflow:scroll; display:block;">
-	      {% for row in hum %}
+	      {% for row in ital %}
 	      <tr>
 		<td>{{row[0]}}</td>
-		<td>{{'0.2f%'|format(row[1])}}</td>
+		<td>{{'%0.2f'|format(row[1])}}</td>
 	      </tr>
 	      {% endfor %}
 	    </tbody>
@@ -161,10 +161,10 @@
 	      </tr>
 	    </thead>
 	    <tbody style="height:450px; overflow:scroll; display:block;">
-	      {% for row in hum %}
+	      {% for row in lati %}
 	      <tr>
 		<td>{{row[0]}}</td>
-		<td>{{'0.2f%'|format(row[1])}}</td>
+		<td>{{'%0.2f'|format(row[1])}}</td>
 	      </tr>
 	      {% endfor %}
 	    </tbody>
@@ -186,10 +186,7 @@
 	      </tr>
 	      {% endfor %}
 	    </tbody>
-	  </table>
-	  
-	   
-	  
+	  </table>  
 	  
 	</div> 
 
@@ -241,7 +238,7 @@
     	<a href="https://plot.ly/~cega5137/46/" target="_blank" title="persian_station_C4C" style="display: block; text-align: center;"><img src="https://plot.ly/~cega5137/46.png" alt="persian_station_C4C" style="max-width: 100%;width: 600px;"  width="600" onerror="this.onerror=null;this.src='https://plot.ly/404.png';" /></a>
     	<script data-plotly="cega5137:46" src="https://plot.ly/embed.js" async></script>
 	</div>
-		
+	
 		<div id="chart_humid"></div>  
 	      </div> 
 <!--	    </div> 
