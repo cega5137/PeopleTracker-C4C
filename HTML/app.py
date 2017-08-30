@@ -75,12 +75,14 @@ def lab_env_db():
 		local_timedate = arrow.get(record[0], "YYYY-MM-DD HH:mm").to(timezone)
 		time_adjusted_temperatures.append([local_timedate.format('YYYY-MM-DD HH:mm'), round(record[2],2)])
 
+	pers_adjusted = convertRecords(Persian, timezone)
+
 #	for record in Asian:
 #		local_timedate = arrow.get(record[0], "YYYY-MM-DD HH:mm").to(timezone)
 #		time_adjusted_humidities.append([local_timedate.format('YYYY-MM-DD HH:mm'), round(record[2],2)])
 
 	return render_template("lab_env_db.html",timezone	= timezone,
-						temp			= time_adjusted_temperatures,
+						temp			= pers_adjusted,
 						hum 			= time_adjusted_humidities,
 						from_date 		= from_date_str,
 						to_date 		= to_date_str,
@@ -88,6 +90,15 @@ def lab_env_db():
 						query_string 	= request.query_string,
 						hum_items 		= len(Persian) )         #len(humidities))
 
+
+def convertRecords(station, timezone):
+	time_adjusted = []
+	
+	for record in station:
+		local_timedate = arrow.get(record[0], "YYYY-MM-DD HH:mm").to(timezone)
+		time_adjusted.append([local_timedate.format('YYYY-MM-DD HH:mm'), round(record[2],2)])
+	
+	return time_adjusted
 
 def get_records():
 	import sqlite3
