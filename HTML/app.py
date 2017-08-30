@@ -66,6 +66,7 @@ def getLastTotal(Station):
 
 @app.route("/lab_env_db", methods=['GET'])
 def lab_env_db():
+	print "About to get records"
 	Asian, American, Persian, Italian, Latin, timezone, from_date_str, to_date_str = get_records()	
 
 	asia_adjusted = convertRecords(Asian,timezone)
@@ -73,7 +74,7 @@ def lab_env_db():
 	pers_adjusted = convertRecords(Persian,timezone)
 	ital_adjusted = convertRecords(Italian,timezone)
 	lati_adjusted = convertRecords(Latin,timezone)
-		
+	print "Finish converting recods"		
 	time_adjusted_temperatures = []
 	time_adjusted_humidities   = []
 
@@ -85,24 +86,25 @@ def lab_env_db():
 #		local_timedate = arrow.get(record[0], "YYYY-MM-DD HH:mm").to(timezone)
 #		time_adjusted_humidities.append([local_timedate.format('YYYY-MM-DD HH:mm'), round(record[2],2)])
 
-	return render_template("lab_env_db.html",timezone	= timezone,
+	return render_template("lab_env_db.html",timezone		= timezone,
 						asia			= asia_adjusted,
-						amer 			= amer_adjusted,
+						amer 			= time_adjusted_temperatures,
 						pers			= pers_adjusted,
 						ital			= ital_adjusted,
 						lati			= lati_adjusted,
 						from_date 		= from_date_str,
 						to_date 		= to_date_str,
-						asia_items 		= len(Asia),           #len(temperatures),
-						query_string 	= request.query_string,
+						temp_items 		= len(Asian),           #len(temperatures),
+						query_string 		= request.query_string,
 						amer_items 		= len(American),
-						pers_items		= len(Persian)
-						ital_items		= len(Italian)
-						lati_items 		= len(Latin))         #len(humidities))
+						pers_items		= len(Persian),
+						ital_items		= len(Italian),
+						lati_items 		= len(Latin)
+						)         
 
 def convertRecords(station,timezone):
 	time_adjusted = []
-	
+	print "For ", station
 	for record in station:
 		local_timedate = arrow.get(record[0], "YYYY-MM-DD HH:mm").to(timezone)
 		time_adjusted.append([local_timedate.format('YYYY-MM-DD HH:mm'), round(record[2],2)])
@@ -119,7 +121,8 @@ def get_records():
 
 	print "REQUEST:"
 	print request.args
-	
+	print "range_h_form", range_h_form	
+
 	try: 
 		range_h_int	= int(range_h_form)
 	except:
