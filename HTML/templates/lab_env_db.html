@@ -239,8 +239,15 @@
     	<a href="https://plot.ly/~cega5137/46/" target="_blank" title="persian_station_C4C" style="display: block; text-align: center;"><img src="https://plot.ly/~cega5137/46.png" alt="persian_station_C4C" style="max-width: 100%;width: 600px;"  width="600" onerror="this.onerror=null;this.src='https://plot.ly/404.png';" /></a>
     	<script data-plotly="cega5137:46" src="https://plot.ly/embed.js" async></script>
 	</div>
-	        <div id="chart_temps"></div>
-		<div id="chart_humid"></div>  
+	<div id="chart_amer"></div>
+	
+	<div id="chart_asia"></div>
+
+	<div id="chart_ital"></div>
+
+	<div id="chart_lati"></div>
+
+	<div id="chart_pers"></div>
 	      </div> 
 <!--	    </div> 
 	  </div> 
@@ -292,6 +299,7 @@
 
   <script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1','packages':['corechart']}]}"></script>
 
+  <!-- American -->
   <script>
     google.load('visualization', '1', {packages: ['corechart']});
     google.setOnLoadCallback(drawChart);
@@ -299,9 +307,9 @@
     function drawChart() {
     var data = new google.visualization.DataTable();
     data.addColumn('datetime', 'Time');
-    data.addColumn('number', 'Temperature');
+    data.addColumn('number', 'People');
     data.addRows([
-    {% for row in asia %}
+    {% for row in amer %}
     [new Date({{row[0][0:4]}},{{row[0][5:7]}}-1,{{row[0][8:10]}},{{row[0][11:13]}},{{row[0][14:16]}}),{{'%0.2f'|format(row[1])}}],
     {% endfor %}
     ]);
@@ -310,20 +318,21 @@
     height: 563,
     hAxis: {
     title: "Date",
-    gridlines: { count: {{temp_items}}, color: '#CCC' },
+    gridlines: { count: {{amer_items}}, color: '#CCC' },
     format: 'dd-MMM-yyyy HH:mm' },
     vAxis: {
     title: 'Number of People'
     },
-    title: 'Asia',
+    title: 'American',
     curveType: 'function'  //Makes line curved
     };
-    var chart = new google.visualization.LineChart(document.getElementById('chart_temps'));
+    var chart = new google.visualization.LineChart(document.getElementById('chart_amer'));
     chart.draw(data, options);
     }    
   </script>
 
-<script>
+  <!-- Asia -->
+  <script>
     google.load('visualization', '1', {packages: ['corechart']});
     google.setOnLoadCallback(drawChart);
 
@@ -341,19 +350,20 @@
     height: 563,
     hAxis: {
     title: "Date",
-    gridlines: { count: {{amer_items}}, color: '#CCC' },
+    gridlines: { count: {{asia_items}}, color: '#CCC' },
     format: 'dd-MMM-yyyy HH:mm' },
     vAxis: {
     title: 'Degrees'
     },
-    title: 'Temperature',
+    title: 'Asia',
     curveType: 'function'  //Makes line curved
     };
-    var chart = new google.visualization.LineChart(document.getElementById('chart_temps'));
+    var chart = new google.visualization.LineChart(document.getElementById('chart_asia'));
     chart.draw(data, options);
     }    
   </script>
-  
+
+  <!-- Italian -->
   <script>
     google.load('visualization', '1', {packages: ['corechart']});
     google.setOnLoadCallback(drawChart);
@@ -377,13 +387,15 @@
     vAxis: {
     title: 'Degrees'
     },
-    title: 'Temperature',
+    title: 'Italian',
     curveType: 'function'  //Makes line curved
     };
-    var chart = new google.visualization.LineChart(document.getElementById('chart_temps'));
+    var chart = new google.visualization.LineChart(document.getElementById('chart_ital'));
     chart.draw(data, options);
     }    
   </script>
+
+  <!-- Latin -->
   <script>
     google.load('visualization', '1', {packages: ['corechart']});
     google.setOnLoadCallback(drawChart);
@@ -407,15 +419,15 @@
     vAxis: {
     title: 'Degrees'
     },
-    title: 'Temperature',
+    title: 'Latin Station',
     curveType: 'function'  //Makes line curved
     };
-    var chart = new google.visualization.LineChart(document.getElementById('chart_temps'));
+    var chart = new google.visualization.LineChart(document.getElementById('chart_lati'));
     chart.draw(data, options);
     }    
   </script>
   
-<!--   Humidity --> 
+<!-- Persian --> 
   <script>
     google.load('visualization', '1', {packages: ['corechart']});
     google.setOnLoadCallback(drawChart);
@@ -426,7 +438,7 @@
     data.addColumn('datetime', 'Time');
     data.addColumn('number', 'Humidity');
     data.addRows([
-    {% for row in hum %}
+    {% for row in pers %}
     [new Date({{row[0][0:4]}},{{row[0][5:7]}}-1,{{row[0][8:10]}},{{row[0][11:13]}},{{row[0][14:16]}}),{{'%0.2f'|format(row[1])}}],
     {% endfor %}
     ]);
@@ -435,15 +447,15 @@
     height: 563,
     hAxis: {
     title: "Date",
-    gridlines: { count: {{hum_items}}, color: '#CCC' },
+    gridlines: { count: {{pers_items}}, color: '#CCC' },
     format: 'dd-MMM-yyyy HH:mm'        },
     vAxis: {
     title: 'Percent'
     },
-    title: 'Humidity',
+    title: 'Persian Station',
     curveType: 'function'  //Makes line curved
     };
-    var chart = new google.visualization.LineChart(document.getElementById('chart_humid'));
+    var chart = new google.visualization.LineChart(document.getElementById('chart_pers'));
     chart.draw(data, options);
     }
   </script> <!-- -->

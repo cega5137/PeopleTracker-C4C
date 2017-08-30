@@ -102,9 +102,11 @@ def lab_env_db():
 						to_date 		= to_date_str,
 						temp_items 		= len(Persian),           #len(temperatures),
 						query_string 		= request.query_string,
-						hum_items 		= len(Persian))
-#						ital			= ital_adjusted
-#				 		)         #len(humidities))
+						asia_items 		= len(Asian),
+						ital_items		= len(Italian),
+						lati_items 		= len(Latin),
+						amer_items		= len(American) 
+				 		)         #len(humidities))
 
 
 def convertRecords(station, timezone):
