@@ -82,11 +82,18 @@ def lab_env_db():
 		local_timedate = arrow.get(record[0], "YYYY-MM-DD HH:mm").to(timezone)
 		time_adjusted_temperatures.append([local_timedate.format('YYYY-MM-DD HH:mm'), round(record[2],2)])
 
+	pers_adjusted = convertRecords(Persian, timezone)
+	asia_adjusted = convertRecords(Asian, timezone)
+	ital_adjusted = convertRecords(Italian, timezone)
+	amer_adjusted = convertRecords(American, timezone)
+	lati_adjusted = convertRecords(Latin, timezone)
+
 #	for record in Asian:
 #		local_timedate = arrow.get(record[0], "YYYY-MM-DD HH:mm").to(timezone)
 #		time_adjusted_humidities.append([local_timedate.format('YYYY-MM-DD HH:mm'), round(record[2],2)])
 
 	return render_template("lab_env_db.html",timezone		= timezone,
+<<<<<<< HEAD
 						asia			= asia_adjusted,
 						amer 			= time_adjusted_temperatures,
 						pers			= pers_adjusted,
@@ -105,6 +112,25 @@ def lab_env_db():
 def convertRecords(station,timezone):
 	time_adjusted = []
 	print "For ", station
+=======
+						pers			= pers_adjusted,
+						asia 			= asia_adjusted,
+						ital			= ital_adjusted,
+						amer			= amer_adjusted,
+						lati			= lati_adjusted,
+						from_date 		= from_date_str,
+						to_date 		= to_date_str,
+						temp_items 		= len(Persian),           #len(temperatures),
+						query_string 		= request.query_string,
+						hum_items 		= len(Persian))
+#						ital			= ital_adjusted
+#				 		)         #len(humidities))
+
+
+def convertRecords(station, timezone):
+	time_adjusted = []
+	
+>>>>>>> dataDisplay
 	for record in station:
 		local_timedate = arrow.get(record[0], "YYYY-MM-DD HH:mm").to(timezone)
 		time_adjusted.append([local_timedate.format('YYYY-MM-DD HH:mm'), round(record[2],2)])
