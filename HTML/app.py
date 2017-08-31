@@ -100,7 +100,7 @@ def lab_env_db():
 						lati			= lati_adjusted,
 						from_date 		= from_date_str,
 						to_date 		= to_date_str,
-						temp_items 		= len(Persian),           #len(temperatures),
+						pers_items 		= len(Persian),           #len(temperatures),
 						query_string 		= request.query_string,
 						asia_items 		= len(Asian),
 						ital_items		= len(Italian),

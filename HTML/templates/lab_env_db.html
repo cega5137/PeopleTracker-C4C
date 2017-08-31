@@ -1,31 +1,31 @@
 <!DOCTYPE html> <html lang="en"> <head>
-        <!-- Basic Page Needs
+<!-- Basic Page Needs
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+<meta charset="utf-8">
+<title>Graph conditions</title>
+<meta name="description" content="Temp conditions - RPi">
+<meta name="author" content="Cesar Galan">
+<style>
+  .bottom-space-firstP{
+    margin-bottom: 3cm;
+  }
+  .Plot-space{
+    margin-bottom: 4.3cm;
+  }
+</style>
+    <!-- Mobile Specific Metas
+	 –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- FONT
 	     –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-	<meta charset="utf-8">
-	<title>Graph conditions</title>
-	<meta name="description" content="Temp conditions - RPi">
-	<meta name="author" content="Cesar Galan">
-	<style>
-	  .bottom-space-firstP{
-	    margin-bottom: 3cm;
-	  }
-	  .Plot-space{
-	    margin-bottom: 4.3cm;
-	  }
-	</style>
-	    <!-- Mobile Specific Metas
+	<link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+	    <!-- CSS
 		 –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-	    <meta name="viewport" content="width=device-width, initial-scale=1">
-	        <!-- FONT
+	    <link rel="stylesheet" href="/static/css/normalize.css">
+	    <link rel="stylesheet" href="/static/css/skeleton.css">
+	        <!-- Favicon
 		     –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-		<link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
-		    <!-- CSS
-			 –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-		    <link rel="stylesheet" href="/static/css/normalize.css">
-		    <link rel="stylesheet" href="/static/css/skeleton.css">
-		        <!-- Favicon
-			     –––––––––––––––––––––––––––––––––––––––––––––––––– -->
-			<link rel="icon" type="image/png" href="/static/images/favicon.png">
+		<link rel="icon" type="image/png" href="/static/images/favicon.png">
   </head>
   <body>
     <div class="container">
@@ -197,9 +197,9 @@
 	 <!--     <div class="three columns"> -->
 	 <p class="bottom-space-firstP">
 	 </p>  
-	 <div id="chart_temp"></div>
+	 <!-- <div id="chart_temp"></div> -->
 	 
-	<!-- Insert American plot here -->
+	<!-- Insert American plot here --
 	 <div>
     	<a href="https://plot.ly/~cega5137/49/" target="_blank" title="american_station_C4C" style="display: block; text-align: center;"><img src="https://plot.ly/~cega5137/49.png" alt="american_station_C4C" style="max-width: 100%;width: 600px;"  width="600" onerror="this.onerror=null;this.src='https://plot.ly/404.png';" /></a>
     	<script data-plotly="cega5137:49" src="https://plot.ly/embed.js" async></script>
@@ -208,7 +208,7 @@
      <p class="Plot-space">
 	 </p>
 	
-	<!-- Insert Asian plot here -->
+	<!-- Insert Asian plot here --
 	<div>
 		<a href="https://plot.ly/~cega5137/47/" target="_blank" title="asian_station_C4C" style="display: block; text-align: center;"><img src="https://plot.ly/~cega5137/47.png" alt="asian_station_C4C" style="max-width: 100%;width: 600px;"  width="600" onerror="this.onerror=null;this.src='https://plot.ly/404.png';" /></a>
     	<script data-plotly="cega5137:47" src="https://plot.ly/embed.js" async></script>
@@ -216,7 +216,7 @@
 	 <p class="Plot-space">
 	 </p>
 
-	 <!-- Insert Italian plot here -->
+	 <!-- Insert Italian plot here --
 	 <div>
     	<a href="https://plot.ly/~cega5137/48/" target="_blank" title="italian_station_C4C" style="display: block; text-align: center;"><img src="https://plot.ly/~cega5137/48.png" alt="italian_station_C4C" style="max-width: 100%;width: 600px;"  width="600" onerror="this.onerror=null;this.src='https://plot.ly/404.png';" /></a>
     	<script data-plotly="cega5137:48" src="https://plot.ly/embed.js" async></script>
@@ -226,7 +226,7 @@
 	 </p>
 
 	 
-	<!-- Insert Latin plot here-->
+	<!-- Insert Latin plot here--
 	 <div>
     	<a href="https://plot.ly/~cega5137/50/" target="_blank" title="latin_station_C4C" style="display: block; text-align: center;"><img src="https://plot.ly/~cega5137/50.png" alt="latin_station_C4C" style="max-width: 100%;width: 600px;"  width="600" onerror="this.onerror=null;this.src='https://plot.ly/404.png';" /></a>
     	<script data-plotly="cega5137:50" src="https://plot.ly/embed.js" async></script>
@@ -234,11 +234,13 @@
 	 <p class="Plot-space">
 	 </p>
 	 
-	 <!-- Insert Persian plot here-->
+	 <!-- Insert Persian plot here--
 	<div>
     	<a href="https://plot.ly/~cega5137/46/" target="_blank" title="persian_station_C4C" style="display: block; text-align: center;"><img src="https://plot.ly/~cega5137/46.png" alt="persian_station_C4C" style="max-width: 100%;width: 600px;"  width="600" onerror="this.onerror=null;this.src='https://plot.ly/404.png';" /></a>
     	<script data-plotly="cega5137:46" src="https://plot.ly/embed.js" async></script>
 	</div>
+
+	-->
 	<div id="chart_amer"></div>
 	
 	<div id="chart_asia"></div>
@@ -426,9 +428,45 @@
     chart.draw(data, options);
     }    
   </script>
+
   
 <!-- Persian --> 
-  <script>
+<script>
+  google.load('visualization', '1', {packages: ['corechart']});
+  google.setOnLoadCallback(drawChart);
+
+  function drawChart() {
+  var data = new google.visualization.DataTable();
+  data.addColumn('datetime', 'Time');
+  data.addColumn('number', 'Temperature');
+  data.addRows([
+  {% for row in pers %}
+  [new Date({{row[0][0:4]}},{{row[0][5:7]}}-1,{{row[0][8:10]}},{{row[0][11:13]}},{{row[0][14:16]}}),{{'%0.2f'|format(row[1])}}],
+  {% endfor %}
+  ]);
+  var options = {
+  width: 600,
+  height: 563,
+  hAxis: {
+  title: "Date",
+  gridlines: { count: {{pers_items}}, color: '#CCC' },
+  format: 'dd-MMM-yyyy HH:mm' },
+  vAxis: {
+  title: 'Degrees'
+  },
+  title: 'Persian Station',
+  curveType: 'function'  //Makes line curved
+  };
+  var chart = new google.visualization.LineChart(document.getElementById('chart_pers'));
+  chart.draw(data, options);
+  }
+</script>
+
+
+
+
+
+ <script>
     google.load('visualization', '1', {packages: ['corechart']});
     google.setOnLoadCallback(drawChart);
 
@@ -455,7 +493,7 @@
     title: 'Persian Station',
     curveType: 'function'  //Makes line curved
     };
-    var chart = new google.visualization.LineChart(document.getElementById('chart_pers'));
+    var chart = new google.visualization.LineChart(document.getElementById('chart_pads'));
     chart.draw(data, options);
     }
   </script> <!-- -->
