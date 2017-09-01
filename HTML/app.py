@@ -62,7 +62,33 @@ def getLastTotal(Station):
 #@app.route("/station_time")
 #def station_time
 	
+@app.route("/plot_db", methods=['GET'])
+def plot_db():
+	print "About to get records"
+        Asian, American, Persian, Italian, Latin, timezone, from_date_str, to_date_str = get_records()
 
+        asia_adjusted = convertRecords(Asian,timezone)
+        amer_adjusted = convertRecords(American,timezone)
+        pers_adjusted = convertRecords(Persian,timezone)
+        ital_adjusted = convertRecords(Italian,timezone)
+        lati_adjusted = convertRecords(Latin,timezone)
+        print "Finish converting recods"
+	
+	return render_template("plot_db.html",timezone               = timezone,
+                                                pers                    = pers_adjusted,
+                                                asia                    = asia_adjusted,
+                                                ital                    = ital_adjusted,
+                                                amer                    = amer_adjusted,
+                                                lati                    = lati_adjusted,
+                                                from_date               = from_date_str,
+                                                to_date                 = to_date_str,
+                                                pers_items              = len(Persian),           #len(temperatures),
+                                                query_string            = request.query_string,
+                                                asia_items              = len(Asian),
+                                                ital_items              = len(Italian),
+                                                lati_items              = len(Latin),
+                                                amer_items              = len(American)
+                                                )
 
 @app.route("/lab_env_db", methods=['GET'])
 def lab_env_db():
@@ -75,22 +101,6 @@ def lab_env_db():
 	ital_adjusted = convertRecords(Italian,timezone)
 	lati_adjusted = convertRecords(Latin,timezone)
 	print "Finish converting recods"		
-	time_adjusted_temperatures = []
-	time_adjusted_humidities   = []
-
-	for record in Persian:
-		local_timedate = arrow.get(record[0], "YYYY-MM-DD HH:mm").to(timezone)
-		time_adjusted_temperatures.append([local_timedate.format('YYYY-MM-DD HH:mm'), round(record[2],2)])
-
-	pers_adjusted = convertRecords(Persian, timezone)
-	asia_adjusted = convertRecords(Asian, timezone)
-	ital_adjusted = convertRecords(Italian, timezone)
-	amer_adjusted = convertRecords(American, timezone)
-	lati_adjusted = convertRecords(Latin, timezone)
-
-#	for record in Asian:
-#		local_timedate = arrow.get(record[0], "YYYY-MM-DD HH:mm").to(timezone)
-#		time_adjusted_humidities.append([local_timedate.format('YYYY-MM-DD HH:mm'), round(record[2],2)])
 
 	return render_template("lab_env_db.html",timezone		= timezone,
 						pers			= pers_adjusted,
