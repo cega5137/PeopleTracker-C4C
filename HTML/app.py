@@ -7,6 +7,10 @@ import subprocess
 import sqlite3
 from switch import Switch 	
 
+import plotly.plotly as py
+from plotly.graph_objs import *
+import plotly.tools as pyTools
+
 app = Flask(__name__)
 
 databasePath = 'var/www/html/PeopleTracker-C4C/HTML/mainDatabase.db'
@@ -110,13 +114,13 @@ def lab_env_db():
 						lati			= lati_adjusted,
 						from_date 		= from_date_str,
 						to_date 		= to_date_str,
-						pers_items 		= len(Persian),           #len(temperatures),
+						pers_items 		= len(Persian),
 						query_string 		= request.query_string,
 						asia_items 		= len(Asian),
 						ital_items		= len(Italian),
 						lati_items 		= len(Latin),
 						amer_items		= len(American) 
-				 		)         #len(humidities))
+				 		)
 
 
 def convertRecords(station, timezone):
@@ -188,9 +192,9 @@ def get_records():
 
 @app.route("/to_plotly", methods=['GET'])
 def to_plotly():
-	import plotly.plotly as py
-	from plotly.graph_objs import *
-  	import plotly.tools as pyTools
+#	import plotly.plotly as py
+#	from plotly.graph_objs import *
+ # 	import plotly.tools as pyTools
 	pyTools.set_credentials_file(username='cega5137', api_key='jLRlCzSOlSOKuUtvknqD')
 
 	Asian, American, Persian, Italian, Latin, timezone, from_date_str, to_date_str = get_records()
@@ -206,9 +210,9 @@ def to_plotly():
 	return plot_all
 
 def getPlotStation(pers, plotTitle,timezone):
-	import plotly.plotly as py
-    	from plotly.graph_objs import *
-    	import plotly.tools as pyTools
+#	import plotly.plotly as py
+ #   	from plotly.graph_objs import *
+  #  	import plotly.tools as pyTools
 	pyTools.set_credentials_file(username='cega5137', api_key='jLRlCzSOlSOKuUtvknqD')
 	
 	time_series_adjusted  = []
@@ -223,7 +227,7 @@ def getPlotStation(pers, plotTitle,timezone):
         per = Scatter(
                         x=time_series_adjusted,
                         y=time_series_values,
-                        name= 'Number of People'
+                        name= plotTitle
                                 )
 
         data = Data([per]) # change from Data([temp, hum]) --> Data([temp])
@@ -263,9 +267,9 @@ def getPlotStation(pers, plotTitle,timezone):
 	return [plot_url, per]
 
 def getAllPlot(per, asi, ita, usa, lat):
-	import plotly.plotly as py
-        from plotly.graph_objs import *
-        import plotly.tools as pyTools
+#	import plotly.plotly as py
+#        from plotly.graph_objs import *
+#        import plotly.tools as pyTools
         pyTools.set_credentials_file(username='cega5137', api_key='jLRlCzSOlSOKuUtvknqD')
 
         data = Data([per, asi, ita, usa, lat])
