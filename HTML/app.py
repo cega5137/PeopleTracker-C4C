@@ -197,13 +197,13 @@ def to_plotly():
 
 #################### Start Persian plot ##################
 	print "About to start getting into the functions"
-	plot_url = getPlotStation(Persian,"Persian Station",timezone)
-	plot_url2 = getPlotStation(Asian,"Asian Station",timezone)
-	plot_url3 = getPlotStation(Italian,"Italian Station",timezone)
-	plot_url4 = getPlotStation(American,"American Station",timezone)
-	plot_url5 = getPlotStation(Latin,"Latin Station",timezone)
-	
-	return plot_url5
+	[plot_url, per] = getPlotStation(Persian,"Persian Station",timezone)
+	[plot_url2, asi] = getPlotStation(Asian,"Asian Station",timezone)
+	[plot_url3, ita] = getPlotStation(Italian,"Italian Station",timezone)
+	[plot_url4, usa] = getPlotStation(American,"American Station",timezone)
+	[plot_url5, lat] = getPlotStation(Latin,"Latin Station",timezone)
+	plot_all = getAllPlot(per,asi, ita, usa, lat)
+	return plot_all
 
 def getPlotStation(pers, plotTitle,timezone):
 	import plotly.plotly as py
@@ -230,8 +230,8 @@ def getPlotStation(pers, plotTitle,timezone):
 
         layout = Layout(title=plotTitle,
                         xaxis=XAxis(
-										type='date',
-                 						autorange=True
+					type='date',
+					autorange=True
                                    ),
                         yaxis=YAxis(
 		        		title='Number of People',
@@ -244,19 +244,48 @@ def getPlotStation(pers, plotTitle,timezone):
 	with Switch(plotTitle) as case:
 		if case("Persian Station"):
 			plot_url = py.plot(fig, filename='persian_station_C4C')
+			print "Ploting Persian"
 		if case("Asian Station"):
 			plot_url = py.plot(fig, filename='asian_station_C4C')
+			print "Ploting Asia"
 		if case("Italian Station"):
 			plot_url = py.plot(fig, filename='italian_station_C4C')
+			print "Ploting Italian"
 		if case("American Station"):
 			plot_url = py.plot(fig, filename='american_station_C4C')
+			print "Ploting American"
 		if case("Latin Station"):
 			plot_url = py.plot(fig, filename='latin_staion_C4C')
+			print "Ploting Latin"
 	
 	print "Finishing ", plotTitle
 
-	return plot_url
+	return [plot_url, per]
+
+def getAllPlot(per, asi, ita, usa, lat):
+	import plotly.plotly as py
+        from plotly.graph_objs import *
+        import plotly.tools as pyTools
+        pyTools.set_credentials_file(username='cega5137', api_key='jLRlCzSOlSOKuUtvknqD')
+
+        data = Data([per, asi, ita, usa, lat])
 	
+	layout = Layout(
+			title="Count of people for all stations",
+			xaxis=XAxis(
+					type='date',
+					autorange=True),
+
+			yaxis=YAxis(
+					title='Number of People',
+					type='linear',
+					autorange=True),
+			)
+
+	fig = Figure(data=data, layout=layout)
+	plot_all_url = py.plot(fig, filename='C4C_count')
+
+	return plot_all_url	
 
 def validate_date(d):
 	try:

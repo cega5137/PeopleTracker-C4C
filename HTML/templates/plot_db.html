@@ -63,19 +63,19 @@
 	  <form id="range_select" action = "/plot_db" method="GET">
 	    <input type="hidden" class="timezone" name="timezone" />
 
-	    <!-- in hour 
+	    <!-- in hour --> 
 	    <div class="one column">
-	      <input type="radio" name="range_h" value="1" id="radio_p25" /><label for="radio_p25">15min</label>
-	    </div> -->
+	      <input type="radio" name="range_h" value="1" id="radio_1" /><label for="radio_p25">1Hour</label>
+	    </div> 
 	    <div class="one column">
-	      <input type="radio" name="range_h" value="1" id="radio_1" /><label for="radio_1">1hr</label>
+	      <input type="radio" name="range_h" value="24" id="radio_24" /><label for="radio_1">1Day</label>
 	    </div>
 	    <div class="one column">
-	      <input type="radio" name="range_h" value="24" id="radio_24" /><label for="radio_24">24hrs</label>
+	      <input type="radio" name="range_h" value="168" id="radio_168" /><label for="radio_24">1Week</label>
 	    </div>
-<!--	    <div class="one column">
-	      <input type="radio" name="range_h" value="24" id="radio_24" /><label for="radio_24">24hrs</label>
-	    </div> -->
+	    <div class="one column">
+	      <input type="radio" name="range_h" value="672" id="radio_672" /><label for="radio_672">4Weeks</label>
+	    </div> 
 	  </form>
 	</div>
       </div>
@@ -89,7 +89,8 @@
       </div>
       
       <div class="row">
-	<div class="row"> 
+	<div class="row">
+	  <br> </br>
 	  <a href="" id="plotly_url" target="_blank"></a><span id="plotly_wait"></span>
 	</div>
       </div> 
@@ -268,7 +269,7 @@
     function drawChart() {
     var data = new google.visualization.DataTable();
     data.addColumn('datetime', 'Time');
-    data.addColumn('number', 'People'); 
+    data.addColumn('number', 'Customer'); 
     data.addRows([
     {% for row in amer %}
     [new Date({{row[0][0:4]}},{{row[0][5:7]}}-1,{{row[0][8:10]}},{{row[0][11:13]}},{{row[0][14:16]}}),{{'%0.2f'|format(row[1])}}],
@@ -304,9 +305,9 @@
     function drawChart() {
     var data = new google.visualization.DataTable();
     data.addColumn('datetime', 'Time');
-    data.addColumn('number', 'Temperature');
+    data.addColumn('number', 'Customers');
     data.addRows([
-    {% for row in amer %}
+    {% for row in asia %}
     [new Date({{row[0][0:4]}},{{row[0][5:7]}}-1,{{row[0][8:10]}},{{row[0][11:13]}},{{row[0][14:16]}}),{{'%0.2f'|format(row[1])}}],
     {% endfor %}
     ]);
@@ -337,7 +338,7 @@
     function drawChart() {
     var data = new google.visualization.DataTable();
     data.addColumn('datetime', 'Time');
-    data.addColumn('number', 'Temperature');
+    data.addColumn('number', 'Customers');
     data.addRows([
     {% for row in ital %}
     [new Date({{row[0][0:4]}},{{row[0][5:7]}}-1,{{row[0][8:10]}},{{row[0][11:13]}},{{row[0][14:16]}}),{{'%0.2f'|format(row[1])}}],
@@ -346,7 +347,6 @@
     var options = {
     width: 600,
     height: 563,
-    
     hAxis: {
     title: "Date",
     gridlines: { count: {{ital_items}}, color: '#CCC' },
@@ -354,6 +354,7 @@
     vAxis: {
     title: 'Number of People'
     },
+    titleTextStyle: {fontSize: 18},
     title: 'Italian',
     curveType: 'function'  //Makes line curved
     };
@@ -370,7 +371,7 @@
     function drawChart() {
     var data = new google.visualization.DataTable();
     data.addColumn('datetime', 'Time');
-    data.addColumn('number', 'Temperature');
+    data.addColumn('number', 'Customers');
     data.addRows([
     {% for row in lati %}
     [new Date({{row[0][0:4]}},{{row[0][5:7]}}-1,{{row[0][8:10]}},{{row[0][11:13]}},{{row[0][14:16]}}),{{'%0.2f'|format(row[1])}}],
@@ -387,6 +388,7 @@
     title: 'Number of People'
     },
     title: 'Latin Station',
+    titleTextStyle: {fontSize: 18},
     curveType: 'function'  //Makes line curved
     };
     var chart = new google.visualization.LineChart(document.getElementById('chart_lati'));
@@ -403,7 +405,7 @@
   function drawChart() {
   var data = new google.visualization.DataTable();
   data.addColumn('datetime', 'Time');
-  data.addColumn('number', 'Temperature');
+  data.addColumn('number', 'Customers');
   data.addRows([
   {% for row in pers %}
   [new Date({{row[0][0:4]}},{{row[0][5:7]}}-1,{{row[0][8:10]}},{{row[0][11:13]}},{{row[0][14:16]}}),{{'%0.2f'|format(row[1])}}],
@@ -420,6 +422,7 @@
   title: 'Number of People'
   },
   title: 'Persian Station',
+  titleTextStyle: { fontSize: 18 },
   curveType: 'function'  //Makes line curved
   };
   var chart = new google.visualization.LineChart(document.getElementById('chart_pers'));
