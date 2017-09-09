@@ -63,19 +63,19 @@
 	  <form id="range_select" action = "/lab_env_db" method="GET">
 	    <input type="hidden" class="timezone" name="timezone" />
 
-	    <!-- in hour 
+	    <!-- in hour -->
 	    <div class="one column">
-	      <input type="radio" name="range_h" value="1" id="radio_p25" /><label for="radio_p25">15min</label>
-	    </div> -->
+	      <input type="radio" name="range_h" value="1" id="radio_1" /><label for="radio_15">1Hour</label>
+	    </div> 
 	    <div class="one column">
-	      <input type="radio" name="range_h" value="1" id="radio_1" /><label for="radio_1">1hr</label>
+	      <input type="radio" name="range_h" value="24" id="radio_24" /><label for="radio_24">1Day</label>
 	    </div>
 	    <div class="one column">
-	      <input type="radio" name="range_h" value="24" id="radio_24" /><label for="radio_24">24hrs</label>
+	      <input type="radio" name="range_h" value="168" id="radio_168" /><label for="radio_168">1Week</label>
 	    </div>
-<!--	    <div class="one column">
-	      <input type="radio" name="range_h" value="24" id="radio_24" /><label for="radio_24">24hrs</label>
-	    </div> -->
+	    <div class="one column">
+	      <input type="radio" name="range_h" value="672" id="radio_672" /><label for="radio_672">4Weeks</label>
+	    </div> 
 	  </form>
 	</div>
       </div>
@@ -83,13 +83,15 @@
 <!--      <div class="row"> -->
       <div class="row">
         <div class="row">
+	  <div class="row">
           <a href="" id="plotly" style="position:relative;top:15px">Plot_data</a>
-        </div>
-        <a href="/lab_temp" style="position:relative;top:15px">Today's_Total</a>
-      </div>
-      
+          </div>
+          <a href="/lab_temp" style="position:relative;top:15px">Today's_Total</a>
+	</div>
+      <a href="/plot_db" style="position:relative;top:15px">Change_plot_style </a>
       <div class="row">
-	<div class="row"> 
+	<div class="row">
+	  <br> </br>
 	  <a href="" id="plotly_url" target="_blank"></a><span id="plotly_wait"></span>
 	</div>
       </div> 
