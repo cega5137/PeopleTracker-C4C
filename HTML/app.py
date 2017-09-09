@@ -5,8 +5,7 @@ import datetime
 import arrow
 import subprocess
 import sqlite3
-from switch import Switch 	
-
+from switch import Switch
 import plotly.plotly as py
 from plotly.graph_objs import *
 import plotly.tools as pyTools
@@ -32,6 +31,7 @@ def lab_temp():
 	Latin =  getLastTotal('Latin')
 
 	humidity = random.randint(1,100)
+	#shutdownRPi(request)
 	return render_template("lab_temp.html",America=amer,asian=Asia,latin=Latin,italian=ita,persian=per )
 
 def getLastTotal(Station):
@@ -62,6 +62,10 @@ def getLastTotal(Station):
 	print "Station: ", Station 
 	print "Total,: ", Total[2]
 	return Total[2]
+
+#def shutdownRpi(request):
+#	if request.method == 'POST':
+#		print "Hey"
 
 #@app.route("/station_time")
 #def station_time

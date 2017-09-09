@@ -22,7 +22,7 @@
   <div class="container">
     <div class="row">
       <div class="two-third column" style="margin-top: 5%">
-	<h1>Total amount of people today:</h1>
+	<h1>Total amount of people today:</h1> <input class="button-primary" type="submit" value="Turn off Device" style="position:absolute; right: 0px; top: 65px" id="submit_buttom"  method="POST"/>
 	<h2>American Station: {{"{0:0.0f}".format(America)}}</h2> 
 	<h2>Asian Station:    {{"{0:0.0f}".format(asian)}}</h2>
 	<h2>Italian Station:  {{"{0:0.0f}".format(italian)}}</h2>
@@ -33,7 +33,7 @@
     </div>
     <div class="row">
       <div class="eleven columns">
-	<form id="range_select" action = "/lab_env_db" method="GET">
+	<form id="range_select" action="/lab_env_db" method="GET">
 	  <input type="hidden" class="timezone" name="timezone" />
 	  <div class="one column">
 	    <a href="/plot_db" style="position:relative;top:15px">Historic Data</a>
