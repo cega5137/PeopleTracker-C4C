@@ -45,9 +45,16 @@ try:
 		msg2 = w.recv(1024)
 		print "Sending Original mesage: ", msg2
                 msgBack2 = msg2 + " Got your message Client"
-                q.send(msgBack2)		
+                w.send(msgBack2)		
 
 except KeyboardInterrupt: 
 	print "Closing connection"
 	s.close
+
+## define Thread function
+def recvSendMsg(Channel):
+	msg = Channel.recv(1024)
+	print "Sending Original mesage: ", msg
+        msgBack = msg + " Got your message Client"
+        Channel.send(msgBack)
 
