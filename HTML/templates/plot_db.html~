@@ -30,7 +30,7 @@
   <body>
     <div class="container">
       <div class="row">
-	<form id="datetime_range" action="/lab_env_db" method="GET">
+	<form id="datetime_range" action="/plot_db" method="GET">
 	  <!-- <div class="row">          -->
 	  <div class="three columns">
 	    <label for="from">From date</label>
@@ -63,19 +63,19 @@
 	  <form id="range_select" action = "/lab_env_db" method="GET">
 	    <input type="hidden" class="timezone" name="timezone" />
 
-	    <!-- in hour -->
+	    <!-- in hour 
 	    <div class="one column">
-	      <input type="radio" name="range_h" value="1" id="radio_1" /><label for="radio_15">1Hour</label>
-	    </div> 
+	      <input type="radio" name="range_h" value="1" id="radio_p25" /><label for="radio_p25">15min</label>
+	    </div> -->
 	    <div class="one column">
-	      <input type="radio" name="range_h" value="24" id="radio_24" /><label for="radio_24">1Day</label>
+	      <input type="radio" name="range_h" value="1" id="radio_1" /><label for="radio_1">1hr</label>
 	    </div>
 	    <div class="one column">
-	      <input type="radio" name="range_h" value="168" id="radio_168" /><label for="radio_168">1Week</label>
+	      <input type="radio" name="range_h" value="24" id="radio_24" /><label for="radio_24">24hrs</label>
 	    </div>
-	    <div class="one column">
-	      <input type="radio" name="range_h" value="672" id="radio_672" /><label for="radio_672">4Weeks</label>
-	    </div> 
+<!--	    <div class="one column">
+	      <input type="radio" name="range_h" value="24" id="radio_24" /><label for="radio_24">24hrs</label>
+	    </div> -->
 	  </form>
 	</div>
       </div>
@@ -83,15 +83,13 @@
 <!--      <div class="row"> -->
       <div class="row">
         <div class="row">
-	  <div class="row">
           <a href="" id="plotly" style="position:relative;top:15px">Plot_data</a>
-          </div>
-          <a href="/lab_temp" style="position:relative;top:15px">Today's_Total</a>
-	</div>
-      <a href="/plot_db" style="position:relative;top:15px">Change_plot_style </a>
+        </div>
+        <a href="/lab_temp" style="position:relative;top:15px">Today's_Total</a>
+      </div>
+      
       <div class="row">
-	<div class="row">
-	  <br> </br>
+	<div class="row"> 
 	  <a href="" id="plotly_url" target="_blank"></a><span id="plotly_wait"></span>
 	</div>
       </div> 
@@ -201,48 +199,7 @@
 	 </p>  
 	 <!-- <div id="chart_temp"></div> -->
 	 
-	<!-- Insert American plot here -->
-	 <div>
-    	<a href="https://plot.ly/~cega5137/49/" target="_blank" title="american_station_C4C" style="display: block; text-align: center;"><img src="https://plot.ly/~cega5137/49.png" alt="american_station_C4C" style="max-width: 100%;width: 600px;"  width="600" onerror="this.onerror=null;this.src='https://plot.ly/404.png';" /></a>
-    	<script data-plotly="cega5137:49" src="https://plot.ly/embed.js" async></script>
-	</div>
-
-     <p class="Plot-space">
-	 </p>
-	
-	<!-- Insert Asian plot here -->
-	<div>
-		<a href="https://plot.ly/~cega5137/47/" target="_blank" title="asian_station_C4C" style="display: block; text-align: center;"><img src="https://plot.ly/~cega5137/47.png" alt="asian_station_C4C" style="max-width: 100%;width: 600px;"  width="600" onerror="this.onerror=null;this.src='https://plot.ly/404.png';" /></a>
-    	<script data-plotly="cega5137:47" src="https://plot.ly/embed.js" async></script>
-	</div>
-	 <p class="Plot-space">
-	 </p>
-
-	 <!-- Insert Italian plot here -->
-	 <div>
-    	<a href="https://plot.ly/~cega5137/48/" target="_blank" title="italian_station_C4C" style="display: block; text-align: center;"><img src="https://plot.ly/~cega5137/48.png" alt="italian_station_C4C" style="max-width: 100%;width: 600px;"  width="600" onerror="this.onerror=null;this.src='https://plot.ly/404.png';" /></a>
-    	<script data-plotly="cega5137:48" src="https://plot.ly/embed.js" async></script>
-	</div>
-	
-	 <p class="Plot-space">
-	 </p>
-
-	 
-	<!-- Insert Latin plot here-->
-	 <div>
-    	<a href="https://plot.ly/~cega5137/50/" target="_blank" title="latin_station_C4C" style="display: block; text-align: center;"><img src="https://plot.ly/~cega5137/50.png" alt="latin_station_C4C" style="max-width: 100%;width: 600px;"  width="600" onerror="this.onerror=null;this.src='https://plot.ly/404.png';" /></a>
-    	<script data-plotly="cega5137:50" src="https://plot.ly/embed.js" async></script>
-	</div>
-	 <p class="Plot-space">
-	 </p>
-	 
-	 <!-- Insert Persian plot here -->
-	<div>
-    	<a href="https://plot.ly/~cega5137/46/" target="_blank" title="persian_station_C4C" style="display: block; text-align: center;"><img src="https://plot.ly/~cega5137/46.png" alt="persian_station_C4C" style="max-width: 100%;width: 600px;"  width="600" onerror="this.onerror=null;this.src='https://plot.ly/404.png';" /></a>
-    	<script data-plotly="cega5137:46" src="https://plot.ly/embed.js" async></script>
-	</div>
-
-	<!-- Other stuff
+	<!-- --> 
 	<div id="chart_amer"></div>
 	
 	<div id="chart_asia"></div>
@@ -251,7 +208,7 @@
 
 	<div id="chart_lati"></div>
 
-	<div id="chart_pers"></div> -->
+	<div id="chart_pers"></div> 
 	      </div> 
 <!--	    </div> 
 	  </div> 

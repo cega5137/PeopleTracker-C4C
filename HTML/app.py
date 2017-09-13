@@ -5,9 +5,15 @@ import datetime
 import arrow
 import subprocess
 import sqlite3
+from switch import Switch
+import plotly.plotly as py
+from plotly.graph_objs import *
+import plotly.tools as pyTools
 
 app = Flask(__name__)
 dataBaseLink = '/var/www/html/lab_app.db'
+
+databasePath = 'var/www/html/PeopleTracker-C4C/HTML/mainDatabase.db'
 
 @app.route('/')
 def index():
@@ -16,24 +22,9 @@ def index():
 
 @app.route("/lab_temp")
 def lab_temp():
-#	temperature, humidity, timezone, from_date_str, to_date_str = get_records()
-
-#	time_adjusted_temperatures = []
-#	time_adjusted_humidities   = []
-	
 	T = datetime.datetime.now()
-#	conn = sqlite3.connect('/var/www/html/mainDatabase.db')
-#	curs = conn.cursor()
 	
-	# Get data for Asian
-#	curs.execute("SELECT * FROM Asian")
-#	temperature = curs.fetchall()
-#	print temperature
-#	print "One more light"
-#	L = len(temperature)
-#	tempe = temperature[L-1]
-#	print "YEAH!!!!", tempe[2]
-	
+	print "Get the last total"
 	Asia = getLastTotal('Asian')
 	amer = getLastTotal('American')
 	per = getLastTotal('Persian')
@@ -41,6 +32,7 @@ def lab_temp():
 	Latin =  getLastTotal('Latin')
 
 	humidity = random.randint(1,100)
+<<<<<<< HEAD
 #	temperature = random.randint(30,80)
 #	if Asia is not None or amer is not None or per is not None or ita is not None or Latin is not N
 #		return render_template("lab_temp.html",America=amer,asian=Asia,latin=Latin,italian=ita,persian=per )
@@ -62,42 +54,119 @@ def getLastTotal(Station):
 	return switcher.get(Station,"Fail to grab last date")
 
 	data = curs.fetchall()
-	L = len(data)
-	Total = data[L-1]
-	return Total
+=======
+	#shutdownRPi(request)
+	return render_template("lab_temp.html",America=amer,asian=Asia,latin=Latin,italian=ita,persian=per )
 
+def getLastTotal(Station):
+	conn = sqlite3.connect("/var/www/html/PeopleTracker-C4C/HTML/mainDatabase.db")
+	curs = conn.cursor()	
+	with Switch(Station) as case:
+		if case('Asian'):
+			curs.execute("SELECT * FROM Asian")
+			data = curs.fetchall()
+		if case('American'):
+			curs.execute("SELECT * FROM American")
+			data = curs.fetchall()
+		if case('Persian'):
+			curs.execute("SELECT * FROM Persian")
+			data = curs.fetchall()
+		if case('Italian'):
+			curs.execute("SELECT * FROM Italian"),
+			data = curs.fetchall()
+		if case('Latin'):
+			curs.execute("SELECT * FROM Latin")
+			data = curs.fetchall()
+
+
+	print "about to get data"
+>>>>>>> acbd0eadbdbf6faa3e649dcf53be6f6ccb672f6a
+	L = len(data)
+	print "length: ", L
+	Total = data[L-1]	
+	print "Station: ", Station 
+	print "Total,: ", Total[2]
+	return Total[2]
+
+#def shutdownRpi(request):
+#	if request.method == 'POST':
+#		print "Hey"
+
+<<<<<<< HEAD
 @app.route("/station_time")
 def station_time():
 	restartDate = datetime.time()
 	
+=======
+#@app.route("/station_time")
+#def station_time
+	
+@app.route("/plot_db", methods=['GET'])
+def plot_db():
+	print "About to get records"
+        Asian, American, Persian, Italian, Latin, timezone, from_date_str, to_date_str = get_records()
+
+        asia_adjusted = convertRecords(Asian,timezone)
+        amer_adjusted = convertRecords(American,timezone)
+        pers_adjusted = convertRecords(Persian,timezone)
+        ital_adjusted = convertRecords(Italian,timezone)
+        lati_adjusted = convertRecords(Latin,timezone)
+        print "Finish converting recods"
+	
+	return render_template("plot_db.html",timezone               = timezone,
+                                                pers                    = pers_adjusted,
+                                                asia                    = asia_adjusted,
+                                                ital                    = ital_adjusted,
+                                                amer                    = amer_adjusted,
+                                                lati                    = lati_adjusted,
+                                                from_date               = from_date_str,
+                                                to_date                 = to_date_str,
+                                                pers_items              = len(Persian),           #len(temperatures),
+                                                query_string            = request.query_string,
+                                                asia_items              = len(Asian),
+                                                ital_items              = len(Italian),
+                                                lati_items              = len(Latin),
+                                                amer_items              = len(American)
+                                                )
+>>>>>>> acbd0eadbdbf6faa3e649dcf53be6f6ccb672f6a
 
 @app.route("/lab_env_db", methods=['GET'])
 def lab_env_db():
-	temperatures, humidities, timezone, from_date_str, to_date_str = get_records()
-	
-	time_adjusted_temperatures = []
-	time_adjusted_humidities   = []
+	print "About to get records"
+	Asian, American, Persian, Italian, Latin, timezone, from_date_str, to_date_str = get_records()	
 
-	for record in temperatures:
+	asia_adjusted = convertRecords(Asian,timezone)
+	amer_adjusted = convertRecords(American,timezone)
+	pers_adjusted = convertRecords(Persian,timezone)
+	ital_adjusted = convertRecords(Italian,timezone)
+	lati_adjusted = convertRecords(Latin,timezone)
+	print "Finish converting recods"		
+
+	return render_template("lab_env_db.html",timezone		= timezone,
+						pers			= pers_adjusted,
+						asia 			= asia_adjusted,
+						ital			= ital_adjusted,
+						amer			= amer_adjusted,
+						lati			= lati_adjusted,
+						from_date 		= from_date_str,
+						to_date 		= to_date_str,
+						pers_items 		= len(Persian),
+						query_string 		= request.query_string,
+						asia_items 		= len(Asian),
+						ital_items		= len(Italian),
+						lati_items 		= len(Latin),
+						amer_items		= len(American) 
+				 		)
+
+
+def convertRecords(station, timezone):
+	time_adjusted = []
+
+	for record in station:
 		local_timedate = arrow.get(record[0], "YYYY-MM-DD HH:mm").to(timezone)
-		time_adjusted_temperatures.append([local_timedate.format('YYYY-MM-DD HH:mm'), round(record[2],2)])
-
-#	for record in humidities:
-#		local_timedate = arrow.get(record[0], "YYYY-MM-DD HH:mm").to(timezone)
-#		time_adjusted_humidities.append([local_timedate.format('YYYY-MM-DD HH:mm'), round(record[2],2)])
-
+		time_adjusted.append([local_timedate.format('YYYY-MM-DD HH:mm'), round(record[2],2)])
 	
-#	humidity = random.randint(1,100)
-#       temperature = random.randint(30.80)
-	return render_template("lab_env_db.html",timezone	= timezone,
-						temp	= time_adjusted_temperatures,
-						hum 	= time_adjusted_humidities,
-						from_date = from_date_str,
-						to_date = to_date_str,
-						temp_items = random.randint,#len(temperatures),
-						query_string = request.query_string,
-						hum_items = random.randint)#len(humidities))
-
+	return time_adjusted
 
 def get_records():
 	import sqlite3
@@ -109,7 +178,8 @@ def get_records():
 
 	print "REQUEST:"
 	print request.args
-	
+	print "range_h_form", range_h_form	
+
 	try: 
 		range_h_int	= int(range_h_form)
 	except:
@@ -118,7 +188,7 @@ def get_records():
 
 	print "Received from browser: %s, %s, %s, %s" % (from_date_str, to_date_str, timezone, range_h_int)
 	
-	if not validate_date(from_date_str):			# Validate date before sending it to the DB
+	if not validate_date(from_date_str):	# Validate date before sending it to the DB
 		from_date_str 	= time.strftime("%Y-%m-%d 00:00")
 	if not validate_date(to_date_str):
 		to_date_str 	= time.strftime("%Y-%m-%d %H:%M")		# Validate date before sending it to the DB
@@ -140,120 +210,131 @@ def get_records():
 		from_date_utc   = arrow.get(from_date_obj, timezone).to('Etc/UTC').strftime("%Y-%m-%d %H:%M")	
 		to_date_utc     = arrow.get(to_date_obj, timezone).to('Etc/UTC').strftime("%Y-%m-%d %H:%M")
 
+<<<<<<< HEAD
 	conn 			    = sqlite3.connect('/var/www/html/lab_app.db') ### Change this database
 	curs 			    = conn.cursor()
 	curs.execute("SELECT * FROM temperatures WHERE rDateTime BETWEEN ? AND ?", (from_date_utc.format('YYYY-MM-DD HH:mm'), to_date_utc.format('YYYY-MM-DD HH:mm')))
 	temperatures 	    = curs.fetchall()
 	curs.execute("SELECT * FROM humidities WHERE rDateTime BETWEEN ? AND ?", (from_date_utc.format('YYYY-MM-DD HH:mm'), to_date_utc.format('YYYY-MM-DD HH:mm')))
 	humidities 		    = curs.fetchall()
+=======
+	conn 			= sqlite3.connect('/var/www/html/PeopleTracker-C4C/HTML/mainDatabase.db')
+	curs 			= conn.cursor()
+	curs.execute("SELECT * FROM Asian WHERE date BETWEEN ? AND ?", (from_date_utc.format('YYYY-MM-DD HH:mm'), to_date_utc.format('YYYY-MM-DD HH:mm')))
+	Asian			= curs.fetchall()
+	curs.execute("SELECT * FROM American WHERE date BETWEEN ? AND ?", (from_date_utc.format('YYYY-MM-DD HH:mm'), to_date_utc.format('YYYY-MM-DD HH:mm')))
+	American		= curs.fetchall()
+	curs.execute("SELECT * FROM Persian WHERE date BETWEEN ? AND ?", (from_date_utc.format('YYYY-MM-DD HH:mm'), to_date_utc.format('YYYY-MM-DD HH:mm')))
+        Persian			= curs.fetchall()
+	curs.execute("SELECT * FROM Italian WHERE date BETWEEN ? AND ?", (from_date_utc.format('YYYY-MM-DD HH:mm'), to_date_utc.format('YYYY-MM-DD HH:mm')))
+        Italian         	= curs.fetchall()
+	curs.execute("SELECT * FROM Latin WHERE date BETWEEN ? AND ?", (from_date_utc.format('YYYY-MM-DD HH:mm'), to_date_utc.format('YYYY-MM-DD HH:mm')))
+        Latin			= curs.fetchall()	 
+>>>>>>> acbd0eadbdbf6faa3e649dcf53be6f6ccb672f6a
 	conn.close()
 
-	return [temperatures, humidities, timezone, from_date_str, to_date_str]
+	return [Asian, American, Persian, Italian, Latin, timezone, from_date_str, to_date_str]
 
 @app.route("/to_plotly", methods=['GET'])
 def to_plotly():
-	import plotly.plotly as py
-	from plotly.graph_objs import *
-  	import plotly.tools as pyTools
+#	import plotly.plotly as py
+#	from plotly.graph_objs import *
+ # 	import plotly.tools as pyTools
 	pyTools.set_credentials_file(username='cega5137', api_key='jLRlCzSOlSOKuUtvknqD')
 
-	temperatures, humidities, timezone, from_date_str, to_date_str = get_records()
+	Asian, American, Persian, Italian, Latin, timezone, from_date_str, to_date_str = get_records()
 
-	# Create new record tables so that datetimes are adjusted back to the user browser's time zone.
-	time_series_adjusted_tempreratures  = []
-	time_series_adjusted_humidities 	= []
-	time_series_temprerature_values 	= []
-	time_series_humidity_values 		= []
+#################### Start Persian plot ##################
+	print "About to start getting into the functions"
+	[plot_url, per] = getPlotStation(Persian,"Persian Station",timezone)
+	[plot_url2, asi] = getPlotStation(Asian,"Asian Station",timezone)
+	[plot_url3, ita] = getPlotStation(Italian,"Italian Station",timezone)
+	[plot_url4, usa] = getPlotStation(American,"American Station",timezone)
+	[plot_url5, lat] = getPlotStation(Latin,"Latin Station",timezone)
+	plot_all = getAllPlot(per,asi, ita, usa, lat)
+	return plot_all
 
-	for record in temperatures:
-		local_timedate = arrow.get(record[0], "YYYY-MM-DD HH:mm").to(timezone)
-		time_series_adjusted_tempreratures.append(local_timedate.format('YYYY-MM-DD HH:mm'))
-		time_series_temprerature_values.append(round(record[2],2))
+def getPlotStation(pers, plotTitle,timezone):
+#	import plotly.plotly as py
+ #   	from plotly.graph_objs import *
+  #  	import plotly.tools as pyTools
+	pyTools.set_credentials_file(username='cega5137', api_key='jLRlCzSOlSOKuUtvknqD')
+	
+	time_series_adjusted  = []
+	time_series_values    = []
 
-	for record in humidities:
-		local_timedate = arrow.get(record[0], "YYYY-MM-DD HH:mm").to(timezone)
-		time_series_adjusted_humidities.append(local_timedate.format('YYYY-MM-DD HH:mm')) #Best to pass datetime in text
-																						  #so that Plotly respects it
-		time_series_humidity_values.append(round(record[2],2))
+        for record in pers:
+                local_timedate = arrow.get(record[0], "YYYY-MM-DD HH:mm").to(timezone)
+                time_series_adjusted.append(local_timedate.format('YYYY-MM-DD HH:mm'))
+                time_series_values.append(round(record[2],2))
 
 
-## Start Persian plot ###
-	temp = Scatter(
-        		x=time_series_adjusted_tempreratures,
-        		y=time_series_temprerature_values,
-        		name= 'Number of People'
-    				)
-#	hum = Scatter(
-#        		x=time_series_adjusted_humidities,
-#        		y=time_series_humidity_values,
-#        		name='Humidity',
-#        		yaxis='y2'
-#			)
+        per = Scatter(
+                        x=time_series_adjusted,
+                        y=time_series_values,
+                        name= plotTitle
+                                )
 
-	data = Data([temp]) # change from Data([temp, hum]) --> Data([temp])
+        data = Data([per]) # change from Data([temp, hum]) --> Data([temp])
 
-	layout = Layout(
-					title="Persian Station",
-				    xaxis=XAxis(
-				        type='date',
-				        autorange=True
-				    ),
-				    yaxis=YAxis(
-				    	title='Number of People',
-				        type='linear',
-				        autorange=True
-				    ),
-#				    yaxis2=YAxis(
-#				    	title='Percent',
-#				        type='linear',
-#				        autorange=True,
-#				        overlaying='y',
-#				        side='right'
-#				    )
-
-					)
-	fig = Figure(data=data, layout=layout)
-	plot_url = py.plot(fig, filename='lab_temp_hum')
-
-###### Asian Plot ####
-
-	hum = Scatter(
-		x = time_series_adjusted_humidities,
-		y = time_series_humidity_values,
-		name = 'HUM'
-	)
-
-	data2 = Data([hum])
-
-	layout2 = Layout(
-			title="Asian station",
-			xaxis=XAxis(
+        layout = Layout(title=plotTitle,
+                        xaxis=XAxis(
 					type='date',
 					autorange=True
-				),
+                                   ),
+                        yaxis=YAxis(
+		        		title='Number of People',
+                                        type='linear',
+                                        autorange=True
+                                    ),
+                                    )
+        fig = Figure(data=data, layout=layout)
+		
+	with Switch(plotTitle) as case:
+		if case("Persian Station"):
+			plot_url = py.plot(fig, filename='persian_station_C4C')
+			print "Ploting Persian"
+		if case("Asian Station"):
+			plot_url = py.plot(fig, filename='asian_station_C4C')
+			print "Ploting Asia"
+		if case("Italian Station"):
+			plot_url = py.plot(fig, filename='italian_station_C4C')
+			print "Ploting Italian"
+		if case("American Station"):
+			plot_url = py.plot(fig, filename='american_station_C4C')
+			print "Ploting American"
+		if case("Latin Station"):
+			plot_url = py.plot(fig, filename='latin_staion_C4C')
+			print "Ploting Latin"
+	
+	print "Finishing ", plotTitle
+
+	return [plot_url, per]
+
+def getAllPlot(per, asi, ita, usa, lat):
+#	import plotly.plotly as py
+#        from plotly.graph_objs import *
+#        import plotly.tools as pyTools
+        pyTools.set_credentials_file(username='cega5137', api_key='jLRlCzSOlSOKuUtvknqD')
+
+        data = Data([per, asi, ita, usa, lat])
+	
+	layout = Layout(
+			title="Count of people for all stations",
+			xaxis=XAxis(
+					type='date',
+					autorange=True),
+
 			yaxis=YAxis(
 					title='Number of People',
 					type='linear',
-					autorange=True
-				),
+					autorange=True),
 			)
 
-	fig2 = Figure(data=data2,layout=layout2)
-	plot_url2 = py.plot(fig2,filename='lab_temp_hum2')
+	fig = Figure(data=data, layout=layout)
+	plot_all_url = py.plot(fig, filename='C4C_count')
 
-##### Italian Station #####
-
-
-#### American Station ####
-
-
-#### Latin Station ##### 
-
-
-
-
-
-	return plot_url2
+	return plot_all_url	
 
 def validate_date(d):
 	try:

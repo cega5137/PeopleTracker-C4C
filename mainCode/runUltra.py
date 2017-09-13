@@ -39,7 +39,13 @@ print "The on time is ", T
 host = "10.0.0.227"
 port = 4446
 Sc=socket(AF_INET, SOCK_STREAM)
-Sc.bind((host, port))
+while True:
+	try: 
+		Sc.bind((host, port))
+		break
+	except:
+		Sc.close
+		continue
 
 # Open File
 now = datetime.datetime.now()
@@ -67,10 +73,11 @@ while 1:
 	##### Sending data
 	Sc.listen(5)
 	q, addr= Sc.accept()
-	msg = "Persian {} {} ".format(previousTimeCount, masterCount)
+	msg = "Asian {} {} ".format(previousTimeCount, masterCount)
 	q.send(msg)
 	Sc.close
-	previousTimeCount = masterCount	
+	previousTimeCount = masterCount
+	T = datetime.datetime.time(datetime.datetime.now())	
 #	Sc = socket(AF_INET,SOCK_STREAM)
 #	Sc.bind((host, port))
 
