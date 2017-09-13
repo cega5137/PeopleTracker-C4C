@@ -2,7 +2,7 @@ from socket import *
 import time
 import subprocess
 
-host = " 10.0.0.150" #ip address of the server
+host = " 10.0.0.151" #ip address of the server
 
 print host
 
