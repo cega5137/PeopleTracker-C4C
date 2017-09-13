@@ -22,10 +22,9 @@ s.listen(5)
 print "Listening for connection..."
 
 q, addr= s.accept()
+print "Connected to address: ", addr
 
-#data = raw_input("Enter data to be sent: ")
 
-data = random.randint(1,100)
 try:
 	while True:
 		msg = "American Station"
