@@ -1,11 +1,11 @@
 from socket import *
 import time
 
-host = " 10.0.0.227"
+host = " 10.0.0.211"
 
 print host
 
-port = 4446
+port = 4447
 
 s=socket(AF_INET, SOCK_STREAM)
 #s.settimeout(60)
@@ -20,10 +20,15 @@ while True:
 		print "not connection found will try again in 2 seconds..."
 		time.sleep(1)
 
-print "socket connected!!"
+try:
+	while True:
 
-msg=s.recv(1024)
+		print "socket connected!!"
 
-print "Message from server: " + msg
+		msg=s.recv(1024)
 
-s.close
+		print "Message from server: " + msg
+
+except KeyboardInterrupt:
+	print "\nClosing"
+	s.close

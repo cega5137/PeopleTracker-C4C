@@ -1,7 +1,8 @@
 from socket import * 
 import random
+import time
 
-host = "10.0.0.151" # get the ip address of the raspberry pi zero
+host = "10.0.0.211" # get the ip address of the raspberry pi zero
 
 print host
 
@@ -15,6 +16,7 @@ s.bind((host, port))
 
 print "Socket Bound"
 
+
 s.listen(5)
 
 print "Listening for connection..."
@@ -24,11 +26,16 @@ q, addr= s.accept()
 #data = raw_input("Enter data to be sent: ")
 
 data = random.randint(1,100)
+try:
+	while True:
+		msg = "american Station"
 
-msg = str(data)
+		print msg
+		
+		q.send(msg)
 
-print msg
+		time.sleep(5)
 
-q.send(msg)
-
-s.close
+except KeyboardInterrupt: 
+	print "Closing connection"
+	s.close
