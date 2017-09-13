@@ -32,29 +32,7 @@ def lab_temp():
 	Latin =  getLastTotal('Latin')
 
 	humidity = random.randint(1,100)
-<<<<<<< HEAD
-#	temperature = random.randint(30,80)
-#	if Asia is not None or amer is not None or per is not None or ita is not None or Latin is not N
-#		return render_template("lab_temp.html",America=amer,asian=Asia,latin=Latin,italian=ita,persian=per )
-#	else:
-	return render_template("lab_temp.html",America=humidity,asian=humidity,latin=humidity,italian=humidity,persian=humidity )
 
-def getLastTotal(Station):
-	conn = sqlite3.connect('/var/www/html/mainDatabase.db') ## Change the database to not magic number
-	curs = conn.cursor()
-
-	# Select station
-	switcher = {	
-		'Asian':curs.execute("SELECT * FROM Asian"),
-		'American':curs.execute("SELECT * FROM American"),
-		'Persian':curs.execute("SELECT * FROM Persian"),
-		'Italian':curs.execute("SELECT * FROM Persian"),
-		'Latin':curs.execute("SELECT * FROM Latin")
-	}
-	return switcher.get(Station,"Fail to grab last date")
-
-	data = curs.fetchall()
-=======
 	#shutdownRPi(request)
 	return render_template("lab_temp.html",America=amer,asian=Asia,latin=Latin,italian=ita,persian=per )
 
@@ -80,7 +58,6 @@ def getLastTotal(Station):
 
 
 	print "about to get data"
->>>>>>> acbd0eadbdbf6faa3e649dcf53be6f6ccb672f6a
 	L = len(data)
 	print "length: ", L
 	Total = data[L-1]	
@@ -92,12 +69,7 @@ def getLastTotal(Station):
 #	if request.method == 'POST':
 #		print "Hey"
 
-<<<<<<< HEAD
-@app.route("/station_time")
-def station_time():
-	restartDate = datetime.time()
-	
-=======
+
 #@app.route("/station_time")
 #def station_time
 	
@@ -121,14 +93,14 @@ def plot_db():
                                                 lati                    = lati_adjusted,
                                                 from_date               = from_date_str,
                                                 to_date                 = to_date_str,
-                                                pers_items              = len(Persian),           #len(temperatures),
+                                                pers_items              = len(Persian),           
                                                 query_string            = request.query_string,
                                                 asia_items              = len(Asian),
                                                 ital_items              = len(Italian),
                                                 lati_items              = len(Latin),
                                                 amer_items              = len(American)
                                                 )
->>>>>>> acbd0eadbdbf6faa3e649dcf53be6f6ccb672f6a
+
 
 @app.route("/lab_env_db", methods=['GET'])
 def lab_env_db():
@@ -210,14 +182,7 @@ def get_records():
 		from_date_utc   = arrow.get(from_date_obj, timezone).to('Etc/UTC').strftime("%Y-%m-%d %H:%M")	
 		to_date_utc     = arrow.get(to_date_obj, timezone).to('Etc/UTC').strftime("%Y-%m-%d %H:%M")
 
-<<<<<<< HEAD
-	conn 			    = sqlite3.connect('/var/www/html/lab_app.db') ### Change this database
-	curs 			    = conn.cursor()
-	curs.execute("SELECT * FROM temperatures WHERE rDateTime BETWEEN ? AND ?", (from_date_utc.format('YYYY-MM-DD HH:mm'), to_date_utc.format('YYYY-MM-DD HH:mm')))
-	temperatures 	    = curs.fetchall()
-	curs.execute("SELECT * FROM humidities WHERE rDateTime BETWEEN ? AND ?", (from_date_utc.format('YYYY-MM-DD HH:mm'), to_date_utc.format('YYYY-MM-DD HH:mm')))
-	humidities 		    = curs.fetchall()
-=======
+
 	conn 			= sqlite3.connect('/var/www/html/PeopleTracker-C4C/HTML/mainDatabase.db')
 	curs 			= conn.cursor()
 	curs.execute("SELECT * FROM Asian WHERE date BETWEEN ? AND ?", (from_date_utc.format('YYYY-MM-DD HH:mm'), to_date_utc.format('YYYY-MM-DD HH:mm')))
@@ -230,7 +195,6 @@ def get_records():
         Italian         	= curs.fetchall()
 	curs.execute("SELECT * FROM Latin WHERE date BETWEEN ? AND ?", (from_date_utc.format('YYYY-MM-DD HH:mm'), to_date_utc.format('YYYY-MM-DD HH:mm')))
         Latin			= curs.fetchall()	 
->>>>>>> acbd0eadbdbf6faa3e649dcf53be6f6ccb672f6a
 	conn.close()
 
 	return [Asian, American, Persian, Italian, Latin, timezone, from_date_str, to_date_str]
