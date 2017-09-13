@@ -1,7 +1,7 @@
 from socket import *
 import time
 
-host = " 10.0.0.211"
+host = " 10.0.0.150" #ip address of the server
 
 print host
 
@@ -29,6 +29,8 @@ try:
 
 		print "Message from server: " + msg
 
+		s.send(msg)
+		
 except KeyboardInterrupt:
 	print "\nClosing"
 	s.close
