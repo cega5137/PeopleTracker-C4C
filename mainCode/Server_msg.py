@@ -23,24 +23,31 @@ print "Listening for connection..."
 
 q, addr= s.accept()
 print "Connected to address: ", addr
+w, addr2=s.accept()
+print "Connected to addres: ", addr2
+
+clientN1 = q.recv(1024)
+print "who is on? ", clientN1
+q.send("Thank you for connecting")
+
+clientN2 = w.recv(1024)
+print "who is on? ", clientN2
+w.send("Thank you for connection")
 
 
 try:
 	while True:
-		msg = "American Station"
+		msg1 = q.recv(1024)
+		print "Sending Original mesage: ", msg1
+		msgBack1 = msg1 + " Got your message Client"
+		q.send(msgBack1)
 
-		print "Sending Original mesage: ", msg
-		
-		q.send(msg)
-
-		time.sleep(1)
-
-		msgR= q.recv(1024)
-
-		print "Message bounce: ", msgR
-
-		
+		msg2 = w.recv(1024)
+		print "Sending Original mesage: ", msg2
+                msgBack2 = msg2 + " Got your message Client"
+                q.send(msgBack2)		
 
 except KeyboardInterrupt: 
 	print "Closing connection"
 	s.close
+
