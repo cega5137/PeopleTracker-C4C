@@ -2,7 +2,7 @@ from socket import *
 import random
 import time
 
-host = "10.0.0.211" # get the ip address of the raspberry pi zero
+host = "10.0.0.150" # ip address of the server
 
 print host
 
@@ -28,13 +28,19 @@ q, addr= s.accept()
 data = random.randint(1,100)
 try:
 	while True:
-		msg = "american Station"
+		msg = "American Station"
 
-		print msg
+		print "Sending Original mesage: ", msg
 		
 		q.send(msg)
 
-		time.sleep(5)
+		time.sleep(1)
+
+		msgR= q.recv(1024)
+
+		print "Message bounce: ", msgR
+
+		
 
 except KeyboardInterrupt: 
 	print "Closing connection"
