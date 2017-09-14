@@ -41,7 +41,12 @@ No text output. Two new records are inserted in the database when the script is 
 
 import sqlite3
 import sys
-#import Adafruit_DHT
+import socket
+import time
+import datetime
+from threading import Thread
+from SocketServer import ThreadingMixIn
+from switch import Switch
 
 class ClientThread(Thread):
         def __init__(self, ip, port):
@@ -68,7 +73,7 @@ class ClientThread(Thread):
 
 	
 	def log_values(self, Header, currn, total):
-        	conn=sqlite3.connect('/var/www/html/mainDatabase.db')  #It is important to provide an
+        	conn=sqlite3.connect('/var/www/html/PeopleTracker-C4C/HTML/mainDatabase.db')  #It is important to provide an
                 	                                             #absolute path to the database
                         	                                     #file, otherwise Cron won't be
                                 	                             #able to find it!
@@ -77,22 +82,22 @@ class ClientThread(Thread):
 		with Switch(Header) as case:
 			if case('Asian'):
 	          		curs.execute('''INSERT INTO Asian values(datetime(CURRENT_TIMESTAMP, 'localtime'), (?), (?))''', (currn,total))
-				print "Saving current and total in Asian: ", currn, ", ", Total
+				print "Saving current and total in Asian: ", currn, ", ", total
 			if case('American'):
 				curs.execute('''INSERT INTO American values(datetime(CURRENT_TIMESTAMP, 'localtime'), (?), (?))''', (currn,total))
-				print "Saving current and total in American: ", currn, ", ", Total
+				print "Saving current and total in American: ", currn, ", ", total
 
 			if case('Persian'):
 				curs.execute('''INSERT INTO Persian values(datetime(CURRENT_TIMESTAMP, 'localtime'), (?), (?))''', (currn,total))
-				print "Saving current and total in Persian: ", currn, ", ", Total
+				print "Saving current and total in Persian: ", currn, ", ", total
 
                		if case('Italian'):
 				curs.execute('''INSERT INTO Italian values(datetime(CURRENT_TIMESTAMP, 'localtime'), (?), (?))''', (currn,total))
-				print "Saving current and total in Italian: ", currn, ", ", Total
+				print "Saving current and total in Italian: ", currn, ", ", total
 
-            	   	if case('Latin')"
+            	   	if case('Latin'):
 				curs.execute('''INSERT INTO Latin values(datetime(CURRENT_TIMESTAMP, 'localtime'), (?), (?))''', (currn,total))
-				print "Saving current and total in Latin: ", currn, ", ", Total
+				print "Saving current and total in Latin: ", currn, ", ", total
 
         	conn.commit()
         	conn.close()
@@ -103,22 +108,17 @@ class ClientThread(Thread):
 # sensor related lines, and uncomment the following lines (these will produce random
 # numbers for the temperature and humidity variables):
 import random
-import socket
-import time
-import datetime
-from threading import Thread
-from SocketServer import ThreadingMixIn
 
 ####################################################
 print "Startin application"
 
-host = "10.0.0.151"
+hostIP = "10.0.0.151"
 port = 3333
 BUFFER_SIZE = 20
 
 tcpServer = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-tcpServer = setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-tcpServer.bind((TCP_IP,TCP_PORT))
+tcpServer.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+tcpServer.bind((hostIP,port))
 threads = []
 #s=socket(AF_INET,SOCK_STREAM)
 #i = 0
@@ -129,7 +129,7 @@ while True:
 	print "Waiting connection from clients"
 	(conn, (ip, port)) = tcpServer.accept()
 	newthread = ClientThread(ip, port)
-	newthread = start()
+	newthread.start()
 	threads.append(newthread)
 	
 	
