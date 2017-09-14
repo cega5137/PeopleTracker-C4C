@@ -2,7 +2,7 @@ print "Register GPIO"
 import RPi.GPIO as GPIO
 import time
 import datetime
-from socket import *
+import socket
 
 GPIO.setmode(GPIO.BCM)
 
@@ -36,27 +36,30 @@ update_time = 1 # minutes
 print "The on time is ", T
 
 # Set up host
-host = "10.0.0.227"
-port = 4446
-Sc=socket(AF_INET, SOCK_STREAM)
-while True:
-	try: 
-		Sc.bind((host, port))
-		break
-	except:
-		Sc.close
-		continue
+host = "10.0.0.151"
+port = 3333
+BUFFER_SIZE = 2000
+Sc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+Sc.connect((host, port))
+
+#while True:
+#	try: 
+#		Sc.bind((host, port))
+#		break
+#	except:
+#		Sc.close()
+#		continue
 
 # Open File
-now = datetime.datetime.now()
-s = "/home/pi/WRTG_Proj/main_code/database/pi_counter_%d_%d_%d_%d.txt" % (now.month, now.day, now.year, now.minute)
+#now = datetime.datetime.now()
+#s = "/home/pi/WRTG_Proj/main_code/database/pi_counter_%d_%d_%d_%d.txt" % (now.month, now.day, now.year, now.minute)
 
-FID = open(s, 'a', 0)
-s = "Date: %d/%d/%d  %d:%d:%d" % (now.month, now.day, now.year,now.hour, now.minute, now.second)
+#FID = open(s, 'a', 0)
+#s = "Date: %d/%d/%d  %d:%d:%d" % (now.month, now.day, now.year,now.hour, now.minute, now.second)
 
-FID.write(s)
-s ="\tTime [min] \t\t Count update \t\t Total Count \t Minute Update time %d [minutes]\n" % update_time
-FID.write(s)
+#FID.write(s)
+#s ="\tTime [min] \t\t Count update \t\t Total Count \t Minute Update time %d [minutes]\n" % update_time
+#FID.write(s)
 
 #Start of Loop
 while 1:
@@ -66,16 +69,18 @@ while 1:
 	n = n + 1
         previousTimeCount = masterCount - previousTimeCount;
         #Print previousTimeCount and masterCount to file
-        s ="\t\t\t\t%d \t\t\t %d \t\t\t %d\n" % (T.minute,  previousTimeCount, masterCount)
-        FID.write(s)
+        #s ="\t\t\t\t%d \t\t\t %d \t\t\t %d\n" % (T.minute,  previousTimeCount, masterCount)
+        #FID.write(s)
 	print "Saving time is: ", T
 #        previousTimeCount = masterCount
 	##### Sending data
-	Sc.listen(5)
-	q, addr= Sc.accept()
+#	Sc.listen(5)
+#	q, addr= Sc.accept()
 	msg = "Asian {} {} ".format(previousTimeCount, masterCount)
-	q.send(msg)
-	Sc.close
+	Sc.send(msg)
+	State = Sc.recv(BUFFER_SIZE)
+	print "Raspberry pi State: ", State
+	#Sc.close
 	previousTimeCount = masterCount
 	T = datetime.datetime.time(datetime.datetime.now())	
 #	Sc = socket(AF_INET,SOCK_STREAM)
