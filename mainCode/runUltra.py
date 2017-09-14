@@ -1,7 +1,7 @@
-print "Register GPIO"
-import RPi.GPIO as GPIO
-import time
-import datetime
+print "Register GPIO" 
+import RPi.GPIO as GPIO 
+import time 
+import datetime 
 import socket
 
 GPIO.setmode(GPIO.BCM)
@@ -42,50 +42,25 @@ BUFFER_SIZE = 2000
 Sc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 Sc.connect((host, port))
 
-#while True:
-#	try: 
-#		Sc.bind((host, port))
-#		break
-#	except:
-#		Sc.close()
-#		continue
-
-# Open File
-#now = datetime.datetime.now()
-#s = "/home/pi/WRTG_Proj/main_code/database/pi_counter_%d_%d_%d_%d.txt" % (now.month, now.day, now.year, now.minute)
-
-#FID = open(s, 'a', 0)
-#s = "Date: %d/%d/%d  %d:%d:%d" % (now.month, now.day, now.year,now.hour, now.minute, now.second)
-
-#FID.write(s)
-#s ="\tTime [min] \t\t Count update \t\t Total Count \t Minute Update time %d [minutes]\n" % update_time
-#FID.write(s)
-
 #Start of Loop
 while 1:
+    print "Getting the time"
     T = datetime.datetime.time(datetime.datetime.now())
-#    if t_actual - t_start >= (update_time * 15) * n:
+
     if  (T.microsecond/1000) < 300 and T.minute == 0 or T.minute == 15 or T.minute == 30 or T.minute == 45:
+	print "Here I am"
 	n = n + 1
         previousTimeCount = masterCount - previousTimeCount;
-        #Print previousTimeCount and masterCount to file
-        #s ="\t\t\t\t%d \t\t\t %d \t\t\t %d\n" % (T.minute,  previousTimeCount, masterCount)
-        #FID.write(s)
 	print "Saving time is: ", T
-#        previousTimeCount = masterCount
-	##### Sending data
-#	Sc.listen(5)
-#	q, addr= Sc.accept()
+
+        #### Sending data
 	msg = "Asian {} {} ".format(previousTimeCount, masterCount)
 	Sc.send(msg)
 	State = Sc.recv(BUFFER_SIZE)
 	print "Raspberry pi State: ", State
-	#Sc.close
 	previousTimeCount = masterCount
 	T = datetime.datetime.time(datetime.datetime.now())	
-#	Sc = socket(AF_INET,SOCK_STREAM)
-#	Sc.bind((host, port))
-
+	print "End of the if statement"
 
     print "Begining of Main Loop", T
     print "count = ", masterCount
@@ -138,6 +113,6 @@ while 1:
 #END OF LOOP
 
 # Clean up
-FID.close()
+
 print "Ending Application"
 GPIO.cleanup()

@@ -24,7 +24,7 @@ while True:
 		break
 	except:
 		print "not connection found will try again in 2 seconds..."
-		time.sleep(1)
+		time.sleep(2)
 
 try:
 	while True:
@@ -35,7 +35,7 @@ try:
 		msg=s.recv(1024)
 
 		print "Message from server: " + msg	
-		time.sleep(2)
+		time.sleep(1)
 
 except KeyboardInterrupt:
 	print "\nClosing"
