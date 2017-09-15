@@ -48,27 +48,29 @@ try:
     		print "Getting the time"
     		T = datetime.datetime.time(datetime.datetime.now())
 
-    		if  (T.microsecond/1000) < 300 and T.minute == 0 or T.minute == 15 or T.minute == 30 or T.minute == 45:
-			n = n + 1
-        		previousTimeCount = masterCount - previousTimeCount;
-			print "Saving time is: ", T
+    		if  T.second == 0 and T.minute == 0 or T.minute == 15 or T.minute == 30 or T.minute == 45:
+			if ((T.microsecond/1000) <= 300):
+				n = n + 1
+        			previousTimeCount = masterCount - previousTimeCount;
+				print "Saving time is: ", T
 
-        		#### Sending data
-			msg = "American {} {} ".format(previousTimeCount, masterCount)
-			Sc.send(msg)
-			State = Sc.recv(BUFFER_SIZE)
-			print "Raspberry pi State: ", State
-			previousTimeCount = masterCount
-			T = datetime.datetime.time(datetime.datetime.now())	
-			print "End of the if statement"
+	        		#### Sending data
+				msg = "American {} {} ".format(previousTimeCount, masterCount)
+				Sc.send(msg)
+				State = Sc.recv(BUFFER_SIZE)
+				print "Raspberry pi State: ", State
+				previousTimeCount = masterCount
+				T = datetime.datetime.time(datetime.datetime.now())	
+				print "End of the if statement"
 
     		print "Begining of Main Loop", T
-    		print "count = ", masterCount
+    		print "Master count = ", masterCount
+		print "Current Count = ", (masterCount-previousTimeCount)
     		time.sleep(0.2)
     		GPIO.output(TRIG, True)
     		time.sleep(0.00001)
     		GPIO.output(TRIG, False)
-
+		
     		while GPIO.input(ECHO)==0:
         		pulse_start = time.time()
 
@@ -76,14 +78,14 @@ try:
     		while GPIO.input(ECHO)==1:
         		pulse_end = time.time()
 	
-#    		print "Pulse Start", pulse_start
-#    		print "Pulse End: ", pulse_end
+    		print "Pulse Start", pulse_start
+    		print "Pulse End: ", pulse_end
     		pulse_duration = pulse_end - pulse_start
 
     		distance = pulse_duration * 17150
     
     		distance = round(distance, 2)
-    
+#		print "Finish taking distance"    
     		if distance > 400:
         		continue
 
