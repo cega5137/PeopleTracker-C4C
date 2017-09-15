@@ -1,8 +1,5 @@
-print "Register GPIO" 
-import RPi.GPIO as GPIO 
-import time 
-import datetime 
-import socket
+print "Register GPIO" import RPi.GPIO as GPIO import time import 
+datetime import socket
 
 GPIO.setmode(GPIO.BCM)
 
@@ -76,6 +73,7 @@ try:
 
     
     		while GPIO.input(ECHO)==1:
+			#add a check for time
         		pulse_end = time.time()
 	
     		print "Pulse Start", pulse_start
