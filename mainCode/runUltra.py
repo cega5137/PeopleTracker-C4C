@@ -33,6 +33,9 @@ isPerson = 0
 # Timer
 T = datetime.datetime.time(datetime.datetime.now())
 t_start = time.time()
+print "lol"
+t_test  = time.time()
+print "Time that it takes to print: ",(t_test - t_start) 
 t_actual = t_start
 n = 1
 update_time = 1 # minutes
@@ -87,12 +90,12 @@ try:
 
 	    	while GPIO.input(ECHO)==0:
 	        	pulse_start = time.time()
-	    
+
 		while GPIO.input(ECHO)==1:
 		        pulse_end = time.time()
 
-		print "Pulse Start:", pulse_start
-		print "Pulse End:", pulse_end
+		print "Pulse Start: ", pulse_start
+		print "Pulse End:   ", pulse_end
 		pulse_duration = pulse_end - pulse_start
 
 	    	distance = pulse_duration * 17150
