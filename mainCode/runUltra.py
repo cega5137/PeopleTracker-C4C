@@ -82,7 +82,7 @@ try:
 
     		print "Begining of Main Loop", T
     		print "Master Count = ", masterCount
-		print "Current Count = ", (masterCount - previousTimeCount)
+			print "Current Count = ", (masterCount - previousTimeCount)
 	    	time.sleep(0.2)
 	    	GPIO.output(TRIG, True)
 	    	time.sleep(0.00001)
@@ -91,32 +91,32 @@ try:
 	    	while GPIO.input(ECHO)==0:
 	        	pulse_start = time.time()
 
-		while GPIO.input(ECHO)==1:
+			while GPIO.input(ECHO)==1:
 		        pulse_end = time.time()
 
-		print "Pulse Start: ", pulse_start
-		print "Pulse End:   ", pulse_end
-		pulse_duration = pulse_end - pulse_start
+			print "Pulse Start: ", pulse_start
+			print "Pulse End:   ", pulse_end
+			pulse_duration = pulse_end - pulse_start
 
-	    	distance = pulse_duration * 17150
+			distance = pulse_duration * 17150
 	    
-	    	distance = round(distance, 2)
+			distance = round(distance, 2)
 	    
-	    	if distance > 400:
-	        	continue
+			if distance > 400:
+				continue
 
-		#Commenting line
-	    	print "Distance:",distance,"cm"
-	    	#    print "isPerson:", isPerson, "tol_dist =", tol_dist
-	    	# No person previously standing in front of sensor
-	    	if isPerson == 0:
-	        	if distance <= tol_dist :
-	            		# Person is now standing in front of sensor
-	            		isPerson = 1
-	            		time_Person = time.time()
-	        	else:
-	            	# No person is standing in front of sensor
-	            		continue
+			#Commenting line
+			print "Distance:",distance,"cm"
+			#    print "isPerson:", isPerson, "tol_dist =", tol_dist
+			# No person previously standing in front of sensor
+			if isPerson == 0:
+				if distance <= tol_dist :
+				# Person is now standing in front of sensor
+					isPerson = 1
+					time_Person = time.time()
+				else:
+				# No person is standing in front of sensor
+					continue
 
 	    	if isPerson == 1:
 	    	#Person Was standing in front of sensor
@@ -125,7 +125,7 @@ try:
 	            		if (time.time() - time_Person) < 1:
 	                		isPerson = 0
 	                		continue
-		    		print "Time In Front = ", time.time() - time_Person
+		    			print "Time In Front = ", time.time() - time_Person
 	            		masterCount = masterCount + 1
 	            		isPerson = 0
 	        else:
