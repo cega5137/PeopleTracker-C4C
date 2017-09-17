@@ -59,6 +59,7 @@ class ClientThread(Thread):
                 while True:
                         msg = conn.recv(2048)
                         print "Server receive data: ", msg
+			print "At :", datetime.datetime.time(datetime.datetime.now())
 			data = msg.split(" ")
 			header = data[0]
 			curr = int(data[1])
