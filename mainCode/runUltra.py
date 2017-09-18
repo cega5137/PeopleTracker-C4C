@@ -25,11 +25,8 @@ Counter_Person = 0
 isPerson = 0
 
 # Timer
-T = datetime.datetime.time(datetime.datetime.now())
+T = datetime.datetime.time(datetime.datetime.now()) 
 t_start = time.time()
-print "lol"
-t_test  = time.time()
-print "Time that it takes to print: ",(t_test - t_start) 
 t_actual = t_start
 n = 1
 update_time = 1 # minutes
@@ -55,79 +52,47 @@ while 1:
 #Start of Loop
 try:
 	while 1:
-<<<<<<< HEAD
-=======
->>>>>>> d2f5b3d81f318a25a9224fab53125a885eb197eb
     		print "Getting the time"
     		T = datetime.datetime.time(datetime.datetime.now())
 
     		if T.minute == 0 or T.minute == 15 or T.minute == 30 or T.minute == 45:
-				if ((T.microsecond/1000) < 300) and T.second == 0:
-					print "Here I am"
-					n = n + 1
-        			previousTimeCount = masterCount - previousTimeCount;
-<<<<<<< HEAD
-				print "Saving time is: ", T
-
-	        		#### Sending data
-				msg = "American {} {} ".format(previousTimeCount, masterCount)
-=======
-    	print "Getting the time"
-    	T = datetime.datetime.time(datetime.datetime.now())
-
-    	if   T,second == 0 and T.minute == 0 or T.minute == 15 or T.minute == 30 or T.minute == 45:
-			if ((T.microsecond/1000) < 300):
+			if ((T.microsecond/1000) < 300) and T.second == 0:
 				print "Here I am"
 				n = n + 1
-        		previousTimeCount = masterCount - previousTimeCount;
+        			previousTimeCount = masterCount - previousTimeCount;
 				print "Saving time is: ", T
-
-        		#### Sending data
-				msg = "Asian {} {} ".format(previousTimeCount, masterCount)
->>>>>>> 22a345a8bf0cbc9d6d9b26a6ce120a8b07969d04
+	        		#### Sending data
+				msg = Station + " {} {} ".format(previousTimeCount, masterCount)
 				Sc.send(msg)
 				State = Sc.recv(BUFFER_SIZE)
 				print "Raspberry pi State: ", State
 				previousTimeCount = masterCount
-<<<<<<< HEAD
-				T = datetime.datetime.time(datetime.datetime.now())	
+				T = datetime.datetime.time(datetime.datetime.now())
 				print "End of the if statement"
-=======
-					print "Saving time is: ", T
->>>>>>> d2f5b3d81f318a25a9224fab53125a885eb197eb
-
-        			#### Sending data
-					msg = Station + " {} {} ".format(previousTimeCount, masterCount)
-
-					Sc.send(msg)
-					State = Sc.recv(BUFFER_SIZE)
-					print "Raspberry pi State: ", State
-					previousTimeCount = masterCount
-			  		T = datetime.datetime.time(datetime.datetime.now())
-					print "End of the if statement"
 
     		print "Begining of Main Loop", T
     		print "Master Count = ", masterCount
-			print "Current Count = ", (masterCount - previousTimeCount)
+		print "Current Count = ", (masterCount - previousTimeCount)
 	    	distance = Counter.getDistance()
 		    
-			if distance > 400:
-				continue
+		if distance > 400:
+			continue
 
-			#Commenting line
-			print "Distance:",distance,"cm"
-			#    print "isPerson:", isPerson, "tol_dist =", tol_dist
-			# No person previously standing in front of sensor
-			if isPerson == 0:
-				if distance <= tol_dist :
-				# Person is now standing in front of sensor
-					isPerson = 1
-					time_Person = time.time()
-				else:
-				# No person is standing in front of sensor
-					continue
-	    	if isPerson == 1:
-	    	#Person Was standing in front of sensor
+		#Commenting line
+		print "Distance:",distance,"cm"
+		#    print "isPerson:", isPerson, "tol_dist =", tol_dist
+		# No person previously standing in front of sensor
+		if isPerson == 0:
+			if distance <= tol_dist :
+			# Person is now standing in front of sensor
+				isPerson = 1
+				time_Person = time.time()
+			else:
+			# No person is standing in front of sensor
+				continue
+	    	
+		if isPerson == 1:
+	    		#Person Was standing in front of sensor
 	        	if (distance > tol_dist):
 	        	# Person is no longer standing in front of sensor
 	            		if (time.time() - time_Person) < 1:
