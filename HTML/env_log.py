@@ -53,12 +53,13 @@ class ClientThread(Thread):
                 Thread.__init__(self)
                 self.ip = ip
                 self.port = port
-                print "[+] New server socket started for" + ip +":" + str(port)
+                print "[+] New server socket started for " + ip + ": " + str(port)
 
         def run(self):
                 while True:
                         msg = conn.recv(2048)
-                        print "Server receive data:", msg
+                        print "Server receive data: ", msg
+			print "At :", datetime.datetime.time(datetime.datetime.now())
 			data = msg.split(" ")
 			header = data[0]
 			curr = int(data[1])
@@ -131,9 +132,9 @@ while True:
 	newthread = ClientThread(ip, port)
 	newthread.start()
 	threads.append(newthread)
-	
-	
+		
 	for t in threads:
+		print "In the for loop"
 		t.join()
 
 
