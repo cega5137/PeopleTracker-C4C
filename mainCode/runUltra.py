@@ -1,20 +1,22 @@
 print "Register GPIO" 
-import RPi.GPIO as GPIO 
+#import RPi.GPIO as GPIO 
 import time 
 import datetime 
 import socket
+from UltraSonicSensor import UltraSonic
+#GPIO.setmode(GPIO.BCM)
 
-GPIO.setmode(GPIO.BCM)
+#TRIG = 23
+#ECHO = 24
 
-TRIG = 23
-ECHO = 24
-
-GPIO.setup(TRIG,GPIO.OUT)
-GPIO.setup(ECHO,GPIO.IN)
-GPIO.output(TRIG, False)
+#GPIO.setup(TRIG,GPIO.OUT)
+#GPIO.setup(ECHO,GPIO.IN)
+#GPIO.output(TRIG, False)
 
 print "Starting Application..."
-time.sleep(2)
+# Setting up Ultrasonic Sensor
+Counter = UltraSonic(23,24)
+#time.sleep(2)
 
 #Station
 Station = "American"
@@ -82,42 +84,42 @@ try:
 
     		print "Begining of Main Loop", T
     		print "Master Count = ", masterCount
-			print "Current Count = ", (masterCount - previousTimeCount)
-	    	time.sleep(0.2)
-	    	GPIO.output(TRIG, True)
-	    	time.sleep(0.00001)
-	    	GPIO.output(TRIG, False)
+		print "Current Count = ", (masterCount - previousTimeCount)
+	    	distance = Counter.getDistance()
+		#time.sleep(0.2)
+	    	#GPIO.output(TRIG, True)
+	    	#time.sleep(0.00001)
+	    	#GPIO.output(TRIG, False)
 
-	    	while GPIO.input(ECHO)==0:
-	        	pulse_start = time.time()
+	    	#while GPIO.input(ECHO)==0:
+	        #	pulse_start = time.time()
 
-			while GPIO.input(ECHO)==1:
-		        pulse_end = time.time()
+		#	while GPIO.input(ECHO)==1:
+		#        pulse_end = time.time()
 
-			print "Pulse Start: ", pulse_start
-			print "Pulse End:   ", pulse_end
-			pulse_duration = pulse_end - pulse_start
+		#	print "Pulse Start: ", pulse_start
+		#	print "Pulse End:   ", pulse_end
+		#	pulse_duration = pulse_end - pulse_start
 
-			distance = pulse_duration * 17150
+		#	distance = pulse_duration * 17150
 	    
-			distance = round(distance, 2)
+		#	distance = round(distance, 2)
 	    
-			if distance > 400:
+		if distance > 400:
+			continue
+
+		#Commenting line
+		print "Distance:",distance,"cm"
+		#    print "isPerson:", isPerson, "tol_dist =", tol_dist
+		# No person previously standing in front of sensor
+		if isPerson == 0:
+			if distance <= tol_dist :
+			# Person is now standing in front of sensor
+				isPerson = 1
+				time_Person = time.time()
+			else:
+			# No person is standing in front of sensor
 				continue
-
-			#Commenting line
-			print "Distance:",distance,"cm"
-			#    print "isPerson:", isPerson, "tol_dist =", tol_dist
-			# No person previously standing in front of sensor
-			if isPerson == 0:
-				if distance <= tol_dist :
-				# Person is now standing in front of sensor
-					isPerson = 1
-					time_Person = time.time()
-				else:
-				# No person is standing in front of sensor
-					continue
-
 	    	if isPerson == 1:
 	    	#Person Was standing in front of sensor
 	        	if (distance > tol_dist):
@@ -137,5 +139,5 @@ try:
 except KeyboardInterrupt: 
 	print "Ending Application"	
 	Sc.close()
-	GPIO.cleanup()
+	Counter.close()
 
