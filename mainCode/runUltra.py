@@ -7,7 +7,6 @@ from UltraSonicSensor import UltraSonic
 TRIG = 23
 ECHO = 24
 
-
 print "Starting Application..."
 Counter = UltraSonic(TRIG,ECHO)
 
@@ -41,6 +40,7 @@ host = "10.201.6.64"
 port = 3333
 BUFFER_SIZE = 2000
 Sc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
 while 1:
 	try:
 		Sc.connect((host, port))
@@ -52,7 +52,6 @@ while 1:
                 print "Could not connect will try in 2 seconds"
                 time.sleep(2)
 
-	
 #Start of Loop
 try:
 	while 1:
@@ -60,41 +59,42 @@ try:
     		T = datetime.datetime.time(datetime.datetime.now())
 
     		if T.minute == 0 or T.minute == 15 or T.minute == 30 or T.minute == 45:
-			if ((T.microsecond/1000) < 300) and T.second == 0:
-				print "Here I am"
-				n = n + 1
+				if ((T.microsecond/1000) < 300) and T.second == 0:
+					print "Here I am"
+					n = n + 1
         			previousTimeCount = masterCount - previousTimeCount;
-				print "Saving time is: ", T
+					print "Saving time is: ", T
 
         			#### Sending data
-				msg = Station + " {} {} ".format(previousTimeCount, masterCount)
-				Sc.send(msg)
-				State = Sc.recv(BUFFER_SIZE)
-				print "Raspberry pi State: ", State
-				previousTimeCount = masterCount
-			  	T = datetime.datetime.time(datetime.datetime.now())
-				print "End of the if statement"
+					msg = Station + " {} {} ".format(previousTimeCount, masterCount)
+
+					Sc.send(msg)
+					State = Sc.recv(BUFFER_SIZE)
+					print "Raspberry pi State: ", State
+					previousTimeCount = masterCount
+			  		T = datetime.datetime.time(datetime.datetime.now())
+					print "End of the if statement"
 
     		print "Begining of Main Loop", T
     		print "Master Count = ", masterCount
-		print "Current Count = ", (masterCount - previousTimeCount)
+			print "Current Count = ", (masterCount - previousTimeCount)
 	    	distance = Counter.getDistance()
 		    
-		if distance > 400:
-			continue
-
-		#Commenting line
-		print "Distance:",distance,"cm"
-		#    print "isPerson:", isPerson, "tol_dist =", tol_dist
-		# No person previously standing in front of sensor
-		if isPerson == 0:
-			if distance <= tol_dist :
-			# Person is now standing in front of sensor
-				isPerson = 1
-				time_Person = time.time()
-			else:
-			# No person is standing in front of sensor
+			if distance > 400:
 				continue
+
+			#Commenting line
+			print "Distance:",distance,"cm"
+			#    print "isPerson:", isPerson, "tol_dist =", tol_dist
+			# No person previously standing in front of sensor
+			if isPerson == 0:
+				if distance <= tol_dist :
+				# Person is now standing in front of sensor
+					isPerson = 1
+					time_Person = time.time()
+				else:
+				# No person is standing in front of sensor
+					continue
 	    	if isPerson == 1:
 	    	#Person Was standing in front of sensor
 	        	if (distance > tol_dist):
