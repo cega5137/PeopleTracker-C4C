@@ -1,22 +1,15 @@
-print "Register GPIO" 
-#import RPi.GPIO as GPIO 
+print "Register GPIO"  
 import time 
 import datetime 
 import socket
 from UltraSonicSensor import UltraSonic
-#GPIO.setmode(GPIO.BCM)
 
-#TRIG = 23
-#ECHO = 24
+TRIG = 23
+ECHO = 24
 
-#GPIO.setup(TRIG,GPIO.OUT)
-#GPIO.setup(ECHO,GPIO.IN)
-#GPIO.output(TRIG, False)
 
 print "Starting Application..."
-# Setting up Ultrasonic Sensor
-Counter = UltraSonic(23,24)
-#time.sleep(2)
+Counter = UltraSonic(TRIG,ECHO)
 
 #Station
 Station = "American"
@@ -44,7 +37,7 @@ update_time = 1 # minutes
 print "The on time is ", T
 
 # Set up host
-host = "10.0.0.151"
+host = "10.201.6.64"
 port = 3333
 BUFFER_SIZE = 2000
 Sc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -86,25 +79,7 @@ try:
     		print "Master Count = ", masterCount
 		print "Current Count = ", (masterCount - previousTimeCount)
 	    	distance = Counter.getDistance()
-		#time.sleep(0.2)
-	    	#GPIO.output(TRIG, True)
-	    	#time.sleep(0.00001)
-	    	#GPIO.output(TRIG, False)
-
-	    	#while GPIO.input(ECHO)==0:
-	        #	pulse_start = time.time()
-
-		#	while GPIO.input(ECHO)==1:
-		#        pulse_end = time.time()
-
-		#	print "Pulse Start: ", pulse_start
-		#	print "Pulse End:   ", pulse_end
-		#	pulse_duration = pulse_end - pulse_start
-
-		#	distance = pulse_duration * 17150
-	    
-		#	distance = round(distance, 2)
-	    
+		    
 		if distance > 400:
 			continue
 

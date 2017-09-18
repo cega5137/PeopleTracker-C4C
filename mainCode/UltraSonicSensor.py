@@ -1,6 +1,5 @@
 import RPi.GPIO as GPIO 
 from time import sleep, time 
-import multiprocessing
 from interruptingcow import timeout
 
 class UltraSonic():
@@ -36,6 +35,7 @@ class UltraSonic():
 
 		except RuntimeError:
 			print "Took longer than 5 seconds"
+			pass
 
 	def close(self):
 		GPIO.cleanup()
