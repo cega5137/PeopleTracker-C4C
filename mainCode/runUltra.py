@@ -57,7 +57,6 @@ try:
 
     		if T.minute == 0 or T.minute == 15 or T.minute == 30 or T.minute == 45:
 			if ((T.microsecond/1000) < 300) and T.second == 0:
-				print "Here I am"
 				n = n + 1
         			previousTimeCount = masterCount - previousTimeCount;
 				print "Saving time is: ", T
@@ -80,7 +79,7 @@ try:
 
 		#Commenting line
 		print "Distance:",distance,"cm"
-		#    print "isPerson:", isPerson, "tol_dist =", tol_dist
+		# print "isPerson:", isPerson, "tol_dist =", tol_dist
 		# No person previously standing in front of sensor
 		if isPerson == 0:
 			if distance <= tol_dist :
@@ -98,7 +97,7 @@ try:
 	            		if (time.time() - time_Person) < 1:
 	                		isPerson = 0
 	                		continue
-		    			print "Time In Front = ", time.time() - time_Person
+		    		print "Time In Front = ", time.time() - time_Person
 	            		masterCount = masterCount + 1
 	            		isPerson = 0
 	        else:
