@@ -36,6 +36,9 @@ class UltraSonic():
 		except RuntimeError:
 			print "Took longer than 5 seconds"
 			pass
+		except UnboundLocalError:
+			print "Unbound Error"
+			pass
 
 	def close(self):
 		GPIO.cleanup()
