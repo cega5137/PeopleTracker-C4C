@@ -61,16 +61,21 @@ class ClientThread(Thread):
                         print "Server receive data: ", msg
 			print "At :", datetime.datetime.time(datetime.datetime.now())
 			data = msg.split(" ")
-			header = data[0]
-			curr = int(data[1])
-			Total = int(data[2])
-			if curr is not None and Total is not None:
-				self.log_values(header, curr, Total)
-			else: 
-				self.log_values(header, -999, -999)
+			if len(data) == 2
+				header = data[0]
+				curr = int(data[1])
+				Total = int(data[2])
+				if curr is not None and Total is not None:
+					self.log_values(header, curr, Total)
+				else: 
+					self.log_values(header, -999, -999)
 
-                        MSG = "ON"
-                        conn.send(MSG)
+                        	MSG = "ON"
+                        	conn.send(MSG)
+
+			else:
+				MSG = "OFF"
+				conn.send(MSG)
 
 	
 	def log_values(self, Header, currn, total):
@@ -113,7 +118,7 @@ import random
 ####################################################
 print "Startin application"
 
-hostIP = "10.0.0.151"
+hostIP = "10.0.0.150"
 port = 3333
 BUFFER_SIZE = 20
 
