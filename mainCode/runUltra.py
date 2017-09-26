@@ -40,7 +40,10 @@ Sc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 while 1:
 	try:
-		Sc.connect((host, port))
+		T0 = time.time()
+#		Sc.connect((host, port))
+		Tend = time.time()
+		print "Time that it takes to connect: ", (Tend - T0)
 		print "Connected with server"
 		break
 	except KeyboardInterrupt:
@@ -56,6 +59,7 @@ try:
 
     		if T.minute == 0 or T.minute == 15 or T.minute == 30 or T.minute == 45:
 			if ((T.microsecond/1000) < 300) and T.second == 0:
+				Sc.connect((host, port))
 				n = n + 1
         			previousTimeCount = masterCount - previousTimeCount;
 				print "Saving time is: ", T
@@ -67,6 +71,7 @@ try:
 				previousTimeCount = masterCount
 				T = datetime.datetime.time(datetime.datetime.now())
 				print "End of the if statement"
+				Sc.close()
 
     		print "Begining of Main Loop", T
     		print "Master Count = ", masterCount
