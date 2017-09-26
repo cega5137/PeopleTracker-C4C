@@ -12,16 +12,17 @@ port = 3333
 s=socket(AF_INET, SOCK_STREAM)
 #s.settimeout(60)
 #s.timeout()
+Station = "Asian"
 print "socket made"
 
 while True:
 	try:
 		s.connect((host, port))
-		s.send("Client 1 Connected")
+#		s.send("Client 1 Connected")
 		print "socket connected!!"
 		time.sleep(2)
-		msg = s.recv(1024)
-		print "Message from server: ", msg 
+#		msg = s.recv(1024)
+#		print "Message from server: ", msg 
 		break
 	except:
 		print "not connection found will try again in 2 seconds..."
@@ -34,15 +35,16 @@ try:
 
 		if T.minute == 0 or T.minute == 15 or T.minute == 30 or T.minute == 45:
 			if ((T.microsecond/1000) < 300) and T.second == 0:
-                                n = n + 1
-                                previousTimeCount = masterCount - previousTimeCount;
+                                print "sending data"
+				n = n + 1
+				masterCount = 1
+				previousTimeCount = 2
                                 print "Saving time is: ", T
                                 #### Sending data
                                 msg = Station + " {} {} ".format(previousTimeCount, masterCount)
                                 s.send(msg)
                                 State = s.recv(BUFFER_SIZE)
                                 print "Raspberry pi State: ", State
-                                previousTimeCount = masterCount
                                 T = datetime.datetime.time(datetime.datetime.now())
                                 print "End of the if statement"
 
