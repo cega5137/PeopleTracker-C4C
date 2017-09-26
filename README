@@ -2,3 +2,18 @@ People Tracker
 Author: Cesar Galan
 
 The goal of this project is to count the amount of people going into each station in order to minimize food thrown away
+
+Techniques used in solving this problem:
+1) Ultrasonic Sensor gather data
+2) Every 15 minutes send data through TCP/IP to mothership Pi
+3) Mothership use multithreading to handle connection with all daughterships
+4) Save data on SQL database
+5) Update HTML website with new data
+
+TODO:
+
+1) Fix display of the current of number of people instead of total - Done
+2) Fix time display on showing records
+3) Static IP for mothership
+3) Add connection indication
+
