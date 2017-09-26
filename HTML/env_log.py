@@ -108,13 +108,6 @@ class ClientThread(Thread):
         	conn.commit()
         	conn.close()
 
-#humidity, temperature = Adafruit_DHT.read_retry(Adafruit_DHT.AM2302, 17)
-#temperature = temperature * 9/5.0 + 32
-# If you don't have a sensor but still wish to run this program, comment out all the 
-# sensor related lines, and uncomment the following lines (these will produce random
-# numbers for the temperature and humidity variables):
-import random
-
 ####################################################
 print "Startin application"
 
@@ -141,40 +134,3 @@ while True:
 	for t in threads:
 		print "In the for loop"
 		t.join()
-
-
-
-
-
-
-#	while True:
-#		try:
-#			s.connect((host, port))
-#			print "Connecting ..."
-#			break
-#		except:
-#			print "Waiting for message..."
-#			time.sleep(1)
-
-
-#	msg=s.recv(1024)
-#	print "Message receive"
-#	print "Number of People " + msg
-#	i = i + 1
-#	print "Counting i = ", i, "at ", datetime.datetime.now()
-
-#	s.close
-	
-#	time.sleep(1)
-#	s=socket(AF_INET,SOCK_STREAM)
-
-#	data = msg.split(" ")
-
-#	header = data[0]
-#	curr = int(data[1])
-#	Total = int(data[2])
-
-#	if curr is not None and Total is not None:
-#		log_values(header, curr, Total)	
-#	else:
-#		log_values(header, -999, -999)
