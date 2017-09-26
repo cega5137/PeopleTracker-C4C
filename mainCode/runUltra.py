@@ -33,7 +33,7 @@ update_time = 1 # minutes
 print "The on time is ", T
 
 # Set up host
-host = "10.0.0.151"
+host = "10.0.0.150"
 port = 3333
 BUFFER_SIZE = 2000
 Sc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

@@ -16,10 +16,10 @@ print "socket made"
 while True:
 	try:
 		s.connect((host, port))
-		s.send("Client 1 Connected")
+#		s.send("Client 1 Connected")
 		print "socket connected!!"
 		time.sleep(2)
-		msg = s.recv(1024)
+#		msg = s.recv(1024)
 		print "Message from server: ", msg 
 		break
 	except:
