@@ -2,11 +2,11 @@ from socket import *
 import time
 import subprocess
 
-host = " 10.0.0.150"
+host = " 10.0.0.151" #ip address of the server
 
 print host
 
-port = 3333
+port = 4447
 
 s=socket(AF_INET, SOCK_STREAM)
 #s.settimeout(60)
@@ -16,27 +16,27 @@ print "socket made"
 while True:
 	try:
 		s.connect((host, port))
-		s.send("Client 1 Connected")
+		s.send("Client 2 connected")
 		print "socket connected!!"
-		time.sleep(2)
 		msg = s.recv(1024)
-		print "Message from server: ", msg 
+		print "Message from server: ", msg
+		time.sleep(3)
 		break
 	except:
 		print "not connection found will try again in 2 seconds..."
-		time.sleep(2)
+		time.sleep(1)
 
 try:
 	while True:
 		
-		msg = "This is client1"
+		msg = "This is client2"
 		s.send(msg)
-		print "Message sent"
+
 		msg=s.recv(1024)
+		print "Message from server: " + msg
 
-		print "Message from server: " + msg	
-		time.sleep(1)
-
+		time.sleep(2)
+		
 except KeyboardInterrupt:
 	print "\nClosing"
 	s.close

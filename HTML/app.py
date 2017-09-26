@@ -11,6 +11,7 @@ from plotly.graph_objs import *
 import plotly.tools as pyTools
 
 app = Flask(__name__)
+dataBaseLink = '/var/www/html/lab_app.db'
 
 databasePath = 'var/www/html/PeopleTracker-C4C/HTML/mainDatabase.db'
 
@@ -31,6 +32,7 @@ def lab_temp():
 	Latin =  getLastTotal('Latin')
 
 	humidity = random.randint(1,100)
+
 	#shutdownRPi(request)
 	return render_template("lab_temp.html",America=amer,asian=Asia,latin=Latin,italian=ita,persian=per )
 
@@ -67,6 +69,7 @@ def getLastTotal(Station):
 #	if request.method == 'POST':
 #		print "Hey"
 
+
 #@app.route("/station_time")
 #def station_time
 	
@@ -90,13 +93,14 @@ def plot_db():
                                                 lati                    = lati_adjusted,
                                                 from_date               = from_date_str,
                                                 to_date                 = to_date_str,
-                                                pers_items              = len(Persian),           #len(temperatures),
+                                                pers_items              = len(Persian),           
                                                 query_string            = request.query_string,
                                                 asia_items              = len(Asian),
                                                 ital_items              = len(Italian),
                                                 lati_items              = len(Latin),
                                                 amer_items              = len(American)
                                                 )
+
 
 @app.route("/lab_env_db", methods=['GET'])
 def lab_env_db():
@@ -177,6 +181,7 @@ def get_records():
 		#Convert datetimes to UTC so we can retrieve the appropriate records from the database
 		from_date_utc   = arrow.get(from_date_obj, timezone).to('Etc/UTC').strftime("%Y-%m-%d %H:%M")	
 		to_date_utc     = arrow.get(to_date_obj, timezone).to('Etc/UTC').strftime("%Y-%m-%d %H:%M")
+
 
 	conn 			= sqlite3.connect('/var/www/html/PeopleTracker-C4C/HTML/mainDatabase.db')
 	curs 			= conn.cursor()
