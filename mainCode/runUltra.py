@@ -52,7 +52,6 @@ while 1:
 #Start of Loop
 try:
 	while 1:
-    		print "Getting the time"
     		T = datetime.datetime.time(datetime.datetime.now())
 
     		if T.minute == 0 or T.minute == 15 or T.minute == 30 or T.minute == 45:
