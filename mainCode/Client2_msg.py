@@ -34,8 +34,8 @@ try:
 
 		msg=s.recv(1024)
 		print "Message from server: " + msg
-
-		time.sleep(2)
+		time.sleep(1)
+		
 		
 except KeyboardInterrupt:
 	print "\nClosing"
