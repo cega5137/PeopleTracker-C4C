@@ -1,11 +1,11 @@
 from socket import *
 import time
 
-host = " 10.0.0.227"
+host = " 10.0.0.150"
 
 print host
 
-port = 4446
+port = 3333
 
 s=socket(AF_INET, SOCK_STREAM)
 #s.settimeout(60)
