@@ -61,7 +61,7 @@ class ClientThread(Thread):
                         print "Server receive data: ", msg
 			print "At :", datetime.datetime.time(datetime.datetime.now())
 			data = msg.split(" ")
-			if len(data) == 2
+			if len(data) == 2:
 				header = data[0]
 				curr = int(data[1])
 				Total = int(data[2])
