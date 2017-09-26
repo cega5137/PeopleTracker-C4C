@@ -11,7 +11,7 @@ print "Starting Application..."
 Counter = UltraSonic(TRIG,ECHO)
 
 #Station
-Station = "American"
+Station = "Italian"
 
 #Determines if person is standing in range or not
 tol_dist = 80
