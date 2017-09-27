@@ -1,7 +1,52 @@
-from socket import * 
+import socket 
 import random
+import time
 
-host = "10.0.0.151" # get the ip address of the raspberry pi zero
+#
+class ClientThread(Tread):
+	def __init__(self, ip, port):
+		Thread.__init__(self)
+		self.ip = ip
+		self.port = port
+		print "[+] New server socket thread started for " + ip + ":" + str(port)
+
+	def run(self):
+		while True :
+			data = conn.recv(2028)
+			print "Server received data: ", data
+			MSG = raw_input("Multithreaded Python Server:")
+			if MSG == 'exit':
+				break
+			conn.send(MSG)
+
+# Multithreaded Python server
+TCP_IP = 10.0.0.150
+TCP_PORT = 2004
+BUFFER_SIZE = 1024
+
+tcpServer = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+tcpServer.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+tcpServer.bind((TCP_IP, TCP_PORT))
+threads = []
+
+while True:
+	tcpServer.listen(4)
+	print "MultThreaded Python Server: Waiting for connection from TCP clients"
+	(conn, (ip, port)) = tcpServer.accept()
+	newthread.start()
+	threads.append(newthread)
+
+for t in threads:
+	t.join()
+
+
+
+
+
+
+
+'''
+host = "10.0.0.151" # ip address of the server
 
 print host
 
@@ -15,20 +60,46 @@ s.bind((host, port))
 
 print "Socket Bound"
 
+
 s.listen(5)
 
 print "Listening for connection..."
 
 q, addr= s.accept()
+print "Connected to address: ", addr
+w, addr2=s.accept()
+print "Connected to addres: ", addr2
 
-#data = raw_input("Enter data to be sent: ")
+clientN1 = q.recv(1024)
+print "who is on? ", clientN1
+q.send("Thank you for connecting")
 
-data = random.randint(1,100)
+clientN2 = w.recv(1024)
+print "who is on? ", clientN2
+w.send("Thank you for connection")
 
-msg = str(data)
 
-print msg
+try:
+	while True:
+		msg1 = q.recv(1024)
+		print "Sending Original mesage: ", msg1
+		msgBack1 = msg1 + " Got your message Client"
+		q.send(msgBack1)
 
-q.send(msg)
+		msg2 = w.recv(1024)
+		print "Sending Original mesage: ", msg2
+                msgBack2 = msg2 + " Got your message Client"
+                w.send(msgBack2)		
 
-s.close
+except KeyboardInterrupt: 
+	print "Closing connection"
+	s.close
+
+## define Thread function
+def recvSendMsg(Channel):
+	msg = Channel.recv(1024)
+	print "Sending Original mesage: ", msg
+        msgBack = msg + " Got your message Client"
+        Channel.send(msgBack)
+
+'''
