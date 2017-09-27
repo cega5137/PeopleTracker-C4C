@@ -131,6 +131,6 @@ while True:
 	newthread.start()
 	threads.append(newthread)
 		
-	for t in threads:
-		print "In the for loop"
-		t.join()
+for t in threads:
+	print "In the for loop"
+	t.join()
