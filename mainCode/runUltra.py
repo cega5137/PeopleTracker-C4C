@@ -59,14 +59,6 @@ try:
 
     		if T.minute == 0 or T.minute == 15 or T.minute == 30 or T.minute == 45:
 			if ((T.microsecond/1000) < 300) and T.second == 0:
-				while 1:
-					try:
-						Sc.connect((host, port))
-						break
-					except :
-						sleep(2)
-						print "waiting"
-
 				n = n + 1
         			previousTimeCount = masterCount - previousTimeCount;
 				print "Saving time is: ", T
