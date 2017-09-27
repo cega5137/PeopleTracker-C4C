@@ -2,19 +2,11 @@ from socket import *
 import time
 import subprocess
 
-<<<<<<< HEAD
-host = " 10.201.28.69"
-
-print host
-
-port = 4447
-=======
 host = " 10.0.0.150" #ip address of the server
 
 print host
 
 port = 3333
->>>>>>> afab2eeef79e4e5cb57c12aa2405df16116f598f
 
 s=socket(AF_INET, SOCK_STREAM)
 #s.settimeout(60)
@@ -61,4 +53,5 @@ def shutdownRPi():
         process = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
         output = process.communicate()[0]
         print output
+
 
