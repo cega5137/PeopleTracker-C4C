@@ -12,7 +12,7 @@ port = 3333
 s=socket(AF_INET, SOCK_STREAM)
 #s.settimeout(60)
 #s.timeout()
-Station = "Asian"
+Station = "Italian"
 print "socket made"
 
 while True:
