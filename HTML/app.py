@@ -136,7 +136,7 @@ def convertRecords(station, timezone):
 
 	for record in station:
 		local_timedate = arrow.get(record[0], "YYYY-MM-DD HH:mm").to(timezone)
-		time_adjusted.append([local_timedate.format('YYYY-MM-DD HH:mm'), round(record[2],2)])
+		time_adjusted.append([local_timedate.format('YYYY-MM-DD HH:mm'), round(record[1],2)])
 	
 	return time_adjusted
 
@@ -309,7 +309,7 @@ def validate_date(d):
 
 if __name__ == '__main__':
 	# change the ip address everytime
-	arg = 'ip route list'
+	arg = 'ip route list'#'hostname -I'
 	p = subprocess.Popen(arg,shell = True, stdout = subprocess.PIPE)
 	data = p.communicate()
 	split_data = data[0].split()
