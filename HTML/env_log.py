@@ -71,7 +71,7 @@ class ClientThread(Thread):
 			else: 
 				self.log_values(header, -999, -999)
                        	MSG = "ON"
-                       	conn.send(MSG)
+#                      	conn.send(MSG)
 
 #			except:
 #				MSG = "OFF"
@@ -111,7 +111,7 @@ class ClientThread(Thread):
 ####################################################
 print "Startin application"
 
-hostIP = "10.0.0.150"
+hostIP = "10.202.17.233"
 port = 3333
 BUFFER_SIZE = 20
 
