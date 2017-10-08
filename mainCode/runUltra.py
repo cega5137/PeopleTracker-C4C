@@ -11,7 +11,7 @@ print "Starting Application..."
 Counter = UltraSonic(TRIG,ECHO)
 
 #Station
-Station = "Asian"
+Station = "Persian"
 
 #Determines if person is standing in range or not
 tol_dist = 80
@@ -33,7 +33,7 @@ update_time = 1 # minutes
 print "The on time is ", T
 
 # Set up host
-host = "10.0.0.150"
+host = "10.202.33.204"
 port = 3333
 BUFFER_SIZE = 2000
 Sc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -57,15 +57,15 @@ try:
 	while 1:
     		T = datetime.datetime.time(datetime.datetime.now())
     		if T.minute == 0 or T.minute == 15 or T.minute == 30 or T.minute == 45:
-			if ((T.microsecond/1000) < 300) and T.second == 0:
+			if ((T.microsecond/1000) < 700) and T.second == 0:
 				n = n + 1
         			previousTimeCount = masterCount - previousTimeCount;
 				print "Saving time is: ", T
 	        		#### Sending data
 				msg = Station + " {} {} ".format(previousTimeCount, masterCount)
 				Sc.send(msg)
-				State = Sc.recv(BUFFER_SIZE)
-				print "Raspberry pi State: ", State
+#				State = Sc.recv(BUFFER_SIZE)
+#				print "Raspberry pi State: ", State
 				previousTimeCount = masterCount
 				T = datetime.datetime.time(datetime.datetime.now())
 				print "End of the if statement"
