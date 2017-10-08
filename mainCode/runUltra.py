@@ -104,6 +104,7 @@ try:
 #				print "Raspberry pi State: ", State
 				previousTimeCount = masterCount
 				T = datetime.datetime.time(datetime.datetime.now())
+				time.sleep(1)
 				print "End of the if statement"
 
     		print "Begining of Main Loop", T
