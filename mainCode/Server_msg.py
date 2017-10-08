@@ -1,7 +1,51 @@
-from socket import * 
+import socket 
 import random
 import time
 
+#
+class ClientThread(Tread):
+	def __init__(self, ip, port):
+		Thread.__init__(self)
+		self.ip = ip
+		self.port = port
+		print "[+] New server socket thread started for " + ip + ":" + str(port)
+
+	def run(self):
+		while True :
+			data = conn.recv(2028)
+			print "Server received data: ", data
+			MSG = raw_input("Multithreaded Python Server:")
+			if MSG == 'exit':
+				break
+			conn.send(MSG)
+
+# Multithreaded Python server
+TCP_IP = 10.0.0.150
+TCP_PORT = 2004
+BUFFER_SIZE = 1024
+
+tcpServer = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+tcpServer.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+tcpServer.bind((TCP_IP, TCP_PORT))
+threads = []
+
+while True:
+	tcpServer.listen(4)
+	print "MultThreaded Python Server: Waiting for connection from TCP clients"
+	(conn, (ip, port)) = tcpServer.accept()
+	newthread.start()
+	threads.append(newthread)
+
+for t in threads:
+	t.join()
+
+
+
+
+
+
+
+'''
 host = "10.0.0.151" # ip address of the server
 
 print host
@@ -58,3 +102,4 @@ def recvSendMsg(Channel):
         msgBack = msg + " Got your message Client"
         Channel.send(msgBack)
 
+'''
