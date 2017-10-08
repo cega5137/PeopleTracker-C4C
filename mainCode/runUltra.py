@@ -93,8 +93,12 @@ try:
 						Sc.send(msg)
 						break
 					except:
-						print "Could not send data"
-						time.sleep(0.5)
+						try:
+							Sc.connect((ipaddr, port))
+							print "Connected again"
+						except:
+							print "Could not send data"
+							time.sleep(0.5)
 #				State = Sc.recv(BUFFER_SIZE)
 #				print "Raspberry pi State: ", State
 				previousTimeCount = masterCount
