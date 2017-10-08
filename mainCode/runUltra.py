@@ -94,6 +94,7 @@ try:
 						break
 					except:
 						try:
+							Sc.close()
 							Sc.connect((ipaddr, port))
 							print "Connected again"
 						except:
