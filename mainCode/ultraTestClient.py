@@ -74,3 +74,5 @@ def shutdownRPi():
         output = process.communicate()[0]
         print output
 
+if __name__ == "__main__":
+	print "Hello"
