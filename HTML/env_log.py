@@ -71,7 +71,7 @@ class ClientThread(Thread):
 			else: 
 				self.log_values(header, -999, -999)
                        	MSG = "ON"
-                       	conn.send(MSG)
+#                      	conn.send(MSG)
 
 #			except:
 #				MSG = "OFF"
@@ -79,7 +79,8 @@ class ClientThread(Thread):
 
 	
 	def log_values(self, Header, currn, total):
-        	conn=sqlite3.connect('/var/www/html/PeopleTracker-C4C/HTML/mainDatabase.db')  #It is important to provide an
+        	conn=sqlite3.connect('/home/pi/Documents/Python/PeopleTracker-C4C/HTML/mainDatabase.db')
+		#conn=sqlite3.connect('/var/www/html/PeopleTracker-C4C/HTML/mainDatabase.db')  #It is important to provide an
                 	                                             #absolute path to the database
                         	                                     #file, otherwise Cron won't be
                                 	                             #able to find it!
@@ -111,7 +112,7 @@ class ClientThread(Thread):
 ####################################################
 print "Startin application"
 
-hostIP = "10.0.0.150"
+hostIP = "10.202.33.204"
 port = 3333
 BUFFER_SIZE = 20
 
