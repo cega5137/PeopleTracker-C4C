@@ -13,6 +13,17 @@ def readInitialization(file):
                 with Switch(dataSplit[i]) as case:
                         if case('Station:'):
                                 Station = dataSplit[i+1]
+				with Switch(Station) as station:
+					if station('Asian'):
+						delayTime = 0
+					if station('American'):
+						delayTime = 1
+					if station('Persian'):
+						delayTime = 2
+					if station('Italian'):
+						delayTime = 3
+					if station('Latin'):
+						delayTime = 4 
 				#print "Station: ", Station
                         if case('ipaddr:'):
                                 ipaddr = dataSplit[i+1]
@@ -21,7 +32,7 @@ def readInitialization(file):
                                 port = int(dataSplit[i+1])
 				#print "port: ", port
 
-        return [Station, ipaddr, port]
+        return [Station, ipaddr, port, delayTime]
 
 
 TRIG = 23
@@ -31,7 +42,7 @@ print "Starting Application..."
 Counter = UltraSonic(TRIG,ECHO)
 
 # Read initialization file
-[Station, ipaddr, port] = readInitialization("initializationFile")
+[Station, ipaddr, port, delayTime] = readInitialization("initializationFile")
 print Station
 print ipaddr
 print port
@@ -82,7 +93,7 @@ try:
 	while 1:
     		T = datetime.datetime.time(datetime.datetime.now())
     		if T.minute == 0 or T.minute == 15 or T.minute == 30 or T.minute == 45:
-			if T.second == 0:
+			if T.second == delayTime:
 				n = n + 1
         			previousTimeCount = masterCount - previousTimeCount;
 				print "Saving time is: ", T
