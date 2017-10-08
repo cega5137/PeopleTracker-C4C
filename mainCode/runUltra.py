@@ -38,8 +38,6 @@ print port
 
 #Station
 #Station = "Asian"
-
-
 #Determines if person is standing in range or not
 tol_dist = 80
 
@@ -84,7 +82,7 @@ try:
 	while 1:
     		T = datetime.datetime.time(datetime.datetime.now())
     		if T.minute == 0 or T.minute == 15 or T.minute == 30 or T.minute == 45:
-			if ((T.microsecond/1000) < 600) and T.second == 0:
+			if ((T.microsecond/1000) < 700) and T.second == 0:
 				n = n + 1
         			previousTimeCount = masterCount - previousTimeCount;
 				print "Saving time is: ", T
@@ -95,8 +93,12 @@ try:
 						Sc.send(msg)
 						break
 					except:
-						print "Could not send data"
-						time.sleep(0.5)
+						try:
+							Sc.connect((ipaddr, port))
+							print "Connected again"
+						except:
+							print "Could not send data"
+							time.sleep(0.5)
 #				State = Sc.recv(BUFFER_SIZE)
 #				print "Raspberry pi State: ", State
 				previousTimeCount = masterCount
