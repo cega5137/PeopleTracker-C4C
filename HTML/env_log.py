@@ -112,7 +112,7 @@ class ClientThread(Thread):
 ####################################################
 print "Startin application"
 
-hostIP = "10.202.17.233"
+hostIP = "10.0.0.150"
 
 port = 3333
 BUFFER_SIZE = 20

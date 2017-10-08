@@ -3,6 +3,26 @@ import time
 import datetime 
 import socket 
 from UltraSonicSensor import UltraSonic
+from switch import Switch
+
+def readInitialization(file):
+        fid = open(file,"r")
+        data = fid.read()
+        dataSplit = data.split()
+        for i in [0,2,4]:
+                with Switch(dataSplit[i]) as case:
+                        if case('Station:'):
+                                Station = dataSplit[i+1]
+				#print "Station: ", Station
+                        if case('ipaddr:'):
+                                ipaddr = dataSplit[i+1]
+				#print "ipaddr: ", ipaddr
+                        if case('port:'):
+                                port = int(dataSplit[i+1])
+				#print "port: ", port
+
+        return [Station, ipaddr, port]
+
 
 TRIG = 23
 ECHO = 24
@@ -10,12 +30,15 @@ ECHO = 24
 print "Starting Application..."
 Counter = UltraSonic(TRIG,ECHO)
 
+# Read initialization file
+[Station, ipaddr, port] = readInitialization("initializationFile")
+print Station
+print ipaddr
+print port
+
 #Station
-<<<<<<< HEAD
-Station = "Latin"
-=======
-Station = "Asian"
->>>>>>> d513292b980020f1c7f4a8e09c4e5fd490c7b8ff
+#Station = "Asian"
+
 
 #Determines if person is standing in range or not
 tol_dist = 80
@@ -37,15 +60,15 @@ update_time = 1 # minutes
 print "The on time is ", T
 
 # Set up host
-host = "10.0.0.150"
-port = 3333
+#host = "10.0.0.150"
+#port = 3333
 BUFFER_SIZE = 2000
 Sc = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 while 1:
 	try:
 		T0 = time.time()
-		Sc.connect((host, port))
+		Sc.connect((ipaddr, port))
 		Tend = time.time()
 		print "Time that it takes to connect: ", (Tend - T0)
 		print "Connected with server"
@@ -67,7 +90,13 @@ try:
 				print "Saving time is: ", T
 	        		#### Sending data
 				msg = Station + " {} {} ".format(previousTimeCount, masterCount)
-				Sc.send(msg)
+				while True:
+					try:
+						Sc.send(msg)
+						break
+					except:
+						print "Could not send data"
+						time.sleep(0.5)
 #				State = Sc.recv(BUFFER_SIZE)
 #				print "Raspberry pi State: ", State
 				previousTimeCount = masterCount
@@ -115,3 +144,23 @@ except KeyboardInterrupt:
 	print "Ending Application"	
 	Sc.close()
 	Counter.close()
+
+
+'''
+def readInitialization(file):
+	fid = open(file,"r")
+	data = fid.read()
+	dataSplit = data.split()
+	for i in [0,2,4]:
+		with Switch(dataSplit[i]) as case:
+			if case('Station'):
+				Station = dataSplit[i+1]
+			if case('ipaddr'):
+				ipaddr = dataSplit[i+1]
+			if case('port'):
+				port = int(dataSplit[i+1])
+
+	return [Station, ipaddr, port]
+
+		
+'''
