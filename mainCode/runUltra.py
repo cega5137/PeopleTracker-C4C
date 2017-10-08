@@ -64,8 +64,8 @@ try:
 	        		#### Sending data
 				msg = Station + " {} {} ".format(previousTimeCount, masterCount)
 				Sc.send(msg)
-				State = Sc.recv(BUFFER_SIZE)
-				print "Raspberry pi State: ", State
+#				State = Sc.recv(BUFFER_SIZE)
+#				print "Raspberry pi State: ", State
 				previousTimeCount = masterCount
 				T = datetime.datetime.time(datetime.datetime.now())
 				print "End of the if statement"
