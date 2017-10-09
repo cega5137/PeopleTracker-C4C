@@ -6,7 +6,7 @@ host = "10.0.0.150" #ip address of the server
 
 print host
 
-port = 3333
+port = 2004
 
 s=socket(AF_INET, SOCK_STREAM)
 #s.settimeout(60)
@@ -20,7 +20,7 @@ while True:
 		print "socket connected!!"
 		time.sleep(2)
 #		msg = s.recv(1024)
-		print "Message from server: ", msg 
+#		print "Message from server: ", msg 
 		break
 	except:
 		print "not connection found will try again in 2 seconds..."
@@ -29,7 +29,7 @@ while True:
 try:
 	while True:
 		
-		msg = input('Enter message for server: ')
+		msg = raw_input('Enter message for server: ')
 		s.send(msg)
 		print "Message sent"
 #		msg=s.recv(1024)
@@ -41,10 +41,10 @@ except KeyboardInterrupt:
 	print "\nClosing"
 	s.close
 
-except Exception:
-	print "\nOther Raspberry pi close connection"
-	print "Close connection"
-	s.close
+#except Exception:
+#	print "\nOther Raspberry pi close connection"
+#	print "Close connection"
+#	s.close
 	
 
 def shutdownRPi():
