@@ -15,7 +15,8 @@ class ClientThread(Thread):
 		while True :
 			data = conn.recv(2028)
 			print "Server received data: ", data
-			#MSG = raw_input("Multithreaded Python Server:")
+			#time.sleep(1)
+#			MSG = raw_input("Multithreaded Python Server:")
 			#if MSG == 'exit':
 			#	break
 			#conn.send(MSG)
@@ -40,11 +41,6 @@ while True:
 
 for t in threads:
 	t.join()
-
-
-
-
-
 
 
 '''
