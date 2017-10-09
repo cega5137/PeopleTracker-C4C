@@ -29,12 +29,12 @@ while True:
 try:
 	while True:
 		
-		msg = "This is client1"
+		msg = input('Enter message for server: ')
 		s.send(msg)
 		print "Message sent"
-		msg=s.recv(1024)
+#		msg=s.recv(1024)
 
-		print "Message from server: " + msg	
+#		print "Message from server: " + msg	
 		time.sleep(1)
 
 except KeyboardInterrupt:
