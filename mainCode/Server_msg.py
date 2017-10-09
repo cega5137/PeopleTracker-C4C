@@ -13,8 +13,22 @@ class ClientThread(Thread):
 
 	def run(self):
 		while True :
-			data = conn.recv(2028)
-			print "Server received data: ", data
+			check = conn.recv(2028,socket.MSG_PEEK)
+			L = len(check)
+			print "Check: ", check
+			print "Check legth: ", L
+			if L > 0:
+				data = conn.recv(2028)
+				print "Server received data: ", data
+			else:
+				break
+
+
+#			[data, ClientIP] = conn.recvfrom(2048)
+#			data = conn.recv(2028[,MSG_PEEK])
+
+#			print "Server received data: ", data
+#			print "Message from ", ClientIP, ": ", data 
 			#time.sleep(1)
 #			MSG = raw_input("Multithreaded Python Server:")
 			#if MSG == 'exit':
@@ -24,7 +38,7 @@ class ClientThread(Thread):
 # Multithreaded Python server
 TCP_IP = '10.0.0.150'
 TCP_PORT = 2004
-BUFFER_SIZE = 1024
+BUFFER_SIZE = 2048
 
 tcpServer = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 tcpServer.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
@@ -32,7 +46,7 @@ tcpServer.bind((TCP_IP, TCP_PORT))
 threads = []
 
 while True:
-	tcpServer.listen(4)
+	tcpServer.listen(5)
 	print "MultThreaded Python Server: Waiting for connection from TCP clients"
 	(conn, (ip, port)) = tcpServer.accept()
 	newthread = ClientThread(ip, port)
