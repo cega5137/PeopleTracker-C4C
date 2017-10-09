@@ -2,7 +2,7 @@ print "Register GPIO"
 import time 
 import datetime 
 import socket 
-from UltraSonicSensor import UltraSonic
+from UltraSonicSensor import UltraSonic 
 from switch import Switch
 
 def readInitialization(file):

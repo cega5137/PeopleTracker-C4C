@@ -1,9 +1,10 @@
 import socket 
 import random
 import time
+from threading import Thread
 
 #
-class ClientThread(Tread):
+class ClientThread(Thread):
 	def __init__(self, ip, port):
 		Thread.__init__(self)
 		self.ip = ip
@@ -20,7 +21,7 @@ class ClientThread(Tread):
 			#conn.send(MSG)
 
 # Multithreaded Python server
-TCP_IP = 10.0.0.150
+TCP_IP = '10.0.0.150'
 TCP_PORT = 2004
 BUFFER_SIZE = 1024
 
@@ -33,6 +34,7 @@ while True:
 	tcpServer.listen(4)
 	print "MultThreaded Python Server: Waiting for connection from TCP clients"
 	(conn, (ip, port)) = tcpServer.accept()
+	newthread = ClientThread(ip, port)
 	newthread.start()
 	threads.append(newthread)
 
