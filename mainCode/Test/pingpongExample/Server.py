@@ -16,7 +16,7 @@ class client_thread(Thread):
 	def run(self):
 		while 1:
 			data = self.conn.recv(self.bufferSize)
-			if not data:
+			if not data or data == 0:
 				break
 			print "receive data: ", data
 			self.conn.send(data) # echo
@@ -27,7 +27,7 @@ def init(Port):
     serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     serversocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     serversocket.bind((host, Port))
-    serversocket.listen(4)
+    serversocket.listen(5)
     signal.signal(signal.SIGPIPE, signal.SIG_IGN) # IGNORE SIG_PIPE
     return serversocket
 
