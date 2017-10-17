@@ -1,7 +1,4 @@
-from socket import *
-import time
-import subprocess
-import signal
+from socket import * import time import subprocess import signal
 
 def init_client(host, port):
     # Initializes the client
@@ -32,13 +29,13 @@ def runClient(soc):
     #Main Loop
     while True:
         # Take Measurment
-        data = getdata()
+        data = 'Station Current Total'#getdata()
         
         if len(data) == 0:
             continue
         
         # Attempt to send to server
-        bits_written = soc.write(data)
+        bits_written = soc.send(data)#write(data)
 
         if bits_written == 0: # Assume Server closed connection, close socket and attempt to connect to server again
             soc.close()
@@ -55,9 +52,9 @@ def cleanup(soc):
 def shutdownRPi():
     print "Shutting down"
     command = "/usr/bin/sudo /sbin/shutdown -h now"
-        process = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
-        output = process.communicate()[0]
-        print output
+    process = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
+    output = process.communicate()[0]
+    print output
 
 
 ######################################################################
