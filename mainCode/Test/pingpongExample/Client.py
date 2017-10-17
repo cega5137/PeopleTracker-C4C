@@ -27,7 +27,7 @@ if len(sys.argv) != 3:
     print "Usage: <hostname>, <port>"
     raise SystemExit(1)
 host = sys.argv[1]
-port = sys.argv[2]
+port = int(sys.argv[2])
 
 bufferSize = 1024
 msg = raw_input("What msg would you like to send? ")

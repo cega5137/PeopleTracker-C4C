@@ -31,7 +31,7 @@ if len(sys.argv) != 2:
     print "Usage: <Server Port>"
     raise SystemExit(1)
 
-Port = sys.argv[1]
+Port = int(sys.argv[1])
 
 bufferSize  = 1024
 conn = init_communication(Port)
