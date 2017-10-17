@@ -1,13 +1,18 @@
 #!/usr/bin/env python
 
 import socket, sys, signal
+import threading import Thread
+
 
 class client_thread():
-	def __init__(clientsocket):
+	def __init__(self, clientsocket, ip, port):
+		Thread.__init__(self)
+		self.ip = ip
+		self.port = port
 		self.bufferSize = 1024
 		self.conn = clientsocket
 
-	def run():
+	def run(self):
 		while 1:
 			data = self.conn.recv(self.bufferSize)
 			if not data:
@@ -24,10 +29,10 @@ def init(Port):
     signal.signal(signal.SIGPIPE, signal.SIG_IGN) # IGNORE SIG_PIPE
     return serversocket
 
-def run(serversocket, bufferSize):
+def run(serversocket, bufferSize, port):
 	while 1:
 	        (clientsocket, address) = serversocket.accept()
-        	ct = client_thread(clientsocket)
+        	ct = client_thread(clientsocket, 'localhost', port)
         	ct.run()
 
 def cleanup(serversocket):
@@ -45,5 +50,5 @@ port = int(sys.argv[1])
 
 bufferSize  = 1024
 serversocket = init(port)
-run(serversocket, bufferSize)
+run(serversocket, bufferSize, port)
 cleanup()

@@ -46,4 +46,4 @@ msg = raw_input("What msg would you like to send? ")
 
 s = init(host, port)
 run(s, msg)
-cleanup()
+cleanup(s)
