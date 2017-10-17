@@ -24,6 +24,7 @@ class client_thread():
 def init(Port):
     host = 'localhost'
     serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    serversocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     serversocket.bind((host, Port))
     serversocket.listen(4)
     signal.signal(signal.SIGPIPE, signal.SIG_IGN) # IGNORE SIG_PIPE
