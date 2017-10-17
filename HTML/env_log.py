@@ -48,29 +48,31 @@ from threading import Thread
 from SocketServer import ThreadingMixIn
 from switch import Switch
 
-class ClientThread(Thread):
+class client_thread(Thread):
         def __init__(self, ip, port):
                 Thread.__init__(self)
                 self.ip = ip
                 self.port = port
+				self.bufferSize = 1024
+				self.conn = clientsocket
                 print "[+] New server socket started for " + ip + ": " + str(port)
 
         def run(self):
-                while True:
-                        msg = conn.recv(2048)
-                        print "Server receive data: ", msg
-			print "At :", datetime.datetime.time(datetime.datetime.now())
-			data = msg.split(" ")
-#			if len(data) == 2:
-#			try:
-			header = data[0]
-			curr = int(data[1])
-			Total = int(data[2])
-			if curr is not None and Total is not None:
-				self.log_values(header, curr, Total)
-			else: 
-				self.log_values(header, -999, -999)
-                       	MSG = "ON"
+            while True:
+                msg = self.conn.recv(self.bufferSize)
+                print "Server receive data: ", msg
+				print "At :", datetime.datetime.time(datetime.datetime.now())
+				data = msg.split(" ")
+	#			if len(data) == 2:
+	#			try:
+				header = data[0]
+				curr = int(data[1])
+				Total = int(data[2])
+				if curr is not None and Total is not None:
+					self.log_values(header, curr, Total)
+				else: 
+					self.log_values(header, -999, -999)
+                   	MSG = "ON"
 #                      	conn.send(MSG)
 
 #			except:
@@ -84,7 +86,7 @@ class ClientThread(Thread):
                 	                                             #absolute path to the database
                         	                                     #file, otherwise Cron won't be
                                 	                             #able to find it!
-	        curs=conn.cursor()	
+		curs=conn.cursor()	
 	
 		with Switch(Header) as case:
 			if case('Asian'):
@@ -109,12 +111,43 @@ class ClientThread(Thread):
         	conn.commit()
         	conn.close()
 
+def init(host, Port):
+	serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	serversocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADOR, 1)
+	serversocket.bind((host, Port))
+	serversocket.listen(5)
+	signal.signal(signal.SIGPIPE, signal.SIG_IGN)
+	return serversocket
+	
+def run(serversocket, host, port):
+	threads = []
+	while 1:
+		(clientsocket, address) = serversocket.accept()
+		ct = client_thread(clientsocket, host, port)
+		ct.start()
+		threads.append(ct)
+		
+	for t in threads:
+		t.join()
+		
+def cleanup(serversocket):
+	serversocket.close()
+	print "Closing Connection"
+
 ####################################################
 print "Startin application"
-
 hostIP = "10.0.0.150"
+port = 5001
+serversocket = init(hostIP, port)
+run(serversocket, hostIP, port)
+cleanup()
 
-port = 3333
+
+
+
+
+
+
 BUFFER_SIZE = 20
 
 tcpServer = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
