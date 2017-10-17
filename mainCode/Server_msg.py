@@ -2,6 +2,7 @@ import socket
 import random
 import time
 from threading import Thread
+from SocketServer import ThreadingMixIn
 
 #
 class ClientThread(Thread):
@@ -13,17 +14,19 @@ class ClientThread(Thread):
 
 	def run(self):
 		while True :
-			check = conn.recv(2028,socket.MSG_PEEK)
-			L = len(check)
-			print "Check: ", check
-			print "Check legth: ", L
-			if L > 0:
-				data = conn.recv(2028)
-				print "Server received data: ", data
-			else:
-				break
+			try:
+				data = conn.recv(2048)
+				L = len(data)
+				if L > 0:
+					print "Server received data: ", data
+				else:
+					print "Closing connection"
+					break
+			except IOError as e:
+				print "I/O error({0}): {1}".format(e.errno,e.strerror)
 
-
+			except:
+				print "some error"
 #			[data, ClientIP] = conn.recvfrom(2048)
 #			data = conn.recv(2028[,MSG_PEEK])
 

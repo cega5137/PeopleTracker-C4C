@@ -3,6 +3,7 @@ import random
 import time
 from threading import Thread
 import signal
+from SocketServer import ThreadingMixIn
 
 #
 class ClientThread(Thread):
@@ -15,6 +16,7 @@ class ClientThread(Thread):
 
 	def run(self):
 		while True :
+			#print "Starting the while loop"
 			check = conn.recv(2028,socket.MSG_PEEK)
 			L = len(check)
 			print "Check: ", check
