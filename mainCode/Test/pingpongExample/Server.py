@@ -1,22 +1,22 @@
 #!/usr/bin/env python
 
-import socket, sys
+import socket, sys, signal
 
 def init(Port):
     serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     serversocket.bind((host, Port))
     serversocket.listen(4)
+    signal.signal(signal.SIG_PIPE, signal.SIG_IGN) # IGNORE SIG_PIPE
     return serversocket
 
 def run(serversocket, bufferSize):
 	while 1:
         (clientsocket, address) = serversocket.accept()
-		data = clientsocket.recv(bufferSize)
         ct = client_thread(clientsocket)
         ct.run()
 
-def cleanup(conn):
-	conn.close()
+def cleanup(serversocket):
+	serversocket.close()
 	print "Closing connection"
 
 
