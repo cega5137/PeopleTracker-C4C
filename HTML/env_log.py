@@ -51,34 +51,39 @@ import signal
 
 class client_thread(Thread):
         def __init__(self, clientsocket, ip, port):
-            Thread.__init__(self)
-            self.ip = ip
-            self.port = port
-			self.bufferSize = 1024
-			self.conn = clientsocket
-            print "[+] New server socket started for " + ip + ": " + str(port)
+            	Thread.__init__(self)
+            	self.ip = ip
+            	self.port = port
+		self.bufferSize = 1024
+		self.conn = clientsocket
+            	print "[+] New server socket started for " + ip + ": " + str(port)
 
         def run(self):
         	# Setting up the prevoius time 
-        	firstRun = True
+       		firstRun = True
 
-            while True:
-                msg = self.conn.recv(self.bufferSize)
-                print "Server receive data: ", msg
-                T = datetime.datetime.time(datetime.datetime.now())
-				print "At :", T
-				data = msg.split(" ")
-				header = data[0]
-				curr = int(data[1])
-				Total = int(data[2])
-				if curr is not None and Total is not None:
-					if not T.minute == previousT.minute and not T.hour == previousT.hour or firstRun: 
-						self.log_values(header, curr, Total)
-						previousT = datetime.datetime.time(datetime.datetime.now())
-						firstRun = False
-				else: 
-					self.log_values(header, -999, -999)
-		                	MSG = "ON"
+		while True:
+			msg = self.conn.recv(self.bufferSize)
+               		print "Server receive data: ", msg
+                	T = datetime.datetime.time(datetime.datetime.now())
+			print "At :", T
+			data = msg.split(" ")
+			header = data[0]
+			curr = int(data[1])
+			Total = int(data[2])
+			if curr is not None and Total is not None:
+				if firstRun:
+					self.log_values(header,curr, Total)
+					firstRun = False
+					previousT = datetime.datetime.time(datetime.datetime.now())
+
+				if not T.minute == previousT.minute: 
+					self.log_values(header, curr, Total)
+					previousT = datetime.datetime.time(datetime.datetime.now())
+					firstRun = False
+			else: 
+				self.log_values(header, -999, -999)
+		               	MSG = "ON"
 	#                      	conn.send(MSG)
 
 	#			except:
@@ -96,7 +101,7 @@ class client_thread(Thread):
 	
 		with Switch(Header) as case:
 			if case('Asian'):
-	          	curs.execute('''INSERT INTO Asian values(datetime(CURRENT_TIMESTAMP, 'localtime'), (?), (?))''', (currn,total))
+	          		curs.execute('''INSERT INTO Asian values(datetime(CURRENT_TIMESTAMP, 'localtime'), (?), (?))''', (currn,total))
 				print "Saving current and total in Asian: ", currn, ", ", total
 			if case('American'):
 				curs.execute('''INSERT INTO American values(datetime(CURRENT_TIMESTAMP, 'localtime'), (?), (?))''', (currn,total))
@@ -142,36 +147,8 @@ def cleanup(serversocket):
 
 ####################################################
 print "Startin application"
-hostIP = "10.0.0.150"
+hostIP = "10.202.16.73"
 port = 5001
 serversocket = init(hostIP, port)
 run(serversocket, hostIP, port)
 cleanup()
-
-
-
-
-
-
-
-#BUFFER_SIZE = 20
-
-#tcpServer = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-#tcpServer.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-#tcpServer.bind((hostIP,port))
-#threads = []
-##s=socket(AF_INET,SOCK_STREAM)
-##i = 0
-
-#print "Done set up port and host"
-#while True:
-#	tcpServer.listen(5)
-#	print "Waiting connection from clients"
-#	(conn, (ip, port)) = tcpServer.accept()
-#	newthread = ClientThread(ip, port)
-#	newthread.start()
-#	threads.append(newthread)
-		
-#for t in threads:
-#	print "In the for loop"
-#	t.join()
