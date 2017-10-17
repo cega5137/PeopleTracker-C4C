@@ -2,11 +2,23 @@
 
 import socket, time, sys
 
-def init_comm(TCP_IP, TCP_PORT):
-	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-	s.connect((TCP_IP,TCP_PORT))
+def init(host, port):
+	
 
-	return s
+	return connectToServer(host, port)
+
+def connectToServer(host, port):
+	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+        while True:
+                try:
+                        s.connect((host,port))
+			break
+                except:
+                        print "Server not found. Will try in two second"
+                        time.sleep(2)
+
+        return s
 
 def run(s,msg):
 	try:
@@ -19,8 +31,11 @@ def run(s,msg):
 			time.sleep(5)
 
 	except:
-		s.close()
+		cleanup()
 
+def cleanup():
+	s.close()
+	print "Closing Program"
 
 ############################## Main Code ##################
 if len(sys.argv) != 3:
@@ -32,5 +47,6 @@ port = int(sys.argv[2])
 bufferSize = 1024
 msg = raw_input("What msg would you like to send? ")
 
-s = init_comm(host, port)
+s = init(host, port)
 run(s, msg)
+cleanup()
