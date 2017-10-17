@@ -1,16 +1,17 @@
 #!/usr/bin/env python
 
 import socket, sys, signal
-import threading import Thread
+from threading import Thread
 
 
-class client_thread():
+class client_thread(Thread):
 	def __init__(self, clientsocket, ip, port):
 		Thread.__init__(self)
 		self.ip = ip
 		self.port = port
 		self.bufferSize = 1024
 		self.conn = clientsocket
+		print "Connecting to ", self.ip, "on port ", self.port
 
 	def run(self):
 		while 1:
@@ -31,10 +32,16 @@ def init(Port):
     return serversocket
 
 def run(serversocket, bufferSize, port):
+	threads = []
 	while 1:
 	        (clientsocket, address) = serversocket.accept()
         	ct = client_thread(clientsocket, 'localhost', port)
-        	ct.run()
+        	ct.start()
+		threads.append(ct)
+		#ct.run()
+
+	for t in threads:
+		t.join()
 
 def cleanup(serversocket):
 	serversocket.close()
