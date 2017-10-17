@@ -60,7 +60,7 @@ def init_client(initializationFile):
     # Initializes the client
 	#signal.signal(signal.SIGPIPE, signal.SIG_IGN)
     
-    	return [connectToServer(host, port), Counter, tol_dist, delayTime]
+    	return [connectToServer(host, port), Counter, tol_dist, delayTime, Station]
 
 def connectToServer(host, port):
     # Connects to Server
@@ -91,7 +91,7 @@ def variableDeclaration():
 	print "The on time is ", T
 	return [masterCount, previousTimeCount, isPerson, t_actual]
 
-def runClient(soc, Counter, tol_dist, delayTime):
+def runClient(soc, Counter, tol_dist, delayTime, station):
 	#set up variable declaration
 	[masterCount, previousTimeCount, isPerson, t_actual] = variableDeclaration()
 
@@ -101,8 +101,8 @@ def runClient(soc, Counter, tol_dist, delayTime):
 		T = datetime.datetime.time(datetime.datetime.now())
     		if T.minute == 0 or T.minute == 15 or T.minute == 30 or T.minute == 45:
 			if T.second == delayTime:
-				[previousTotal, T] = sendData(soc, station, countMaster, previousTotal)
-        
+				[previousTotal, T] = sendData(soc, station, countMaster, previousTotal, station)
+
 		print "Begining of Main Loop", T
 		print "Master Count = ", masterCount
 		print "Current Count = ", (masterCount - previousTimeCount)
@@ -317,8 +317,8 @@ filePath = "initializationFile"
 #print "hostname: ", host, " Portnumber: ", port
 
 # Initalize Client
-[soc, Counter, tol_dist, delay] = init_client(filePath)
-runClient(soc, Counter, tol_dist, delay)
+[soc, Counter, tol_dist, delay, station] = init_client(filePath)
+runClient(soc, Counter, tol_dist, delay, station)
 cleanup(soc)
 
 
