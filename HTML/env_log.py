@@ -51,34 +51,39 @@ import signal
 
 class client_thread(Thread):
         def __init__(self, clientsocket, ip, port):
-                Thread.__init__(self)
-                self.ip = ip
-                self.port = port
-		self.bufferSize = 1024
-		self.conn = clientsocket
-                print "[+] New server socket started for " + ip + ": " + str(port)
+            Thread.__init__(self)
+            self.ip = ip
+            self.port = port
+			self.bufferSize = 1024
+			self.conn = clientsocket
+            print "[+] New server socket started for " + ip + ": " + str(port)
 
         def run(self):
+        	# Setting up the prevoius time 
+        	firstRun = True
+
             while True:
                 msg = self.conn.recv(self.bufferSize)
                 print "Server receive data: ", msg
-		print "At :", datetime.datetime.time(datetime.datetime.now())
-		data = msg.split(" ")
-	#	if len(data) == 2:
-	#	try:
-		header = data[0]
-		curr = int(data[1])
-		Total = int(data[2])
-		if curr is not None and Total is not None:
-			self.log_values(header, curr, Total)
-		else: 
-			self.log_values(header, -999, -999)
-                	MSG = "ON"
-#                      	conn.send(MSG)
+                T = datetime.datetime.time(datetime.datetime.now())
+				print "At :", T
+				data = msg.split(" ")
+				header = data[0]
+				curr = int(data[1])
+				Total = int(data[2])
+				if curr is not None and Total is not None:
+					if not T.minute == previousT.minute and not T.hour == previousT.hour or firstRun: 
+						self.log_values(header, curr, Total)
+						previousT = datetime.datetime.time(datetime.datetime.now())
+						firstRun = False
+				else: 
+					self.log_values(header, -999, -999)
+		                	MSG = "ON"
+	#                      	conn.send(MSG)
 
-#			except:
-#				MSG = "OFF"
-#				conn.send(MSG)
+	#			except:
+	#				MSG = "OFF"
+	#				conn.send(MSG)
 
 	
 	def log_values(self, Header, currn, total):
@@ -91,7 +96,7 @@ class client_thread(Thread):
 	
 		with Switch(Header) as case:
 			if case('Asian'):
-	          		curs.execute('''INSERT INTO Asian values(datetime(CURRENT_TIMESTAMP, 'localtime'), (?), (?))''', (currn,total))
+	          	curs.execute('''INSERT INTO Asian values(datetime(CURRENT_TIMESTAMP, 'localtime'), (?), (?))''', (currn,total))
 				print "Saving current and total in Asian: ", currn, ", ", total
 			if case('American'):
 				curs.execute('''INSERT INTO American values(datetime(CURRENT_TIMESTAMP, 'localtime'), (?), (?))''', (currn,total))
@@ -101,11 +106,11 @@ class client_thread(Thread):
 				curs.execute('''INSERT INTO Persian values(datetime(CURRENT_TIMESTAMP, 'localtime'), (?), (?))''', (currn,total))
 				print "Saving current and total in Persian: ", currn, ", ", total
 
-               		if case('Italian'):
+			if case('Italian'):
 				curs.execute('''INSERT INTO Italian values(datetime(CURRENT_TIMESTAMP, 'localtime'), (?), (?))''', (currn,total))
 				print "Saving current and total in Italian: ", currn, ", ", total
 
-            	   	if case('Latin'):
+			if case('Latin'):
 				curs.execute('''INSERT INTO Latin values(datetime(CURRENT_TIMESTAMP, 'localtime'), (?), (?))''', (currn,total))
 				print "Saving current and total in Latin: ", currn, ", ", total
 
