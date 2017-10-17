@@ -2,6 +2,7 @@ import socket
 import random
 import time
 from threading import Thread
+import signal
 
 #
 class ClientThread(Thread):
@@ -9,7 +10,7 @@ class ClientThread(Thread):
 		Thread.__init__(self)
 		self.ip = ip
 		self.port = port
-        signal.signal(signal.SIGPIPE, signal.SIG_IGN) # NEW NEW
+        	signal.signal(signal.SIGPIPE, signal.SIG_IGN) # NEW NEW
 		print "[+] New server socket thread started for " + ip + ":" + str(port)
 
 	def run(self):

@@ -1,7 +1,4 @@
-from socket import *
-import time
-import subprocess
-import signal
+from socket import * import time import subprocess import signal
 
 def init_client(host, port):
     # Initializes the client
@@ -55,9 +52,9 @@ def cleanup(soc):
 def shutdownRPi():
     print "Shutting down"
     command = "/usr/bin/sudo /sbin/shutdown -h now"
-        process = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
-        output = process.communicate()[0]
-        print output
+    process = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
+    output = process.communicate()[0]
+    print output
 
 
 ######################################################################
