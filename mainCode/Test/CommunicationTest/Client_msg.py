@@ -1,7 +1,4 @@
-from socket import *
-import time
-import subprocess
-import signal
+from socket import * import time import subprocess import signal
 
 def init_client(host, port):
     # Initializes the client

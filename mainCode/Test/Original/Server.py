@@ -21,7 +21,7 @@ class ClientThread(Thread):
             conn.send(MESSAGE)  # echo 
 
 # Multithreaded Python server : TCP Server Socket Program Stub
-TCP_IP = '0.0.0.0' 
+TCP_IP = '10.0.0.150' 
 TCP_PORT = 2004 
 BUFFER_SIZE = 20  # Usually 1024, but we need quick response 
 
