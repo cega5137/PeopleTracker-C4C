@@ -15,6 +15,7 @@ def run(s,msg):
 			print "Sending: ", msg
 			s.send(msg)
 			data = s.recv(bufferSize)
+			print "Message Receive: ", data
 			msg = data
 			time.sleep(5)
 
