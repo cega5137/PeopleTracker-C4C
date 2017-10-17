@@ -32,7 +32,7 @@ def runClient(soc):
     #Main Loop
     while True:
         # Take Measurment
-        data = 'Station Current Total'#getdata()
+        data = raw_input('Enter message to Server:')#'Station Current Total'#getdata()
         
         if len(data) == 0:
             continue
