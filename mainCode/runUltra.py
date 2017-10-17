@@ -293,9 +293,9 @@ try:
 		    		print "Time In Front = ", time.time() - time_Person
 	            		masterCount = masterCount + 1
 	            		isPerson = 0
-	        else:
-	        # Person is still standing in front of sensor
-	            continue
+	        	else:
+	        	# Person is still standing in front of sensor
+	           		 continue
 		#END OF LOOP
 
 # Clean up
