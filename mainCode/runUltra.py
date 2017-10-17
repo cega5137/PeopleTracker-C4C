@@ -1,3 +1,4 @@
+
 print "Register GPIO" 
 import time 
 import datetime 
@@ -60,7 +61,7 @@ def init_client(initializationFile):
     # Initializes the client
 	#signal.signal(signal.SIGPIPE, signal.SIG_IGN)
     
-    	return [connectToServer(host, port), Counter, tol_dist, delayTime, Station]
+    	return [connectToServer(host, port), Counter, tol_dist, delayTime, Station, host, port]
 
 def connectToServer(host, port):
     # Connects to Server
@@ -91,9 +92,9 @@ def variableDeclaration():
 	print "The on time is ", T
 	return [masterCount, previousTimeCount, isPerson, t_actual]
 
-def runClient(soc, Counter, tol_dist, delayTime, station):
+def runClient(soc, Counter, tol_dist, delayTime, station, host, port):
 	#set up variable declaration
-	[masterCount, previousTimeCount, isPerson, t_actual] = variableDeclaration()
+	[masterCount, previousTotal, isPerson, t_actual] = variableDeclaration()
 
 	#Main Loop
 	while True:
@@ -101,11 +102,11 @@ def runClient(soc, Counter, tol_dist, delayTime, station):
 		T = datetime.datetime.time(datetime.datetime.now())
     		#if T.minute == 0 or T.minute == 15 or T.minute == 30 or T.minute == 45:
 		if T.second == delayTime:
-			[previousTotal, T] = sendData(soc, station, masterCount, previousTotal, station)
+			[previousTotal, T] = sendData(soc, host, port, station, masterCount, previousTotal)
 
 		print "Begining of Main Loop", T
 		print "Master Count = ", masterCount
-		print "Current Count = ", (masterCount - previousTimeCount)
+		print "Current Count = ", (masterCount - previousTotal)
     		distance = Counter.getDistance()
 		    
 		if distance > 400:
@@ -139,9 +140,9 @@ def runClient(soc, Counter, tol_dist, delayTime, station):
 	            continue
 		#END OF LOOP
 	
- 	data = raw_input('Enter message to Server:')#'Station Current Total'#getdata()
+ 	#data = raw_input('Enter message to Server:')#'Station Current Total'#getdata()
 	
-def sendData(soc, Station, countMaster, previousTotal):
+def sendData(soc, host, port, Station, masterCount, previousTotal):
 	# Creating message
 	previousTimeCount = masterCount - previousTotal
 	msg = Station + " {} {} ".format(previousTotal, masterCount)
@@ -149,9 +150,11 @@ def sendData(soc, Station, countMaster, previousTotal):
 	# Send Data
 	while True:
 		try:
-        		bits_written = soc.send(data)#write(data)
+        		bits_written = soc.send(msg)#write(data)
+			print "data sent"
 			break
 		except:
+			print "Connection broket"
 			soc.close()
 			soc = connectToServer(host, port)
 			
@@ -317,8 +320,8 @@ filePath = "initializationFile"
 #print "hostname: ", host, " Portnumber: ", port
 
 # Initalize Client
-[soc, Counter, tol_dist, delay, station] = init_client(filePath)
-runClient(soc, Counter, tol_dist, delay, station)
+[soc, Counter, tol_dist, delay, station, host, port] = init_client(filePath)
+runClient(soc, Counter, tol_dist, delay, station, host, port)
 cleanup(soc)
 
 
