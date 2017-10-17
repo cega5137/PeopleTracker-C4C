@@ -1,7 +1,6 @@
 #!/usr/bin/env python 
 
-import socket
-import time
+import socket, time, sys
 
 def init_comm(TCP_IP, TCP_PORT):
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -24,8 +23,12 @@ def run(s,msg):
 
 
 ############################## Main Code ##################
-host = 'localhost'
-port = 3333
+if len(sys.argv) != 3:
+    print "Usage: <hostname>, <port>"
+    raise SystemExit(1)
+host = sys.argv[1]
+port = sys.argv[2]
+
 bufferSize = 1024
 msg = raw_input("What msg would you like to send? ")
 

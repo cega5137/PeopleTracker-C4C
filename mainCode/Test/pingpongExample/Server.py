@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import socket
+import socket, sys
 
 def init_communication(Port):
 	TCP_IP = 'localhost' #'10.0.0.150'
@@ -26,7 +26,13 @@ def run(conn, bufferSize):
 		conn.send(data)
 
 ###################### Main Code ################
-Port  = 3333
+
+if len(sys.argv) != 2:
+    print "Usage: <Server Port>"
+    raise SystemExit(1)
+
+Port = sys.argv[1]
+
 bufferSize  = 1024
 conn = init_communication(Port)
 run(conn, bufferSize)
