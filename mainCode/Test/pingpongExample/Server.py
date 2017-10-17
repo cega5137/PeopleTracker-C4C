@@ -2,8 +2,10 @@
 
 import socket
 
-TCP_IP = '10.0.0.150'
+TCP_IP = 'localhost' #'10.0.0.150'
 TCP_PORT = 3333
+print "IP: ", TCP_IP
+print "PORT: ", TCP_PORT
 bufferSize = 1024
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

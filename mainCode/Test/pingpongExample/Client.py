@@ -3,16 +3,17 @@
 import socket
 import time
 
-TCP_IP = '10.0.0.150'
+TCP_IP = 'localhost'
 TCP_PORT = 3333
 bufferSize = 1024
 msg = "working"
-s = socket.scoket(socket.AF_INET, socket.SOCK_STREAM)
+s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.connect((TCP_IP,TCP_PORT))
 
 
 try:
 	while True:
+		print "Sending: ", msg
 		s.send(msg)
 		data = s.recv(bufferSize)
 		msg = data
