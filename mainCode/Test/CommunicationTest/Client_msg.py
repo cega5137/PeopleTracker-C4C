@@ -1,4 +1,7 @@
-from socket import * import time import subprocess import signal
+from socket import * 
+import time 
+import subprocess 
+import signal
 
 def init_client(host, port):
     # Initializes the client
@@ -29,18 +32,27 @@ def runClient(soc):
     #Main Loop
     while True:
         # Take Measurment
-        data = 'Station Current Total'#getdata()
+        data = raw_input('Enter message to Server:')#'Station Current Total'#getdata()
         
         if len(data) == 0:
             continue
         
         # Attempt to send to server
-        bits_written = soc.send(data)#write(data)
+	while True:
+		try:
+        		bits_written = soc.send(data)#write(data)
+			break
+		except:
+			soc.close()
+			soc = connectToServer(host, port)
+		
 
-        if bits_written == 0: # Assume Server closed connection, close socket and attempt to connect to server again
-            soc.close()
-            soc = connectToServer(host, port)
-
+        	#if bits_written == 0: # Assume Server closed connection, close socket and attempt to connect to server again
+            	#	soc.close()
+            	#	soc = connectToServer(host, port)
+	#except:
+	#	soc = connectToServer(host, port)
+		
 
 def cleanup(soc):
     # Close Socket
