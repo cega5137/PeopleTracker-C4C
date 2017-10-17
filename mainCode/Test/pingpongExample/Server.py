@@ -3,36 +3,21 @@
 import socket, sys
 
 def init(Port):
-	s = accept(Port)
+    serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    serversocket.bind((host, Port))
+    serversocket.listen(4)
+    return serversocket
 
-	return connect(s)
+def accept(serversocket):
+    (clientsocket, address) = serversocket.accept()
+    return clientsocket
 
-def accept(port):
-	host = 'localhost' #'10.0.0.150'
-        print "IP: ", host
-        print "PORT: ", Port
-
-	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        s.bind((host, Port))
-        s.listen(4)
-
-	return s
-
-def connect(s):
-	conn, addr = s.accept()
-        print 'Connection address: ', addr
-	
-	return conn
-
-
-def run(conn, bufferSize):
+def run(serversocket, bufferSize):
 	while 1:
-		data = conn.recv(bufferSize)
-		if not data: 
-			cleanup()
-
-		print "Receive: ", data
-		conn.send(data)
+        (clientsocket, address) = serversocket.accept()
+		data = clientsocket.recv(bufferSize)
+        ct = client_thread(clientsocket)
+        ct.run()
 
 def cleanup(conn):
 	conn.close()
@@ -45,9 +30,9 @@ if len(sys.argv) != 2:
     print "Usage: <Server Port>"
     raise SystemExit(1)
 
-Port = int(sys.argv[1])
+port = int(sys.argv[1])
 
 bufferSize  = 1024
-conn = init(Port)
-run(conn, bufferSize)
+serversocket = init(port)
+run(serversocket, bufferSize)
 cleanup()

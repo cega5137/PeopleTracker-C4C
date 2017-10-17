@@ -3,21 +3,18 @@
 import socket, time, sys
 
 def init(host, port):
-	
-
 	return connectToServer(host, port)
 
 def connectToServer(host, port):
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
+    
         while True:
                 try:
                         s.connect((host,port))
-			break
+                        break
                 except:
                         print "Server not found. Will try in two second"
                         time.sleep(2)
-
         return s
 
 def run(s,msg):
