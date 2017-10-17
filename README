@@ -11,9 +11,12 @@ Techniques used in solving this problem:
 5) Update HTML website with new data
 
 TODO:
+5) Add reconnection handeling in runUltra
+6) Add checking of the time when saving data to reduce copy of data
 
 1) Fix display of the current of number of people instead of total - Done
 2) Fix time display on showing records
 3) Static IP for mothership
-3) Add connection indication
+4) Add connection indication - Done
+
 

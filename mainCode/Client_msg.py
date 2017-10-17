@@ -41,10 +41,10 @@ except KeyboardInterrupt:
 	print "\nClosing"
 	s.close
 
-#except Exception:
-#	print "\nOther Raspberry pi close connection"
-#	print "Close connection"
-#	s.close
+except Exception:
+	print "\nOther Raspberry pi close connection"
+	print "Close connection"
+	s.close
 	
 
 def shutdownRPi():
