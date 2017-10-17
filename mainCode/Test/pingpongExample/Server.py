@@ -2,24 +2,31 @@
 
 import socket
 
-TCP_IP = 'localhost' #'10.0.0.150'
-TCP_PORT = 3333
-print "IP: ", TCP_IP
-print "PORT: ", TCP_PORT
-bufferSize = 1024
+def init_communication(Port):
+	TCP_IP = 'localhost' #'10.0.0.150'
+	print "IP: ", TCP_IP
+	print "PORT: ", Port
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.bind((TCP_IP, TCP_PORT))
-s.listen(4)
+	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	s.bind((TCP_IP, Port))
+	s.listen(4)
 
-conn, addr = s.accept()
-print 'Connection address: ', addr
+	conn, addr = s.accept()
+	print 'Connection address: ', addr
 
-while 1:
-	data = conn.recv(bufferSize)
-	if not data: 
-		conn.close()
+	return conn
 
-	print "Receive: ", data
-	conn.send(data)
+def run(conn, bufferSize):
+	while 1:
+		data = conn.recv(bufferSize)
+		if not data: 
+			conn.close()
 
+		print "Receive: ", data
+		conn.send(data)
+
+###################### Main Code ################
+Port  = 3333
+bufferSize  = 1024
+conn = init_communication(Port)
+run(conn, bufferSize)
