@@ -100,9 +100,9 @@ def runClient(soc, Counter, tol_dist, delayTime, station, host, port):
 	while True:
         # Take Measurment
 		T = datetime.datetime.time(datetime.datetime.now())
-    		#if T.minute == 0 or T.minute == 15 or T.minute == 30 or T.minute == 45:
-		if T.second == delayTime:
-			[previousTotal, T] = sendData(soc, host, port, station, masterCount, previousTotal)
+    		if T.minute == 0 or T.minute == 15 or T.minute == 30 or T.minute == 45:
+			if T.second == delayTime:
+				[previousTotal, T] = sendData(soc, host, port, station, masterCount, previousTotal)
 
 		print "Begining of Main Loop", T
 		print "Master Count = ", masterCount
