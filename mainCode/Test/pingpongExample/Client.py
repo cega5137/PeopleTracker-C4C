@@ -28,9 +28,9 @@ def run(s,msg):
 			time.sleep(5)
 
 	except:
-		cleanup()
+		cleanup(s)
 
-def cleanup():
+def cleanup(s):
 	s.close()
 	print "Closing Program"
 
