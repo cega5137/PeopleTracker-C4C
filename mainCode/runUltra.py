@@ -18,7 +18,7 @@ def readInitialization(file):
         fid = open(file,"r")
         data = fid.read()
         dataSplit = data.split()
-        for i in [0,2,4]:
+        for i in [0,2,4,6,8,10]:
                 with Switch(dataSplit[i]) as case:
                         if case('Station:'):
                                 Station = dataSplit[i+1]
@@ -40,21 +40,27 @@ def readInitialization(file):
                         if case('port:'):
                                 port = int(dataSplit[i+1])
 				#print "port: ", port
+			if case('TRIG:'):
+				TRIG = int(dataSplit[i+1])
+			if case('ECHO:'):
+				ECHO = int(dataSplit[i+1])
+			if case('tolerance:'): 
+				tol_dist = int(dataSplit[i+1])
 
-        return [Station, ipaddr, port, delayTime]
+        return [Station, ipaddr, port, delayTime, TRIG, ECHO, tol_dist]
 
 def init_client(initializationFile):
     #Get the initialization file
 	[Station, host, port, delayTime, TRIG, ECHO, tol_dist] = readInitialization(initializationFile)
 	Counter = UltraSonic(TRIG,ECHO)
 	print Station
-	print ipaddr
+	print host
 	print port
 	
     # Initializes the client
 	#signal.signal(signal.SIGPIPE, signal.SIG_IGN)
     
-    return [connectToServer(host, port), Counter]
+    	return [connectToServer(host, port), Counter, tol_dist, delayTime]
 
 def connectToServer(host, port):
     # Connects to Server
@@ -85,22 +91,22 @@ def variableDeclaration():
 	print "The on time is ", T
 	return [masterCount, previousTimeCount, isPerson, t_actual]
 
-def runClient(soc, Counter):
+def runClient(soc, Counter, tol_dist, delay):
 	#set up variable declaration
 	[masterCount, previousTimeCount, isPerson, t_actual] = variableDeclaration()
 
-    #Main Loop
-    while True:
+	#Main Loop
+	while True:
         # Take Measurment
 		T = datetime.datetime.time(datetime.datetime.now())
     		if T.minute == 0 or T.minute == 15 or T.minute == 30 or T.minute == 45:
-				if T.second == delayTime:
-					previousTotal = sendData(soc, station, countMaster, previousTotal)
+			if T.second == delayTime:
+				[previousTotal, T] = sendData(soc, station, countMaster, previousTotal)
         
 		print "Begining of Main Loop", T
 		print "Master Count = ", masterCount
 		print "Current Count = ", (masterCount - previousTimeCount)
-    	distance = Counter.getDistance()
+    		distance = Counter.getDistance()
 		    
 		if distance > 400:
 			continue
@@ -138,12 +144,12 @@ def runClient(soc, Counter):
 def sendData(soc, Station, countMaster, previousTotal):
 	# Creating message
 	previousTimeCount = masterCount - previousTotal
-	msg = Station + " {} {} ".format(previousTotal, masterCount
+	msg = Station + " {} {} ".format(previousTotal, masterCount)
 	
 	# Send Data
 	while True:
 		try:
-        	bits_written = soc.send(data)#write(data)
+        		bits_written = soc.send(data)#write(data)
 			break
 		except:
 			soc.close()
@@ -153,48 +159,6 @@ def sendData(soc, Station, countMaster, previousTotal):
 	T = datetime.datetime.time(datetime.datetime.now())
 	return [masterCount, T]
 	
-def getData(masterCount):
-	print "Begining of Main Loop", T
-	print "Master Count = ", masterCount
-	print "Current Count = ", (masterCount - previousTimeCount)
-	distance = Counter.getDistance()
-	    
-	if distance > 400:
-		#continue
-		return masterCount
-
-	#Commenting line
-	print "Distance:",distance,"cm"
-	# print "isPerson:", isPerson, "tol_dist =", tol_dist
-	# No person previously standing in front of sensor
-	if isPerson == 0:
-		if distance <= tol_dist :
-		# Person is now standing in front of sensor
-			isPerson = 1
-			time_Person = time.time()
-		else:
-		# No person is standing in front of sensor
-			#continue
-			return masterCount
-    	
-	if isPerson == 1:
-    		#Person Was standing in front of sensor
-        	if (distance > tol_dist):
-        	# Person is no longer standing in front of sensor
-            		if (time.time() - time_Person) < 1:
-                		isPerson = 0
-                		#continue
-						return masterCount
-						
-		    		print "Time In Front = ", time.time() - time_Person
-            		masterCount = masterCount + 1
-            		isPerson = 0
-        else:
-        # Person is still standing in front of sensor
-            continue
-			return masterCount
-	#END OF LOOP
-
 def cleanup(soc):
     # Close Socket
     if (soc > 0):
@@ -298,7 +262,7 @@ try:
 		print "Begining of Main Loop", T
 		print "Master Count = ", masterCount
 		print "Current Count = ", (masterCount - previousTimeCount)
-    	distance = Counter.getDistance()
+    		distance = Counter.getDistance()
 		    
 		if distance > 400:
 			continue
@@ -353,8 +317,8 @@ filePath = "initializationFile"
 #print "hostname: ", host, " Portnumber: ", port
 
 # Initalize Client
-[soc, Counter] = init_client(filePath)
-runClient(soc)
+[soc, Counter, tol_dist, delay] = init_client(filePath)
+runClient(soc, Counter, tol_dist, delay)
 cleanup(soc)
 
 
