@@ -8,10 +8,6 @@ def init(Port):
     serversocket.listen(4)
     return serversocket
 
-def accept(serversocket):
-    (clientsocket, address) = serversocket.accept()
-    return clientsocket
-
 def run(serversocket, bufferSize):
 	while 1:
         (clientsocket, address) = serversocket.accept()
