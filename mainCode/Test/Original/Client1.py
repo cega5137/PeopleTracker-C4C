@@ -1,7 +1,7 @@
 # Python TCP Client A
 import socket 
 
-host = socket.gethostname() 
+host = '10.0.0.150'#socket.gethostname() 
 port = 2004
 BUFFER_SIZE = 2000 
 MESSAGE = raw_input("tcpClientA: Enter message/ Enter exit:") 
