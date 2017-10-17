@@ -38,14 +38,21 @@ def runClient(soc):
             continue
         
         # Attempt to send to server
-	try:
-        	bits_written = soc.send(data)#write(data)
+	while True:
+		try:
+        		bits_written = soc.send(data)#write(data)
+			break
+		except:
+			soc.close()
+			soc = connectToServer(host, port)
+		
 
-        	if bits_written == 0: # Assume Server closed connection, close socket and attempt to connect to server again
-            		soc.close()
-            		soc = connectToServer(host, port)
-	except:
-		soc = connectToServer(host, port)
+        	#if bits_written == 0: # Assume Server closed connection, close socket and attempt to connect to server again
+            	#	soc.close()
+            	#	soc = connectToServer(host, port)
+	#except:
+	#	soc = connectToServer(host, port)
+		
 
 def cleanup(soc):
     # Close Socket
