@@ -113,6 +113,7 @@ def lab_env_db():
 	pers_adjusted = convertRecords(Persian,timezone)
 	ital_adjusted = convertRecords(Italian,timezone)
 	lati_adjusted = convertRecords(Latin,timezone)
+#	print pers_adjusted
 	print "Finish converting recods"		
 
 	return render_template("lab_env_db.html",timezone		= timezone,
@@ -134,18 +135,18 @@ def lab_env_db():
 
 def convertRecords(station, timezone):
 	time_adjusted = []
-
+#	print "timezone", timezone
 	for record in station:
-		local_timedate = arrow.get(record[0], "YYYY-MM-DD HH:mm").to(timezone)
+		local_timedate = arrow.get(record[0], "YYYY-MM-DD HH:mm")#.to(timezone)
 		time_adjusted.append([local_timedate.format('YYYY-MM-DD HH:mm'), round(record[1],2)])
-	
+		#print "Local_ timedate",local_timedate
 	return time_adjusted
 
 def get_records():
 	import sqlite3
 	from_date_str 	= request.args.get('from',time.strftime("%Y-%m-%d 00:00")) #Get the from date value from the URL
 	to_date_str 	= request.args.get('to',time.strftime("%Y-%m-%d %H:%M"))   #Get the to date value from the URL
-	timezone 	= request.args.get('timezone','Etc/UTC') #request.args.get('timezone','Etc/UTC');
+	timezone 	= request.args.get('timezone','US/Mountain') #request.args.get('timezone','Etc/UTC');
 	range_h_form	= request.args.get('range_h','')  #This will return a string, if field range_h exchange
 	range_h_int 	= "nan"  #initialise this variable with not a number
 
@@ -172,6 +173,7 @@ def get_records():
 
 	# If range_h is defined, we don't need the from and to times
 	if isinstance(range_h_int,int):	
+#		print "in the IF"
 		arrow_time_from = arrow.now().replace(hours=-range_h_int) # Change from utcnow()
 		arrow_time_to   = arrow.now()
 		from_date_utc   = arrow_time_from.strftime("%Y-%m-%d %H:%M")	
@@ -179,11 +181,13 @@ def get_records():
 		from_date_str   = arrow_time_from.to(timezone).strftime("%Y-%m-%d %H:%M")
 		to_date_str	= arrow_time_to.to(timezone).strftime("%Y-%m-%d %H:%M")
 	else:
+#		print "in the ELse"
 		#Convert datetimes to UTC so we can retrieve the appropriate records from the database
-		from_date_utc   = arrow.get(from_date_obj, timezone).to('US/Mountain').strftime("%Y-%m-%d %H:%M")#arrow.get(from_date_obj, timezone).to('Etc/UTC').strftime("%Y-%m-%d %H:%M")	
-		to_date_utc     = arrow.get(to_date_obj, timezone).to('US/Mountain').strftime("%Y-%m-%d %H:%M")#arrow.get(to_date_obj, timezone).to('Etc/UTC').strftime("%Y-%m-%d %H:%M")
+		from_date_utc   = arrow.get(from_date_obj, timezone).strftime("%Y-%m-%d %H:%M")#arrow.get(from_date_obj, timezone).to('Etc/UTC').strftime("%Y-%m-%d %H:%M")	
+		to_date_utc     = arrow.get(to_date_obj, timezone).strftime("%Y-%m-%d %H:%M")#arrow.get(to_date_obj, timezone).to('Etc/UTC').strftime("%Y-%m-%d %H:%M")
 
-
+##	print "from UTC variable",from_date_utc
+#	print "to UTC variable", to_date_utc
 	conn 			= sqlite3.connect('/var/www/html/PeopleTracker-C4C/HTML/mainDatabase.db')
 	curs 			= conn.cursor()
 	curs.execute("SELECT * FROM Asian WHERE date BETWEEN ? AND ?", (from_date_utc.format('YYYY-MM-DD HH:mm'), to_date_utc.format('YYYY-MM-DD HH:mm')))
@@ -317,5 +321,5 @@ if __name__ == '__main__':
 	ipaddr = split_data[split_data.index('src')+1]
 	my_ip = '%s' % ipaddr
 
-	app.run(debug=True, host=my_ip,port=4996) # '10.0.0.151'
+	app.run(debug=True, host='10.202.16.53',port=4996) # '10.0.0.151'
 
