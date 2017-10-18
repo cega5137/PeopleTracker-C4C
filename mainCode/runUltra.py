@@ -19,7 +19,7 @@ def readInitialization(file):
         fid = open(file,"r")
         data = fid.read()
         dataSplit = data.split()
-        for i in [0,2,4,6,8,10]:
+        for i in [0,2,4,6,8,10, 12]:
                 with Switch(dataSplit[i]) as case:
                         if case('Station:'):
                                 Station = dataSplit[i+1]
@@ -47,12 +47,14 @@ def readInitialization(file):
 				ECHO = int(dataSplit[i+1])
 			if case('tolerance:'): 
 				tol_dist = int(dataSplit[i+1])
+			if case('delayTime:'):
+				waitPerson = int(dataSplit[i+1])
 
-        return [Station, ipaddr, port, delayTime, TRIG, ECHO, tol_dist]
+        return [Station, ipaddr, port, delayTime, TRIG, ECHO, tol_dist, waitPerson]
 
 def init_client(initializationFile):
     #Get the initialization file
-	[Station, host, port, delayTime, TRIG, ECHO, tol_dist] = readInitialization(initializationFile)
+	[Station, host, port, sendingDelay, TRIG, ECHO, tol_dist, personDelay] = readInitialization(initializationFile)
 	Counter = UltraSonic(TRIG,ECHO)
 	print Station
 	print host
@@ -61,7 +63,7 @@ def init_client(initializationFile):
     # Initializes the client
 	#signal.signal(signal.SIGPIPE, signal.SIG_IGN)
     
-    	return [connectToServer(host, port), Counter, tol_dist, delayTime, Station, host, port]
+    	return [connectToServer(host, port), Counter, tol_dist, sendingDelay, Station, host, port, personDelay]
 
 def connectToServer(host, port):
     # Connects to Server
@@ -92,7 +94,7 @@ def variableDeclaration():
 	print "The on time is ", T
 	return [masterCount, previousTimeCount, isPerson, t_actual]
 
-def runClient(soc, Counter, tol_dist, delayTime, station, host, port):
+def runClient(soc, Counter, tol_dist, sendingDelay, station, host, port, personDelay):
 	#set up variable declaration
 	[masterCount, previousTotal, isPerson, t_actual] = variableDeclaration()
 
@@ -100,9 +102,9 @@ def runClient(soc, Counter, tol_dist, delayTime, station, host, port):
 	while True:
         # Take Measurment
 		T = datetime.datetime.time(datetime.datetime.now())
-#    		if T.minute == 0 or T.minute == 15 or T.minute == 30 or T.minute == 45:
-		if T.second == delayTime:
-			[previousTotal, T] = sendData(soc, host, port, station, masterCount, previousTotal)
+    		if T.minute == 0 or T.minute == 15 or T.minute == 30 or T.minute == 45:
+			if T.second == sendingDelay:
+				[previousTotal, T] = sendData(soc, host, port, station, masterCount, previousTotal)
 
 		print "Begining of Main Loop", T
 		print "Master Count = ", masterCount
@@ -129,7 +131,7 @@ def runClient(soc, Counter, tol_dist, delayTime, station, host, port):
 	    		#Person Was standing in front of sensor
 	        	if (distance > tol_dist):
 	        	# Person is no longer standing in front of sensor
-	            		if (time.time() - time_Person) < 1:
+	            		if (time.time() - time_Person) < personDelay:
 	                		isPerson = 0
 	                		continue
 		    		print "Time In Front = ", time.time() - time_Person
@@ -319,8 +321,8 @@ filePath = "initializationFile"
 #print "hostname: ", host, " Portnumber: ", port
 
 # Initalize Client
-[soc, Counter, tol_dist, delay, station, host, port] = init_client(filePath)
-runClient(soc, Counter, tol_dist, delay, station, host, port)
+[soc, Counter, tol_dist, delay, station, host, port, personDelay] = init_client(filePath)
+runClient(soc, Counter, tol_dist, delay, station, host, port, personDelay)
 cleanup(soc)
 
 
