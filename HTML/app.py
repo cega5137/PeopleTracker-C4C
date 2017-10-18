@@ -62,6 +62,7 @@ def getLastTotal(Station):
 	print "length: ", L
 	Total = data[L-1]	
 	print "Station: ", Station 
+	print "Date: ", data[0]
 	print "Total,: ", Total[2]
 	return Total[2]
 
@@ -144,8 +145,8 @@ def get_records():
 	import sqlite3
 	from_date_str 	= request.args.get('from',time.strftime("%Y-%m-%d 00:00")) #Get the from date value from the URL
 	to_date_str 	= request.args.get('to',time.strftime("%Y-%m-%d %H:%M"))   #Get the to date value from the URL
-	timezone 	= request.args.get('timezone','Etc/UTC');
-	range_h_form	= request.args.get('range_h','');  #This will return a string, if field range_h exists in the request
+	timezone 	= request.args.get('timezone','Etc/UTC') #request.args.get('timezone','Etc/UTC');
+	range_h_form	= request.args.get('range_h','')  #This will return a string, if field range_h exists in the request
 	range_h_int 	= "nan"  #initialise this variable with not a number
 
 	print "REQUEST:"
@@ -171,12 +172,12 @@ def get_records():
 
 	# If range_h is defined, we don't need the from and to times
 	if isinstance(range_h_int,int):	
-		arrow_time_from = arrow.utcnow().replace(hours=-range_h_int)
-		arrow_time_to   = arrow.utcnow()
+		arrow_time_from = arrow.now().replace(hours=-range_h_int) # Change from utcnow()
+		arrow_time_to   = arrow.now()
 		from_date_utc   = arrow_time_from.strftime("%Y-%m-%d %H:%M")	
 		to_date_utc     = arrow_time_to.strftime("%Y-%m-%d %H:%M")
 		from_date_str   = arrow_time_from.to(timezone).strftime("%Y-%m-%d %H:%M")
-		to_date_str	    = arrow_time_to.to(timezone).strftime("%Y-%m-%d %H:%M")
+		to_date_str	= arrow_time_to.to(timezone).strftime("%Y-%m-%d %H:%M")
 	else:
 		#Convert datetimes to UTC so we can retrieve the appropriate records from the database
 		from_date_utc   = arrow.get(from_date_obj, timezone).to('Etc/UTC').strftime("%Y-%m-%d %H:%M")	
