@@ -109,7 +109,7 @@ def runClient(soc, Counter, tol_dist, sendingDelay, station, host, port, personD
 		print "Begining of Main Loop", T
 		print "Master Count = ", masterCount
 		print "Current Count = ", (masterCount - previousTotal)
-    	distance = Counter.getDistance()
+    		distance = Counter.getDistance()
 		#Commenting line
 		print "Distance:",distance,"cm"
 
