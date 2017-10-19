@@ -183,8 +183,8 @@ def get_records():
 	else:
 #		print "in the ELse"
 		#Convert datetimes to UTC so we can retrieve the appropriate records from the database
-		from_date_utc   = arrow.get(from_date_obj, timezone).strftime("%Y-%m-%d %H:%M")#arrow.get(from_date_obj, timezone).to('Etc/UTC').strftime("%Y-%m-%d %H:%M")	
-		to_date_utc     = arrow.get(to_date_obj, timezone).strftime("%Y-%m-%d %H:%M")#arrow.get(to_date_obj, timezone).to('Etc/UTC').strftime("%Y-%m-%d %H:%M")
+		from_date_utc   = arrow.get(from_date_obj, timezone).to('US/Mountain').strftime("%Y-%m-%d %H:%M")#arrow.get(from_date_obj, timezone).to('Etc/UTC').strftime("%Y-%m-%d %H:%M")	
+		to_date_utc     = arrow.get(to_date_obj, timezone).to('US/Mountain').strftime("%Y-%m-%d %H:%M")#arrow.get(to_date_obj, timezone).to('Etc/UTC').strftime("%Y-%m-%d %H:%M")
 
 ##	print "from UTC variable",from_date_utc
 #	print "to UTC variable", to_date_utc
@@ -321,5 +321,5 @@ if __name__ == '__main__':
 	ipaddr = split_data[split_data.index('src')+1]
 	my_ip = '%s' % ipaddr
 
-	app.run(debug=True, host='10.202.16.53',port=4996) # '10.0.0.151'
+	app.run(debug=True, host='10.202.19.207',port=4996) # '10.0.0.151'
 
