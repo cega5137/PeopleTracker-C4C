@@ -48,7 +48,7 @@ def readInitialization(file):
 			if case('tolerance:'): 
 				tol_dist = int(dataSplit[i+1])
 			if case('delayTime:'):
-				waitPerson = int(dataSplit[i+1])
+				waitPerson = float(dataSplit[i+1])
 
         return [Station, ipaddr, port, delayTime, TRIG, ECHO, tol_dist, waitPerson]
 
