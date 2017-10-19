@@ -109,13 +109,14 @@ def runClient(soc, Counter, tol_dist, sendingDelay, station, host, port, personD
 		print "Begining of Main Loop", T
 		print "Master Count = ", masterCount
 		print "Current Count = ", (masterCount - previousTotal)
-    		distance = Counter.getDistance()
-		    
+    	distance = Counter.getDistance()
+		#Commenting line
+		print "Distance:",distance,"cm"
+
 		if distance > 400:
 			continue
 
-		#Commenting line
-		print "Distance:",distance,"cm"
+		
 		# print "isPerson:", isPerson, "tol_dist =", tol_dist
 		# No person previously standing in front of sensor
 		if isPerson == 0:
