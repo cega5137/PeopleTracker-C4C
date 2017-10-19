@@ -106,12 +106,12 @@ def runClient(soc, Counter, tol_dist, sendingDelay, station, host, port, personD
 			if T.second == sendingDelay:
 				[previousTotal, T] = sendData(soc, host, port, station, masterCount, previousTotal)
 
-		print "Begining of Main Loop", T
-		print "Master Count = ", masterCount
-		print "Current Count = ", (masterCount - previousTotal)
+		print "Begining of Main Loop", T,
+		print "\nMaster Count = ", masterCount,
+		print "\nCurrent Count = ", (masterCount - previousTotal),
     		distance = Counter.getDistance()
 		#Commenting line
-		print "Distance:",distance,"cm"
+		print "\nDistance:",distance,"cm"
 
 		if distance > 400:
 			continue
