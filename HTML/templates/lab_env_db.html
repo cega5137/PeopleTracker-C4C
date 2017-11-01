@@ -112,7 +112,7 @@
 	      {% for row in amer %}
 	      <tr>
 		<td>{{row[0]}}</td>
-		<td>{{'%0.2f' |format(row[1])  }}</td>
+		<td>{{'%0.2f' |format(row[1])}}</td>
 	      </tr>
 	      {% endfor %}
 	    </tbody>
@@ -303,7 +303,7 @@
 
   <script type="text/javascript" src="https://www.google.com/jsapi?autoload={'modules':[{'name':'visualization','version':'1','packages':['corechart']}]}"></script>
 
-  <!-- American -->
+  <!-- American 
   <script>
     google.load('visualization', '1', {packages: ['corechart']});
     google.setOnLoadCallback(drawChart);
@@ -327,7 +327,7 @@
     vAxis: {
     title: 'Number of People'
     },
-    title: 'American',
+    title: 'American Station',
     titleTextStyle: {
                      fontSize: 18
     },
@@ -339,7 +339,7 @@
     }    
   </script>
 
-  <!-- Asia -->
+  <!-- Asia 
   <script>
     google.load('visualization', '1', {packages: ['corechart']});
     google.setOnLoadCallback(drawChart);
@@ -349,7 +349,7 @@
     data.addColumn('datetime', 'Time');
     data.addColumn('number', 'Temperature');
     data.addRows([
-    {% for row in amer %}
+    {% for row in asia %}
     [new Date({{row[0][0:4]}},{{row[0][5:7]}}-1,{{row[0][8:10]}},{{row[0][11:13]}},{{row[0][14:16]}}),{{'%0.2f'|format(row[1])}}],
     {% endfor %}
     ]);
@@ -372,7 +372,7 @@
     }    
   </script>
 
-  <!-- Italian -->
+  <!-- Italian
   <script>
     google.load('visualization', '1', {packages: ['corechart']});
     google.setOnLoadCallback(drawChart);
@@ -405,7 +405,7 @@
     }    
   </script>
 
-  <!-- Latin -->
+  <!-- Latin 
   <script>
     google.load('visualization', '1', {packages: ['corechart']});
     google.setOnLoadCallback(drawChart);
@@ -438,7 +438,7 @@
   </script>
 
   
-<!-- Persian --> 
+<!-- Persian  
 <script>
   google.load('visualization', '1', {packages: ['corechart']});
   google.setOnLoadCallback(drawChart);

@@ -60,11 +60,20 @@ def getLastTotal(Station):
 	print "about to get data"
 	L = len(data)
 	print "length: ", L
-	Total = data[L-1]	
+	dateData = data[L-1][0]
+	Total = data[L-1][2]
 	print "Station: ", Station 
-	print "Date: ", data[0]
-	print "Total,: ", Total[2]
-	return Total[2]
+	print "Date: ", dateData[0:9]
+	print "Total,: ", Total
+	Ttoday = datetime.datetime.now()
+	currentDate =  Ttoday.strftime('%Y-%m-%d')
+	print "Current date:", currentDate
+	if dateData in currentDate:
+		print "In the date"
+		return Total
+	else:
+		print "not the same day"
+		return 0
 
 #def shutdownRpi(request):
 #	if request.method == 'POST':
@@ -77,7 +86,7 @@ def getLastTotal(Station):
 @app.route("/plot_db", methods=['GET'])
 def plot_db():
 	print "About to get records"
-        Asian, American, Persian, Italian, Latin, timezone, from_date_str, to_date_str = get_records()
+        Asian, American, Persian, Italian, Latin, timezone, from_date_str, to_date_str = get_records(False)
 
         asia_adjusted = convertRecords(Asian,timezone)
         amer_adjusted = convertRecords(American,timezone)
@@ -106,13 +115,15 @@ def plot_db():
 @app.route("/lab_env_db", methods=['GET'])
 def lab_env_db():
 	print "About to get records"
-	Asian, American, Persian, Italian, Latin, timezone, from_date_str, to_date_str = get_records()	
+	Asian, American, Persian, Italian, Latin, timezone, from_date_str, to_date_str = get_records(False)	
 
-	asia_adjusted = convertRecords(Asian,timezone)
-	amer_adjusted = convertRecords(American,timezone)
-	pers_adjusted = convertRecords(Persian,timezone)
-	ital_adjusted = convertRecords(Italian,timezone)
-	lati_adjusted = convertRecords(Latin,timezone)
+	asia_adjusted = convertRecordsTimezone(Asian,timezone)
+	amer_adjusted = convertRecordsTimezone(American,timezone)
+	pers_adjusted = convertRecordsTimezone(Persian,timezone)
+	ital_adjusted = convertRecordsTimezone(Italian,timezone)
+	lati_adjusted = convertRecordsTimezone(Latin,timezone)
+	print "america"
+	print amer_adjusted
 #	print pers_adjusted
 	print "Finish converting recods"		
 
@@ -142,11 +153,24 @@ def convertRecords(station, timezone):
 		#print "Local_ timedate",local_timedate
 	return time_adjusted
 
-def get_records():
+def convertRecordsTimezone(station, timezone):
+        time_adjusted = []
+#       print "timezone", timezone
+        for record in station:
+                local_timedate = arrow.get(record[0], "YYYY-MM-DD HH:mm")#.to(timezone)
+                time_adjusted.append([local_timedate.format('YYYY-MM-DD HH:mm'), round(record[1],2)])
+                #print "Local_ timedate",local_timedate
+        return time_adjusted
+
+
+def get_records(timeChange):
 	import sqlite3
 	from_date_str 	= request.args.get('from',time.strftime("%Y-%m-%d 00:00")) #Get the from date value from the URL
 	to_date_str 	= request.args.get('to',time.strftime("%Y-%m-%d %H:%M"))   #Get the to date value from the URL
-	timezone 	= request.args.get('timezone','US/Mountain') #request.args.get('timezone','Etc/UTC');
+	if timeChange:
+		timezone = request.args.get('timezone','Etc/UTC') #
+	else:
+		timezone = request.args.get('timezone','US/Mountain')
 	range_h_form	= request.args.get('range_h','')  #This will return a string, if field range_h exchange
 	range_h_int 	= "nan"  #initialise this variable with not a number
 
@@ -171,20 +195,37 @@ def get_records():
 	from_date_obj       = datetime.datetime.strptime(from_date_str,'%Y-%m-%d %H:%M')
 	to_date_obj         = datetime.datetime.strptime(to_date_str,'%Y-%m-%d %H:%M')
 
-	# If range_h is defined, we don't need the from and to times
-	if isinstance(range_h_int,int):	
-#		print "in the IF"
-		arrow_time_from = arrow.now().replace(hours=-range_h_int) # Change from utcnow()
-		arrow_time_to   = arrow.now()
-		from_date_utc   = arrow_time_from.strftime("%Y-%m-%d %H:%M")	
-		to_date_utc     = arrow_time_to.strftime("%Y-%m-%d %H:%M")
-		from_date_str   = arrow_time_from.to(timezone).strftime("%Y-%m-%d %H:%M")
-		to_date_str	= arrow_time_to.to(timezone).strftime("%Y-%m-%d %H:%M")
+	if timeChange: # change timezone
+		# If range_h is defined, we don't need the from and to times
+        	if isinstance(range_h_int,int):
+#               	print "in the IF"
+                	arrow_time_from = arrow.utcnow().replace(hours=-range_h_int) # Change from utcnow()
+                	arrow_time_to   = arrow.utcnow()
+                	from_date_utc   = arrow_time_from.strftime("%Y-%m-%d %H:%M")
+                	to_date_utc     = arrow_time_to.strftime("%Y-%m-%d %H:%M")
+                	from_date_str   = arrow_time_from.to(timezone).strftime("%Y-%m-%d %H:%M")
+                	to_date_str     = arrow_time_to.to(timezone).strftime("%Y-%m-%d %H:%M")
+        	else:
+#               	print "in the ELse"
+                	#Convert datetimes to UTC so we can retrieve the appropriate records from the database
+                	from_date_utc   = arrow.get(from_date_obj, timezone).to('Etc/UTC').strftime("%Y-%m-%d %H:%M")
+                	to_date_utc     = arrow.get(to_date_obj, timezone).to('Etc/UTC').strftime("%Y-%m-%d %H:%M")
+
 	else:
-#		print "in the ELse"
-		#Convert datetimes to UTC so we can retrieve the appropriate records from the database
-		from_date_utc   = arrow.get(from_date_obj, timezone).to('US/Mountain').strftime("%Y-%m-%d %H:%M")#arrow.get(from_date_obj, timezone).to('Etc/UTC').strftime("%Y-%m-%d %H:%M")	
-		to_date_utc     = arrow.get(to_date_obj, timezone).to('US/Mountain').strftime("%Y-%m-%d %H:%M")#arrow.get(to_date_obj, timezone).to('Etc/UTC').strftime("%Y-%m-%d %H:%M")
+		# If range_h is defined, we don't need the from and to times
+		if isinstance(range_h_int,int):	
+#			print "in the IF"
+			arrow_time_from = arrow.now().replace(hours=-range_h_int) # Change from utcnow()
+			arrow_time_to   = arrow.now()
+			from_date_utc   = arrow_time_from.strftime("%Y-%m-%d %H:%M")	
+			to_date_utc     = arrow_time_to.strftime("%Y-%m-%d %H:%M")
+			from_date_str   = arrow_time_from.to(timezone).strftime("%Y-%m-%d %H:%M")
+			to_date_str	= arrow_time_to.to(timezone).strftime("%Y-%m-%d %H:%M")
+		else:
+#			print "in the ELse"
+			#Convert datetimes to UTC so we can retrieve the appropriate records from the database
+			from_date_utc   = arrow.get(from_date_obj, timezone).to('US/Mountain').strftime("%Y-%m-%d %H:%M")#arrow.get(from_date_obj, timezone).to('Etc/UTC').strftime("%Y-%m-%d %H:%M")	
+			to_date_utc     = arrow.get(to_date_obj, timezone).to('US/Mountain').strftime("%Y-%m-%d %H:%M")#arrow.get(to_date_obj, timezone).to('Etc/UTC').strftime("%Y-%m-%d %H:%M")
 
 ##	print "from UTC variable",from_date_utc
 #	print "to UTC variable", to_date_utc
@@ -211,7 +252,7 @@ def to_plotly():
  # 	import plotly.tools as pyTools
 	pyTools.set_credentials_file(username='cega5137', api_key='jLRlCzSOlSOKuUtvknqD')
 
-	Asian, American, Persian, Italian, Latin, timezone, from_date_str, to_date_str = get_records()
+	Asian, American, Persian, Italian, Latin, timezone, from_date_str, to_date_str = get_records(False)
 
 #################### Start Persian plot ##################
 	print "About to start getting into the functions"
@@ -223,7 +264,7 @@ def to_plotly():
 	plot_all = getAllPlot(per,asi, ita, usa, lat)
 	return plot_all
 
-def getPlotStation(pers, plotTitle,timezone):
+def getPlotStation(dataStation, plotTitle,timezone):
 #	import plotly.plotly as py
  #   	from plotly.graph_objs import *
   #  	import plotly.tools as pyTools
@@ -232,12 +273,12 @@ def getPlotStation(pers, plotTitle,timezone):
 	time_series_adjusted  = []
 	time_series_values    = []
 
-        for record in pers:
-                local_timedate = arrow.get(record[0], "YYYY-MM-DD HH:mm").to(timezone)
+        for record in dataStation:
+                local_timedate = arrow.get(record[0], "YYYY-MM-DD HH:mm")#.to(timezone)
                 time_series_adjusted.append(local_timedate.format('YYYY-MM-DD HH:mm'))
-                time_series_values.append(round(record[2],2))
+                time_series_values.append(round(record[1],2))
 
-
+	print "date: ", time_series_adjusted 
         per = Scatter(
                         x=time_series_adjusted,
                         y=time_series_values,
@@ -321,5 +362,5 @@ if __name__ == '__main__':
 	ipaddr = split_data[split_data.index('src')+1]
 	my_ip = '%s' % ipaddr
 
-	app.run(debug=True, host='10.202.19.207',port=4996) # '10.0.0.151'
+	app.run(debug=True, host='10.0.0.150',port=4996) # '10.0.0.151'
 
