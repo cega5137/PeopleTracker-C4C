@@ -25,7 +25,7 @@ def run(s,msg):
 			data = s.recv(bufferSize)
 			print "Message Receive: ", data
 			msg = data
-			time.sleep(5)
+			time.sleep(1)
 
 	except:
 		cleanup(s)
