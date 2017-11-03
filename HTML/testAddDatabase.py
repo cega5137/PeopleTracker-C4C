@@ -64,29 +64,30 @@ def log_values(Header, currn, total):
 			curs.execute('''INSERT INTO Italian values(datetime(CURRENT_TIMESTAMP, 'localtime'), (?), (?))''', (currn,total))
 		if case("Latin"):
 			curs.execute('''INSERT INTO Latin values(datetime(CURRENT_TIMESTAMP, 'localtime'), (?), (?))''', (currn,total))
-
-#	switcher = {
-#		'Asian': curs.execute('''INSERT INTO Asian values(datetime(CURRENT_TIMESTAMP, 'localtime'), (?), (?))''', (currn,total)),
-#		'American': curs.execute('''INSERT INTO American values(datetime(CURRENT_TIMESTAMP, 'localtime'), (?), (?))''', (currn,total)),
-#		'Persian':curs.execute('''INSERT INTO Persian values(datetime(CURRENT_TIMESTAMP, 'localtime'), (?), (?))''', (currn,total)),
-#		'Italian':curs.execute('''INSERT INTO Italian values(datetime(CURRENT_TIMESTAMP, 'localtime'), (?), (?))''', (currn,total)),
-#		'Latin':curs.execute('''INSERT INTO Latin values(datetime(CURRENT_TIMESTAMP, 'localtime'), (?), (?))''', (currn,total)),
-#
-#	}
-#	return switcher.get(Header,"Nothing")
-
-#	curs.execute('''INSERT INTO temperatures values(datetime(CURRENT_TIMESTAMP, 'localtime'), (?), (?))''', (sensor_id,temp))
-#	curs.execute('''INSERT INTO humidities values(datetime(CURRENT_TIMESTAMP, 'localtime'), (?), (?))''', (sensor_id,hum))
 	conn.commit()
 	conn.close()
 
+def addingTest():
+	As = random.randint(1,100)
+	log_values('Asian', As, As)
+	Am = random.randint(1,100)
+	log_values("American", Am, Am)
+	Pe = random.randint(1,100)
+	log_values("Persian", Pe, Pe)
+	It = random.randint(1,100)
+	log_values("Italian", It, It)
+	La = random.randint(1,100)
+	log_values("Latin", La, La)
 
 
-#humidity, temperature = Adafruit_DHT.read_retry(Adafruit_DHT.AM2302, 17)
-#temperature = temperature * 9/5.0 + 32
-# If you don't have a sensor but still wish to run this program, comment out all the 
-# sensor related lines, and uncomment the following lines (these will produce random
-# numbers for the temperature and humidity variables):
+def getDay(station, dayToday):
+	conn = sqlite3.connect("/var/www/html/PeopleTracker-C4C/HTML/mainDatabase.db"
+	curs = conn.cursor()
+	
+	with Switch(Station) as case:
+		
+
+
 import random
 #from socket import *
 import time
@@ -94,17 +95,5 @@ import datetime
 
 print "Startin application"
 
-humidity = random.randint(1,100)
-temperature = random.randint(10,70)
 
-As = random.randint(1,100)
-log_values('Asian', As, As)
-Am = random.randint(1,100)	
-log_values("American", Am, Am)
-Pe = random.randint(1,100)
-log_values("Persian", Pe, Pe)
-It = random.randint(1,100)
-log_values("Italian", It, It)
-La = random.randint(1,100)
-log_values("Latin", La, La)
-
+print "End application"

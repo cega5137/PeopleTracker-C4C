@@ -44,7 +44,7 @@ import sys
 import socket
 import time
 import datetime
-from threading import Thread
+from threading import Thread, activeCount
 from SocketServer import ThreadingMixIn
 from switch import Switch
 import signal
@@ -57,6 +57,7 @@ class client_thread(Thread):
 		self.bufferSize = 1024
 		self.conn = clientsocket
             	print "[+] New server socket started for " + ip + ": " + str(port)
+		print "The Thread Count is: ", activeCount()
 
         def run(self):
         	# Setting up the prevoius time 
@@ -133,6 +134,7 @@ def init(host, Port):
 def run(serversocket, host, port):
 	threads = []
 	while 1:
+		print "Waiting for connections"
 		(clientsocket, address) = serversocket.accept()
 		ct = client_thread(clientsocket, host, port)
 		ct.start()
@@ -147,7 +149,7 @@ def cleanup(serversocket):
 
 ####################################################
 print "Startin application"
-hostIP = "10.202.19.207"
+hostIP = "10.0.0.150"
 port = 5001
 serversocket = init(hostIP, port)
 run(serversocket, hostIP, port)
