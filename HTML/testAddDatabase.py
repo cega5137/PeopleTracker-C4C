@@ -42,6 +42,8 @@ No text output. Two new records are inserted in the database when the script is 
 import sqlite3
 import sys
 from switch import Switch
+import datetime
+import time
 #import Adafruit_DHT
 
 
@@ -85,7 +87,30 @@ def getDay(station, dayToday):
 	curs = conn.cursor()
 	
 	with Switch(Station) as case:
-		
+		if case('Asian'):
+			curs.execute("SELECT * FROM Asian")
+			data = curs.fetchall()
+		if case('American'):
+			curs.execute("SELECT * FROM American")
+			data = curs.fetchall()
+		if case('Persian'):
+			curs.execute("SELECT * FROM Persian")
+			data = curs.fetchall()
+		if case('Italian'):
+			curs.execute("SELECT * FROM Italian"),
+			data = curs.fetchall()
+		if case('Latin'):
+			curs.execute("SELECT * FROM Latin")
+			data = curs.fetchall()
+
+	print "Data: ", data
+
+	t0 = time.time()
+	for i in Data:
+		# Check day of the week for each entry
+
+	tf = time.time()
+	print "It takes:", tf - t0
 
 
 import random
@@ -94,6 +119,7 @@ import time
 import datetime
 
 print "Startin application"
-
+Station = 'American'
+getDay(Station,'Wend')
 
 print "End application"
