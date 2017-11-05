@@ -44,6 +44,7 @@ import sys
 from switch import Switch
 import datetime
 import time
+import numpy as np
 #import Adafruit_DHT
 
 
@@ -82,8 +83,8 @@ def addingTest():
 	log_values("Latin", La, La)
 
 
-def getDay(station, dayToday):
-	conn = sqlite3.connect("/var/www/html/PeopleTracker-C4C/HTML/mainDatabase.db"
+def getDay(station):
+	conn = sqlite3.connect("/var/www/html/PeopleTracker-C4C/HTML/mainDatabase.db")
 	curs = conn.cursor()
 	
 	with Switch(Station) as case:
@@ -103,14 +104,81 @@ def getDay(station, dayToday):
 			curs.execute("SELECT * FROM Latin")
 			data = curs.fetchall()
 
-	print "Data: ", data
+	print "Data: ", data[0][0]
 
+	hourInDay = ['7','8','9','10','11','12','13','14','15','16','17','18','19','20']
+	Time = np.zeros([24, 7, 10])
+	timeIndex = np.zeros([24,7])
 	t0 = time.time()
-	for i in Data:
-		# Check day of the week for each entry
+	previousDate = None
+	for Data in data:
+		#Check day of the week for each entry
+		print "Data", Data
+		#print Data[0][11:13] # Hour
+		week = datetime.date(int(Data[0][0:4]),int(Data[0][5:7]),int(Data[0][8:10])).weekday()
+		timeOfDay = int(Data[0][11:13])
+		#print week, timeOfDay, Data[1]
+		
+		# Save data on matrix
+		Time[timeOfDay][week][timeIndex[timeOfDay][week]] = Time[timeOfDay][week][timeIndex[timeOfDay][week]] + Data[1]
+		print Time[timeOfDay][week][timeIndex[timeOfDay][week]]
+		
+		if previousDate != Data[0][0:10] and previousDate != None:
+			print "Time: ", previousTime
+			print "Week: ", previousWeek
+			timeIndex[previousTime][previousWeek] = timeIndex[previousTime][previousWeek] + 1  
+		
+		previousDate = Data[0][0:10]
+		previousTime = int(Data[0][11:13])
+		previousWeek = week
 
 	tf = time.time()
 	print "It takes:", tf - t0
+
+def getDayCount(Data, week):
+	hourInDay = ['7','8','9','10','11','12','13','14','15','16','17','18','19','20']
+	for dayofWeek in xrange(0,7):
+                        for hourofDay in hourInDay:
+                                if week == dayofWeek and Data[0][11:13] == hourofDay:
+                                        #print "it work!!", week, Data[0][11:13]
+                                        return Data[1], hourofDay
+
+	return None
+
+
+def getTimeDate(Data):
+	with Switch(Data) as case:
+		if case('7'):
+			return 7
+		if case('8'):
+			return 8
+		if case('9'):
+			return 9
+		if case('10'):
+                        return 10
+                if case('11'):
+                        return 11
+                if case('12'):
+                        return 12
+		if case('13'):
+                        return 13
+                if case('14'):
+                        return 14
+                if case('15'):
+                        return 15
+                if case('16'):
+                        return 16
+                if case('17'):
+                        return 17
+                if case('18'):
+                        return 18
+		if case('19'):
+                        return 19
+                if case('20'):
+                        return 20
+
+
+
 
 
 import random
@@ -120,6 +188,6 @@ import datetime
 
 print "Startin application"
 Station = 'American'
-getDay(Station,'Wend')
+getDay(Station)
 
 print "End application"
