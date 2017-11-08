@@ -98,7 +98,7 @@ def runClient(soc, Counter, tol_dist, sendingDelay, station, host, port, personD
 	[masterCount, previousTotal, isPerson, t_actual] = variableDeclaration()
 	
 	#Schedule shutdown
-	schShut = datetime.time(11,35,0,0)
+	schShut = scheduleShutdown("/home/pi/Documents/Python/PeopleTracker-C4C/mainCode/shutdownTime") #datetime.time(11,35,0,0)
 
 	#Main Loop
 	while True:
@@ -179,12 +179,54 @@ def cleanup(soc, Counter):
     shutdownRPi()
 
 def shutdownRPi():
-    print "Shutting down"
-    command = "/usr/bin/sudo /sbin/shutdown -h now"
-    process = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
-    output = process.communicate()[0]
-    print output
+    	print "Shutting down"
+    	command = "/usr/bin/sudo /sbin/shutdown -h now"
+    	process = subprocess.Popen(command.split(), stdout=subprocess.PIPE)
+    	output = process.communicate()[0]
+    	print output
 
+def scheduleShutdown(file):
+    	print "Schedule Shutdown"
+	fid = open(file,"r")
+        data = fid.read()
+	datasplit = data.split()
+	T = datetime.datetime.time(datetime.datetime.today())
+	count = 1	
+
+	for i in xrange(len(datasplit)):
+		with Switch(datasplit[i]) as case:
+			if case('M:') and datetime.datetime.today().weekday() == 0:
+				while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
+                                        count = count + 1
+                                timeRed =  datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
+			if case('T:') and datetime.datetime.today().weekday() == 1:
+				while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
+                                        count = count + 1
+                                timeRed =  datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
+			if case('W:') and datetime.datetime.today().weekday() == 2:
+				while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
+                                        count = count + 1
+                                timeRed =  datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
+			if case('t:' )and datetime.datetime.today().weekday() == 3:
+				while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
+                                        count = count + 1
+                                timeRed =  datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
+			if case('F:') and datetime.datetime.today().weekday() == 4:
+				while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
+                                        count = count + 1
+                                timeRed =  datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
+			if case('S:') and datetime.datetime.today().weekday() == 5:
+				while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
+                                        count = count + 1
+                                timeRed =  datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
+			if case('s:') and datetime.datetime.today().weekday() == 6:
+				while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
+                                        count = count + 1
+                                timeRed =  datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
+
+		
+
+	return timeRed
 
 ##########################################################################################	
 ##################################### New Main ###########################################
