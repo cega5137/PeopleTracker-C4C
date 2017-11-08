@@ -86,25 +86,30 @@ def addingTest():
 def getDay(station):
 	conn = sqlite3.connect("/var/www/html/PeopleTracker-C4C/HTML/mainDatabase.db")
 	curs = conn.cursor()
-	
+
 	with Switch(Station) as case:
 		if case('Asian'):
+			#curs.execute("SELECT * FROM Asian WHERE date BETWEEN ? AND ?", (from_date_utc.format('YYYY-MM-DD HH:mm'), to_date_utc.format('YYYY-MM-DD HH:mm')))
 			curs.execute("SELECT * FROM Asian")
 			data = curs.fetchall()
 		if case('American'):
+			#curs.execute("SELECT * FROM American WHERE date BETWEEN ? AND ?", (from_date_utc.format('YYYY-MM-DD HH:mm'), to_date_utc.format('YYYY-MM-DD HH:mm')))
 			curs.execute("SELECT * FROM American")
 			data = curs.fetchall()
 		if case('Persian'):
+			#curs.execute("SELECT * FROM Persian WHERE date BETWEEN ? AND ?", (from_date_utc.format('YYYY-MM-DD HH:mm'), to_date_utc.format('YYYY-MM-DD HH:mm')))
 			curs.execute("SELECT * FROM Persian")
 			data = curs.fetchall()
 		if case('Italian'):
+			#curs.execute("SELECT * FROM Italian WHERE date BETWEEN ? AND ?", (from_date_utc.format('YYYY-MM-DD HH:mm'), to_date_utc.format('YYYY-MM-DD HH:mm')))
 			curs.execute("SELECT * FROM Italian"),
 			data = curs.fetchall()
 		if case('Latin'):
+			#curs.execute("SELECT * FROM Latin WHERE date BETWEEN ? AND ?", (from_date_utc.format('YYYY-MM-DD HH:mm'), to_date_utc.format('YYYY-MM-DD HH:mm')))
 			curs.execute("SELECT * FROM Latin")
 			data = curs.fetchall()
 
-	print "Data: ", data[0][0]
+	#print "Data: ", data[0][0]
 
 	hourInDay = ['7','8','9','10','11','12','13','14','15','16','17','18','19','20']
 	Time = np.zeros([24, 7, 10])
@@ -113,7 +118,7 @@ def getDay(station):
 	previousDate = None
 	for Data in data:
 		#Check day of the week for each entry
-		print "Data", Data
+		#print "Data", Data
 		#print Data[0][11:13] # Hour
 		week = datetime.date(int(Data[0][0:4]),int(Data[0][5:7]),int(Data[0][8:10])).weekday()
 		timeOfDay = int(Data[0][11:13])
@@ -124,16 +129,17 @@ def getDay(station):
 		print Time[timeOfDay][week][timeIndex[timeOfDay][week]]
 		
 		if previousDate != Data[0][0:10] and previousDate != None:
-			print "Time: ", previousTime
-			print "Week: ", previousWeek
+			#print "Time: ", previousTime
+			#print "Week: ", previousWeek
 			timeIndex[previousTime][previousWeek] = timeIndex[previousTime][previousWeek] + 1  
 		
 		previousDate = Data[0][0:10]
-		previousTime = int(Data[0][11:13])
+		previousTime = timeOfDay
 		previousWeek = week
 
 	tf = time.time()
 	print "It takes:", tf - t0
+	return Time, timeIndex
 
 def getDayCount(Data, week):
 	hourInDay = ['7','8','9','10','11','12','13','14','15','16','17','18','19','20']
@@ -187,7 +193,10 @@ import time
 import datetime
 
 print "Startin application"
-Station = 'American'
-getDay(Station)
+American = getDay('American')
+Asian =  getDay('Asian')
+Latin = getDay('Latin')
+Persian = getDay('Persian')
+Italian = getDay('Italian')
 
 print "End application"

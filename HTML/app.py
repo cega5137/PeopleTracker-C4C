@@ -9,6 +9,7 @@ from switch import Switch
 import plotly.plotly as py
 from plotly.graph_objs import *
 import plotly.tools as pyTools
+import numpy as np
 
 app = Flask(__name__)
 dataBaseLink = '/var/www/html/lab_app.db'
@@ -352,6 +353,58 @@ def validate_date(d):
 		return True
 	except ValueError:
 		return False
+
+def getDay(station, pastDays):
+	conn = sqlite3.connect("/var/www/html/PeopleTracker-C4C/HTML/mainDatabase.db")
+	curs = conn.cursor()
+
+	TodayGreatDay = datetime.datetime.today().strftime('%Y-%m-%d %H:%M')
+	daysPast = (datetime.datetime.today() + datetime.timedelta(-pastDays)).strftime('%Y-%m-%d %H:%M')
+
+
+	with Switch(Station) as case:
+		if case('Asian'):
+			#curs.execute("SELECT * FROM Asian WHERE date BETWEEN ? AND ?", (daysPast, TodayGreatDay))
+			curs.execute("SELECT * FROM Asian")
+			data = curs.fetchall()
+		if case('American'):
+			#curs.execute("SELECT * FROM American WHERE date BETWEEN ? AND ?", (daysPast, TodayGreatDay))
+			curs.execute("SELECT * FROM American")
+			data = curs.fetchall()
+		if case('Persian'):
+			#curs.execute("SELECT * FROM Persian WHERE date BETWEEN ? AND ?", (daysPast, TodayGreatDay))
+			curs.execute("SELECT * FROM Persian")
+			data = curs.fetchall()
+		if case('Italian'):
+			#curs.execute("SELECT * FROM Italian WHERE date BETWEEN ? AND ?", (daysPast, TodayGreatDay))
+			curs.execute("SELECT * FROM Italian"),
+			data = curs.fetchall()
+		if case('Latin'):
+			#curs.execute("SELECT * FROM Latin WHERE date BETWEEN ? AND ?", (daysPast, TodayGreatDay))
+			curs.execute("SELECT * FROM Latin")
+			data = curs.fetchall()
+
+	hourInDay = ['7','8','9','10','11','12','13','14','15','16','17','18','19','20']
+	Time = np.zeros([24, 7, 10])
+	timeIndex = np.zeros([24,7])
+	previousDate = None
+	for Data in data:
+		#Check day of the week for each entry
+		week = datetime.date(int(Data[0][0:4]),int(Data[0][5:7]),int(Data[0][8:10])).weekday()
+		timeOfDay = int(Data[0][11:13])
+		
+		# Save data on matrix
+		Time[timeOfDay][week][timeIndex[timeOfDay][week]] = Time[timeOfDay][week][timeIndex[timeOfDay][week]] + Data[1]
+		print Time[timeOfDay][week][timeIndex[timeOfDay][week]]
+		
+		if previousDate != Data[0][0:10] and previousDate != None:
+			timeIndex[previousTime][previousWeek] = timeIndex[previousTime][previousWeek] + 1  
+		
+		previousDate = Data[0][0:10]
+		previousTime = timeOfDay
+		previousWeek = week
+
+	return Time, timeIndex
 
 if __name__ == '__main__':
 	# change the ip address everytime
