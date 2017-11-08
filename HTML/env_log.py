@@ -150,7 +150,7 @@ def cleanup(serversocket):
 ####################################################
 print "Startin application"
 hostIP = "10.0.0.150"
-port = 5001
+port = 5003
 serversocket = init(hostIP, port)
 run(serversocket, hostIP, port)
 cleanup()

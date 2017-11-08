@@ -10,6 +10,8 @@ Techniques used in solving this problem:
 4) Save data on SQL database
 5) Update HTML website with new data
 
+To see the website get the ipaddress with port 5043
+
 TODO:
 3) Static IP for mothership
 
