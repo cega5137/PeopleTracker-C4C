@@ -105,7 +105,10 @@ def runClient(soc, Counter, tol_dist, sendingDelay, station, host, port, personD
         # Take Measurment
 		T = datetime.datetime.time(datetime.datetime.now())
 		if T >= schShut:
-			break
+			# get on standby funtion
+			# get new schShut
+			pass
+
     		if T.minute == 0 or T.minute == 15 or T.minute == 30 or T.minute == 45:
 			if T.second == sendingDelay:
 				[previousTotal, T] = sendData(soc, host, port, station, masterCount, previousTotal)
