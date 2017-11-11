@@ -59,17 +59,22 @@ def getLastTotal(Station):
 
 
 	print "about to get data"
+	print "Station: ", Station
 	L = len(data)
 	print "length: ", L
-	dateData = data[L-1][0]
+	print "Date Saved: ", data[L-1][0]
+	print "Data all: ",data[L-1][0][0:4],data[L-1][0][5:7],data[L-1][0][8:10]
+	dateData = datetime.date(int(data[L-1][0][0:4]),int(data[L-1][0][5:7]),int(data[L-1][0][8:10]))
 	Total = data[L-1][2]
-	print "Station: ", Station 
-	print "Date: ", dateData[0:9]
+	#print "Station: ", Station 
+	#print "Date: ", dateData[0:10]
 	print "Total,: ", Total
-	Ttoday = datetime.datetime.now()
-	currentDate =  Ttoday.strftime('%Y-%m-%d')
-	print "Current date:", currentDate
-	if dateData in currentDate:
+	#Ttoday = datetime.datetime.now()
+	#print Ttoday
+	currentDate = datetime.date.today() #Ttoday.strftime('%Y-%m-%d')
+	print "Last date saved data: ", dateData
+	print "Current date: ", currentDate
+	if dateData == currentDate:
 		print "In the date"
 		return Total
 	else:
