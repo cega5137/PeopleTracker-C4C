@@ -107,7 +107,7 @@ def runClient(soc, Counter, tol_dist, sendingDelay, station, host, port, personD
 	#Main Loop
 	while True:
         # Take Measurment
-		T = datetime.datetime.time(datetime.datetime.now())
+		T = datetime.datetime.now() #time(datetime.datetime.now())
 		if T >= schShut:
 			# Check if needs to turn off
 			if shutdownSwitch:
