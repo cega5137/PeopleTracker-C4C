@@ -101,7 +101,8 @@ def runClient(soc, Counter, tol_dist, sendingDelay, station, host, port, personD
 	[masterCount, previousTotal, isPerson, t_actual] = variableDeclaration()
 	
 	#Schedule shutdown
-	schShut = scheduleShutdown(onFile) 
+	print "Getting shutdown time"
+	schShut = scheduleShutdown(offFile) 
 
 	#Main Loop
 	while True:
@@ -197,7 +198,6 @@ def shutdownRPi():
     	print output
 
 def scheduleShutdown(file):
-	print "Schedule Shutdown"
 	fid = open(file,"r")
 	data = fid.read()
 	datasplit = data.split()
@@ -206,6 +206,7 @@ def scheduleShutdown(file):
 	count = 1	
 
 	for i in xrange(len(datasplit)):
+		
 		with Switch(datasplit[i]) as case:
 			if case('Mon:') and dayWeek == 0:
 				try:
@@ -214,17 +215,18 @@ def scheduleShutdown(file):
 				
 					timeRed =  datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
 				except:
+					print datasplit[i+count+1]
 					dayWeek = dayWeek + 1
-					continue
+					break
 
 			if case('Tue:') and dayWeek == 1:
-				while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
-					count = count + 1
- 				try:
+				try:
+					while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
+						count = count + 1
 					timeRed =  datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
 				except:
 					dayWeek = dayWeek + 1
-					continue
+					break
 
 			if case('Wen:') and dayWeek == 2:
 				while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
@@ -276,6 +278,7 @@ def scheduleShutdown(file):
 
 def standbyRun(soc, Couter, onFile, offFile):
 	# Check when it needs to turn on
+	print "getting on time"
 	onStart = scheduleShutdown(onfile) # On file
 	
 	#Close connection and GPIO
@@ -287,6 +290,7 @@ def standbyRun(soc, Couter, onFile, offFile):
 		T = datetime.datetime.time(datetime.datetime.now())
 
 	# check new time to turn off
+	print "getting off time"
 	offStart = scheduleShutdown() # Off file
 
 	# initialize code again
