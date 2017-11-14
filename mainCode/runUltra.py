@@ -297,9 +297,9 @@ def standbyRun(soc, Couter, onFile, offFile):
 ##########################################################################################
 
 # Read initialization file
-filePath = "/home/pi/Documents/Python/PeopleTracker-C4C/mainCode/initializationFile"
-onFile = "/home/pi/Documents/Python/PeopleTracker-C4C/mainCode/OnTime"
-offFile = "/home/pi/Documents/Python/PeopleTracker-C4C/mainCode/shutdownTime"
+filePath = "/home/pi/Documents/Python/PeopleTracker-C4C/mainCode/initializationFile.ini"
+onFile = "/home/pi/Documents/Python/PeopleTracker-C4C/mainCode/startTime.ini"
+offFile = "/home/pi/Documents/Python/PeopleTracker-C4C/mainCode/shutdownTime.ini"
 
 # Initalize Client
 [soc, Counter, tol_dist, delay, station, host, port, personDelay, shutdownSwitch] = init_client(filePath)
