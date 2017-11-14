@@ -50,28 +50,29 @@ from switch import Switch
 import signal
 
 class client_thread(Thread):
-        def __init__(self, clientsocket, ip, port):
-            	Thread.__init__(self)
-            	self.ip = ip
-            	self.port = port
+	def __init__(self, clientsocket, ip, port):
+		Thread.__init__(self)
+		self.ip = ip
+		self.port = port
 		self.bufferSize = 1024
 		self.conn = clientsocket
-            	print "[+] New server socket started for " + ip + ": " + str(port)
+		print "[+] New server socket started for " + ip + ": " + str(port)
 		print "The Thread Count is: ", activeCount()
 
-        def run(self):
-        	# Setting up the prevoius time 
-       		firstRun = True
+	def run(self):
+        # Setting up the prevoius time 
+       	firstRun = True
 
 		while True:
 			msg = self.conn.recv(self.bufferSize)
-               		print "Server receive data: ", msg
-                	T = datetime.datetime.time(datetime.datetime.now())
+			print "Server receive data: ", msg
+			T = datetime.datetime.time(datetime.datetime.now())
 			print "At :", T
 			data = msg.split(" ")
 			header = data[0]
 			curr = int(data[1])
 			Total = int(data[2])
+			
 			if curr is not None and Total is not None:
 				if firstRun:
 					self.log_values(header,curr, Total)
@@ -84,7 +85,7 @@ class client_thread(Thread):
 					firstRun = False
 			else: 
 				self.log_values(header, -999, -999)
-		               	MSG = "ON"
+			MSG = "ON"
 	#                      	conn.send(MSG)
 
 	#			except:
@@ -93,8 +94,8 @@ class client_thread(Thread):
 
 	
 	def log_values(self, Header, currn, total):
-		conn=sqlite3.connect('C:\User\cesar\Documents\Projects\PeopleTracker-C4C\HTML\mainDatabase.db')
-		#conn=sqlite3.connect('/var/www/html/PeopleTracker-C4C/HTML/mainDatabase.db')  #It is important to provide an
+		#conn=sqlite3.connect('C:\User\cesar\Documents\Projects\PeopleTracker-C4C\HTML\mainDatabase.db')
+		conn=sqlite3.connect('/var/www/html/PeopleTracker-C4C/HTML/mainDatabase.db')  #It is important to provide an
                 	                                             #absolute path to the database
                         	                                     #file, otherwise Cron won't be
                                 	                             #able to find it!
@@ -102,7 +103,7 @@ class client_thread(Thread):
 	
 		with Switch(Header) as case:
 			if case('Asian'):
-	          		curs.execute('''INSERT INTO Asian values(datetime(CURRENT_TIMESTAMP, 'localtime'), (?), (?))''', (currn,total))
+				curs.execute('''INSERT INTO Asian values(datetime(CURRENT_TIMESTAMP, 'localtime'), (?), (?))''', (currn,total))
 				print "Saving current and total in Asian: ", currn, ", ", total
 			if case('American'):
 				curs.execute('''INSERT INTO American values(datetime(CURRENT_TIMESTAMP, 'localtime'), (?), (?))''', (currn,total))
@@ -120,15 +121,15 @@ class client_thread(Thread):
 				curs.execute('''INSERT INTO Latin values(datetime(CURRENT_TIMESTAMP, 'localtime'), (?), (?))''', (currn,total))
 				print "Saving current and total in Latin: ", currn, ", ", total
 
-        	conn.commit()
-        	conn.close()
+			conn.commit()
+			conn.close()
 
 def init(host, Port):
 	serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	serversocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 	serversocket.bind((host, Port))
 	serversocket.listen(5)
-	#signal.signal(signal.SIGPIPE, signal.SIG_IGN) # Off for windows
+	signal.signal(signal.SIGPIPE, signal.SIG_IGN) # Off for windows
 	return serversocket
 	
 def run(serversocket, host, port):
@@ -149,7 +150,7 @@ def cleanup(serversocket):
 
 ####################################################
 print "Startin application"
-hostIP = "10.0.0.133"
+hostIP = "10.202.18.51"
 port = 5003
 serversocket = init(hostIP, port)
 run(serversocket, hostIP, port)
