@@ -56,7 +56,7 @@ def readInitialization(file):
 
 def init_client(initializationFile):
     #Get the initialization file
-	[Station, host, port, sendingDelay, TRIG, ECHO, tol_dist, personDelay] = readInitialization(initializationFile)
+	[Station, host, port, sendingDelay, TRIG, ECHO, tol_dist, personDelay, shutdownSwitch] = readInitialization(initializationFile)
 	Counter = UltraSonic(TRIG,ECHO)
 	print Station
 	print host
@@ -65,7 +65,7 @@ def init_client(initializationFile):
     # Initializes the client
 	#signal.signal(signal.SIGPIPE, signal.SIG_IGN)
     
-    	return [connectToServer(host, port), Counter, tol_dist, sendingDelay, Station, host, port, personDelay]
+    	return [connectToServer(host, port), Counter, tol_dist, sendingDelay, Station, host, port, personDelay, shutdownSwitch]
 
 def connectToServer(host, port):
     # Connects to Server
