@@ -197,7 +197,7 @@ def shutdownRPi():
     	print output
 
 def scheduleShutdown(file):
-    print "Schedule Shutdown"
+	print "Schedule Shutdown"
 	fid = open(file,"r")
 	data = fid.read()
 	datasplit = data.split()
