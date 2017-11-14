@@ -96,7 +96,7 @@ def variableDeclaration():
 	print "The on time is ", T
 	return [masterCount, previousTimeCount, isPerson, t_actual]
 
-def runClient(soc, Counter, tol_dist, sendingDelay, station, host, port, personDelay, onFile, offFile):
+def runClient(soc, Counter, tol_dist, sendingDelay, station, host, port, personDelay, shutdownSwitch, onFile, offFile):
 	#set up variable declaration
 	[masterCount, previousTotal, isPerson, t_actual] = variableDeclaration()
 	
