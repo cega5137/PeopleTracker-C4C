@@ -93,12 +93,12 @@ def variableDeclaration():
 	print "The on time is ", T
 	return [masterCount, previousTimeCount, isPerson, t_actual]
 
-def runClient(soc, Counter, tol_dist, sendingDelay, station, host, port, personDelay):
+def runClient(soc, Counter, tol_dist, sendingDelay, station, host, port, personDelay, onFile, offFile):
 	#set up variable declaration
 	[masterCount, previousTotal, isPerson, t_actual] = variableDeclaration()
 	
 	#Schedule shutdown
-	schShut = scheduleShutdown("/home/pi/Documents/Python/PeopleTracker-C4C/mainCode/shutdownTime") #datetime.time(11,35,0,0)
+	schShut = scheduleShutdown(onFile) 
 
 	#Main Loop
 	while True:
@@ -109,11 +109,9 @@ def runClient(soc, Counter, tol_dist, sendingDelay, station, host, port, personD
 			if shutdownSwitch:
 			# break if it does
 				break
-			standby()
+			schShut, soc, Counter, host, port, station = standby()
 			# get on standby funtion
 			# get new schShut
-
-			pass
 
    		if T.minute == 0 or T.minute == 15 or T.minute == 30 or T.minute == 45:
 			if T.second == sendingDelay:
@@ -272,7 +270,7 @@ def scheduleShutdown(file):
 	return timeRed
 
 
-def standbyRun(soc, Couter, onfile):
+def standbyRun(soc, Couter, onFile, offFile):
 	# Check when it needs to turn on
 	onStart = scheduleShutdown(onfile) # On file
 	
@@ -297,10 +295,12 @@ def standbyRun(soc, Couter, onfile):
 
 # Read initialization file
 filePath = "/home/pi/Documents/Python/PeopleTracker-C4C/mainCode/initializationFile"
+onFile = "/home/pi/Documents/Python/PeopleTracker-C4C/mainCode/OnTime"
+offFile = "/home/pi/Documents/Python/PeopleTracker-C4C/mainCode/shutdownTime"
 
 # Initalize Client
 [soc, Counter, tol_dist, delay, station, host, port, personDelay] = init_client(filePath)
-runClient(soc, Counter, tol_dist, delay, station, host, port, personDelay)
+runClient(soc, Counter, tol_dist, delay, station, host, port, personDelay, onFile, offFile)
 cleanup(soc, Counter, True)
 
 
