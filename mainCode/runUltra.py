@@ -105,11 +105,17 @@ def runClient(soc, Counter, tol_dist, sendingDelay, station, host, port, personD
         # Take Measurment
 		T = datetime.datetime.time(datetime.datetime.now())
 		if T >= schShut:
+			# Check if needs to turn off
+			if shutdownSwitch:
+			# break if it does
+				break
+			standby()
 			# get on standby funtion
 			# get new schShut
+
 			pass
 
-    		if T.minute == 0 or T.minute == 15 or T.minute == 30 or T.minute == 45:
+   		if T.minute == 0 or T.minute == 15 or T.minute == 30 or T.minute == 45:
 			if T.second == sendingDelay:
 				[previousTotal, T] = sendData(soc, host, port, station, masterCount, previousTotal)
 
@@ -171,7 +177,7 @@ def sendData(soc, host, port, Station, masterCount, previousTotal):
 	T = datetime.datetime.time(datetime.datetime.now())
 	return [masterCount, T]
 	
-def cleanup(soc, Counter):
+def cleanup(soc, Counter, switchOff):
     # Close GPIO
     Counter.close()
 
@@ -179,7 +185,8 @@ def cleanup(soc, Counter):
     if (soc > 0):
         soc.close()
     # Shutdown pi
-    #shutdownRPi()
+    if switchOff:
+    	shutdownRPi()
 
 def shutdownRPi():
     	print "Shutting down"
@@ -265,16 +272,24 @@ def scheduleShutdown(file):
 	return timeRed
 
 
-def standbyRun(soc, Couter):
-	onStart = scheduleShutdown() # On file
-	cleanup(soc, Counter)
+def standbyRun(soc, Couter, onfile):
+	# Check when it needs to turn on
+	onStart = scheduleShutdown(onfile) # On file
+	
+	#Close connection and GPIO
+	cleanup(soc, Counter, False)
 
+	# Do the wait
 	while T >= onStart:
 		time.delay(60*15)
 		T = datetime.datetime.time(datetime.datetime.now())
 
-	onStart = scheduleShutdown() # Off file
+	# check new time to turn off
+	offStart = scheduleShutdown() # Off file
+
+	# initialize code again
 	[soc, Counter, tol_dist, delay, station, host, port, personDelay] = init_client(filePath)
+	return offStart
 
 ##########################################################################################	
 ##################################### New Main ###########################################
@@ -286,7 +301,7 @@ filePath = "/home/pi/Documents/Python/PeopleTracker-C4C/mainCode/initializationF
 # Initalize Client
 [soc, Counter, tol_dist, delay, station, host, port, personDelay] = init_client(filePath)
 runClient(soc, Counter, tol_dist, delay, station, host, port, personDelay)
-cleanup(soc, Counter)
+cleanup(soc, Counter, True)
 
 
 
