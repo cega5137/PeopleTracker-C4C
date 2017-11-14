@@ -113,7 +113,7 @@ def runClient(soc, Counter, tol_dist, sendingDelay, station, host, port, personD
 			if shutdownSwitch:
 			# break if it does
 				break
-			schShut, soc, Counter, host, port, station = standby()
+			schShut, soc, Counter, host, port, station = standbyRun(soc, Counter, onFile, offFile)
 			# get on standby funtion
 			# get new schShut
 
@@ -281,17 +281,19 @@ def scheduleShutdown(file):
 	return timeRed
 
 
-def standbyRun(soc, Couter, onFile, offFile):
+def standbyRun(soc, Counter, onFile, offFile):
 	# Check when it needs to turn on
 	print "getting on time"
-	onStart = scheduleShutdown(onfile) # On file
+	onStart = scheduleShutdown(onFile) # On file
 	
 	#Close connection and GPIO
 	cleanup(soc, Counter, False)
-
+	
+	print "Waking up at: ", onStart
 	# Do the wait
+	T = datetime.datetime.time(datetime.datetime.now())
 	while T >= onStart:
-		time.delay(60*15)
+		time.sleep(60*15)
 		T = datetime.datetime.time(datetime.datetime.now())
 
 	# check new time to turn off
