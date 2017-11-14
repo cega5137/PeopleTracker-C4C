@@ -65,7 +65,7 @@ def init_client(initializationFile):
     # Initializes the client
 	#signal.signal(signal.SIGPIPE, signal.SIG_IGN)
     
-    	return [connectToServer(host, port), Counter, tol_dist, sendingDelay, Station, host, port, personDelay, shutdownSwitch]
+    return [connectToServer(host, port), Counter, tol_dist, sendingDelay, Station, host, port, personDelay, shutdownSwitch]
 
 def connectToServer(host, port):
     # Connects to Server
