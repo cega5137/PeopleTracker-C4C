@@ -214,9 +214,17 @@ def scheduleShutdown(file):
 				try:
 					while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
 						count = count + 1
-					timeRed = datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
+
+					TodayDay = datetime.datetime.now()
+					timeOff = datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
+					timeRed = datetime.datetime(TodayDay.year, TodayDay.month, TodayDay.day, timeOff.hour, timeOff.minute)
 				except:
-					timeRed = datetime.time(int(datasplit[i+count+1][0:2]), int(datasplit[i+count+1][3:5]))
+					TodayDay = datetime.datetime.now()
+					timeOff = datetime.time(int(datasplit[i+count+1][0:2]), int(datasplit[i+count+1][3:5]))
+					try:
+						timeRed = datetime.datetime(TodayDay.year, TodayDay.month, TodayDay.day+1, timeOff.hour, timeOff.minute)
+					except:
+						timeRed = datetime.datetime(TodayDay.year, TodayDay.month+1, 1, timeOff.hour, timeOff.minute)
 					#dayWeek = dayWeek + 1
 					break
 
@@ -224,9 +232,16 @@ def scheduleShutdown(file):
 				try:
 					while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
 						count = count + 1
-					timeRed = datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
+					TodayDay = datetime.datetime.now()
+					timeOff = datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
+					timeRed = datetime.datetime(TodayDay.year, TodayDay.month, TodayDay.day, timeOff.hour, timeOff.minute)
 				except:
-					timeRed = datetime.time(int(datasplit[i+count+1][0:2]), int(datasplit[i+count+1][3:5]))
+					TodayDay = datetime.datetime.now()
+					timeOff = datetime.time(int(datasplit[i+count+1][0:2]), int(datasplit[i+count+1][3:5]))
+					try:
+						timeRed = datetime.datetime(TodayDay.year, TodayDay.month, TodayDay.day+1, timeOff.hour, timeOff.minute)
+					except:
+						timeRed = datetime.datetime(TodayDay.year, TodayDay.month+1, 1, timeOff.hour, timeOff.minute)
 					#dayWeek = dayWeek + 1
 					break
 
@@ -234,9 +249,16 @@ def scheduleShutdown(file):
 				try:
 					while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
 						count = count + 1
-					timeRed =  datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
+					TodayDay = datetime.datetime.now()
+					timeOff = datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
+					timeRed = datetime.datetime(TodayDay.year, TodayDay.month, TodayDay.day, timeOff.hour, timeOff.minute)
 				except:
-					timeRed = datetime.time(int(datasplit[i+count+1][0:2]), int(datasplit[i+count+1][3:5]))
+					TodayDay = datetime.datetime.now()
+					timeOff = datetime.time(int(datasplit[i+count+1][0:2]), int(datasplit[i+count+1][3:5]))
+					try:
+						timeRed = datetime.datetime(TodayDay.year, TodayDay.month, TodayDay.day+1, timeOff.hour, timeOff.minute)
+					except:
+						timeRed = datetime.datetime(TodayDay.year, TodayDay.month+1, 1, timeOff.hour, timeOff.minute)
 					#dayWeek = dayWeek + 1
 					break
 
@@ -244,9 +266,16 @@ def scheduleShutdown(file):
 				try:
 					while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
 						count = count + 1
-					timeRed =  datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
+					TodayDay = datetime.datetime.now()
+					timeOff = datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
+					timeRed = datetime.datetime(TodayDay.year, TodayDay.month, TodayDay.day, timeOff.hour, timeOff.minute)
 				except:
-					timeRed = datetime.time(int(datasplit[i+count+1][0:2]), int(datasplit[i+count+1][3:5]))
+					TodayDay = datetime.datetime.now()
+					timeOff = datetime.time(int(datasplit[i+count+1][0:2]), int(datasplit[i+count+1][3:5]))
+					try:
+						timeRed = datetime.datetime(TodayDay.year, TodayDay.month, TodayDay.day+1, timeOff.hour, timeOff.minute)
+					except:
+						timeRed = datetime.datetime(TodayDay.year, TodayDay.month+1, 1, timeOff.hour, timeOff.minute)
 					#dayWeek = dayWeek + 1
 					break
 
@@ -254,9 +283,16 @@ def scheduleShutdown(file):
 				try:
 					while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
 						count = count + 1
-					timeRed =  datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
+					TodayDay = datetime.datetime.now()
+					timeOff = datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
+					timeRed = datetime.datetime(TodayDay.year, TodayDay.month, TodayDay.day, timeOff.hour, timeOff.minute)
 				except:
-					timeRed = datetime.time(int(datasplit[i+count+1][0:2]), int(datasplit[i+count+1][3:5]))
+					TodayDay = datetime.datetime.now()
+					timeOff = datetime.time(int(datasplit[i+count+1][0:2]), int(datasplit[i+count+1][3:5]))
+					try:
+						timeRed = datetime.datetime(TodayDay.year, TodayDay.month, TodayDay.day+1, timeOff.hour, timeOff.minute)
+					except:
+						timeRed = datetime.datetime(TodayDay.year, TodayDay.month+1, 1, timeOff.hour, timeOff.minute)
 					#dayWeek = dayWeek + 1
 					break
 
@@ -264,9 +300,16 @@ def scheduleShutdown(file):
 				try:
 					while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
 						count = count + 1
-					timeRed =  datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
+					TodayDay = datetime.datetime.now()
+					timeOff = datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
+					timeRed = datetime.datetime(TodayDay.year, TodayDay.month, TodayDay.day, timeOff.hour, timeOff.minute)
 				except:
-					timeRed = datetime.time(int(datasplit[i+count+1][0:2]), int(datasplit[i+count+1][3:5]))
+					TodayDay = datetime.datetime.now()
+					timeOff = datetime.time(int(datasplit[i+count+1][0:2]), int(datasplit[i+count+1][3:5]))
+					try:
+						timeRed = datetime.datetime(TodayDay.year, TodayDay.month, TodayDay.day+1, timeOff.hour, timeOff.minute)
+					except:
+						timeRed = datetime.datetime(TodayDay.year, TodayDay.month+1, 1, timeOff.hour, timeOff.minute)
 					#dayWeek = dayWeek + 1
 					break
 
@@ -274,11 +317,18 @@ def scheduleShutdown(file):
 				try:
 					while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
 						count = count + 1
-					timeRed =  datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
+					TodayDay = datetime.datetime.now()
+					timeOff = datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
+					timeRed = datetime.datetime(TodayDay.year, TodayDay.month, TodayDay.day, timeOff.hour, timeOff.minute)
 				except:
 					#timeRed = datasplit[i+count+1]
 					#dayWeek = 0
-					timeRed =  datetime.time(int(datasplit[2][0:2]),int(datasplit[2][3:5]))
+					timeOff =  datetime.time(int(datasplit[2][0:2]),int(datasplit[2][3:5]))
+					TodayDay = datetime.datetime.now()
+					try:
+						timeRed = datetime.datetime(TodayDay.year, TodayDay.month, TodayDay.day+1, timeOff.hour, timeOff.minute)
+					except:
+						timeRed = datetime.datetime(TodayDay.year, TodayDay.month+1, 1, timeOff.hour, timeOff.minute)
 
 	TodayDay = datetime.datetime.now()
 	return timeRed
