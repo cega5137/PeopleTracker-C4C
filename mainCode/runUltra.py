@@ -93,21 +93,27 @@ def variableDeclaration():
 	print "The on time is ", T
 	return [masterCount, previousTimeCount, isPerson, t_actual]
 
-def runClient(soc, Counter, tol_dist, sendingDelay, station, host, port, personDelay):
+def runClient(soc, Counter, tol_dist, sendingDelay, station, host, port, personDelay, onFile, offFile):
 	#set up variable declaration
 	[masterCount, previousTotal, isPerson, t_actual] = variableDeclaration()
 	
 	#Schedule shutdown
-	schShut = scheduleShutdown("/home/pi/Documents/Python/PeopleTracker-C4C/mainCode/shutdownTime") #datetime.time(11,35,0,0)
-	print schShut
+	schShut = scheduleShutdown(onFile) 
 
 	#Main Loop
 	while True:
         # Take Measurment
 		T = datetime.datetime.time(datetime.datetime.now())
 		if T >= schShut:
-			break
-    		if T.minute == 0 or T.minute == 15 or T.minute == 30 or T.minute == 45:
+			# Check if needs to turn off
+			if shutdownSwitch:
+			# break if it does
+				break
+			schShut, soc, Counter, host, port, station = standby()
+			# get on standby funtion
+			# get new schShut
+
+   		if T.minute == 0 or T.minute == 15 or T.minute == 30 or T.minute == 45:
 			if T.second == sendingDelay:
 				[previousTotal, T] = sendData(soc, host, port, station, masterCount, previousTotal)
 
@@ -169,7 +175,7 @@ def sendData(soc, host, port, Station, masterCount, previousTotal):
 	T = datetime.datetime.time(datetime.datetime.now())
 	return [masterCount, T]
 	
-def cleanup(soc, Counter):
+def cleanup(soc, Counter, switchOff):
     # Close GPIO
     Counter.close()
 
@@ -177,7 +183,8 @@ def cleanup(soc, Counter):
     if (soc > 0):
         soc.close()
     # Shutdown pi
-    shutdownRPi()
+    if switchOff:
+    	shutdownRPi()
 
 def shutdownRPi():
     	print "Shutting down"
@@ -187,47 +194,100 @@ def shutdownRPi():
     	print output
 
 def scheduleShutdown(file):
-    	print "Schedule Shutdown"
+    print "Schedule Shutdown"
 	fid = open(file,"r")
-        data = fid.read()
+	data = fid.read()
 	datasplit = data.split()
 	T = datetime.datetime.time(datetime.datetime.today())
+	dayWeek = datetime.datetime.today().weekday()
 	count = 1	
 
 	for i in xrange(len(datasplit)):
 		with Switch(datasplit[i]) as case:
-			if case('M:') and datetime.datetime.today().weekday() == 0:
+			if case('Mon:') and dayWeek == 0:
 				while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
-                                        count = count + 1
-                                timeRed =  datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
-			if case('T:') and datetime.datetime.today().weekday() == 1:
-				while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
-                                        count = count + 1
-                                timeRed =  datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
-			if case('W:') and datetime.datetime.today().weekday() == 2:
-				while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
-                                        count = count + 1
-                                timeRed =  datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
-			if case('t:' )and datetime.datetime.today().weekday() == 3:
-				while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
-                                        count = count + 1
-                                timeRed =  datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
-			if case('F:') and datetime.datetime.today().weekday() == 4:
-				while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
-                                        count = count + 1
-                                timeRed =  datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
-			if case('S:') and datetime.datetime.today().weekday() == 5:
-				while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
-                                        count = count + 1
-                                timeRed =  datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
-			if case('s:') and datetime.datetime.today().weekday() == 6:
-				while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
-                                        count = count + 1
-                                timeRed =  datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
+					count = count + 1
+				try:
+					timeRed =  datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
+				except:
+					dayWeek = dayWeek + 1
+					continue
 
-		
+			if case('Tue:') and dayWeek == 1:
+				while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
+					count = count + 1
+ 				try:
+					timeRed =  datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
+				except:
+					dayWeek = dayWeek + 1
+					continue
+
+			if case('Wen:') and dayWeek == 2:
+				while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
+					count = count + 1
+				try:
+					timeRed =  datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
+				except:
+					dayWeek = dayWeek + 1
+					continue
+
+			if case('Thu:' )and dayWeek == 3:
+				while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
+					count = count + 1	
+				try:
+					timeRed =  datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
+				except:
+					dayWeek = dayWeek + 1
+					continue
+
+			if case('Fri:') and dayWeek == 4:
+				while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
+					count = count + 1
+				try:
+					timeRed =  datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
+				except:
+					dayWeek = dayWeek + 1
+					continue
+
+			if case('Sat:') and dayWeek == 5:
+				while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
+					count = count + 1
+				try:
+					timeRed =  datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
+				except:
+					dayWeek = dayWeek + 1
+					continue
+
+			if case('Sun:') and dayWeek == 6:
+				while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
+					count = count + 1
+				try:
+					timeRed =  datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
+				except:
+					#dayWeek = 0
+					timeRed =  datetime.time(int(datasplit[2][0:2]),int(datasplit[2][3:5]))
 
 	return timeRed
+
+
+def standbyRun(soc, Couter, onFile, offFile):
+	# Check when it needs to turn on
+	onStart = scheduleShutdown(onfile) # On file
+	
+	#Close connection and GPIO
+	cleanup(soc, Counter, False)
+
+	# Do the wait
+	while T >= onStart:
+		time.delay(60*15)
+		T = datetime.datetime.time(datetime.datetime.now())
+
+	# check new time to turn off
+	offStart = scheduleShutdown() # Off file
+
+	# initialize code again
+	[soc, Counter, tol_dist, delay, station, host, port, personDelay] = init_client(filePath)
+	return offStart
 
 ##########################################################################################	
 ##################################### New Main ###########################################
@@ -235,11 +295,13 @@ def scheduleShutdown(file):
 
 # Read initialization file
 filePath = "/home/pi/Documents/Python/PeopleTracker-C4C/mainCode/initializationFile"
+onFile = "/home/pi/Documents/Python/PeopleTracker-C4C/mainCode/OnTime"
+offFile = "/home/pi/Documents/Python/PeopleTracker-C4C/mainCode/shutdownTime"
 
 # Initalize Client
 [soc, Counter, tol_dist, delay, station, host, port, personDelay] = init_client(filePath)
-runClient(soc, Counter, tol_dist, delay, station, host, port, personDelay)
-cleanup(soc, Counter)
+runClient(soc, Counter, tol_dist, delay, station, host, port, personDelay, onFile, offFile)
+cleanup(soc, Counter, True)
 
 
 
