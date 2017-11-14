@@ -128,7 +128,7 @@ def init(host, Port):
 	serversocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 	serversocket.bind((host, Port))
 	serversocket.listen(5)
-	signal.signal(signal.SIGPIPE, signal.SIG_IGN)
+	#signal.signal(signal.SIGPIPE, signal.SIG_IGN) # Off for windows
 	return serversocket
 	
 def run(serversocket, host, port):

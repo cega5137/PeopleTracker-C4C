@@ -18,7 +18,7 @@ def readInitialization(file):
         fid = open(file,"r")
         data = fid.read()
         dataSplit = data.split()
-        for i in [0,2,4,6,8,10, 12]:
+        for i in [0,2,4,6,8,10, 12, 14]:
                 with Switch(dataSplit[i]) as case:
                         if case('Station:'):
                                 Station = dataSplit[i+1]
@@ -48,8 +48,11 @@ def readInitialization(file):
 				tol_dist = int(dataSplit[i+1])
 			if case('delayTime:'):
 				waitPerson = float(dataSplit[i+1])
+			if case('shutdownCase:'):
+				shutdownSwitch = bool(int(dataSplit[i+1]))
 
-        return [Station, ipaddr, port, delayTime, TRIG, ECHO, tol_dist, waitPerson]
+
+        return [Station, ipaddr, port, delayTime, TRIG, ECHO, tol_dist, waitPerson, shutdownSwitch]
 
 def init_client(initializationFile):
     #Get the initialization file
@@ -299,8 +302,8 @@ onFile = "/home/pi/Documents/Python/PeopleTracker-C4C/mainCode/OnTime"
 offFile = "/home/pi/Documents/Python/PeopleTracker-C4C/mainCode/shutdownTime"
 
 # Initalize Client
-[soc, Counter, tol_dist, delay, station, host, port, personDelay] = init_client(filePath)
-runClient(soc, Counter, tol_dist, delay, station, host, port, personDelay, onFile, offFile)
+[soc, Counter, tol_dist, delay, station, host, port, personDelay, shutdownSwitch] = init_client(filePath)
+runClient(soc, Counter, tol_dist, delay, station, host, port, personDelay, shutdownSwitch, onFile, offFile)
 cleanup(soc, Counter, True)
 
 
