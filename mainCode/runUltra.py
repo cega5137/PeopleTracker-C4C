@@ -103,6 +103,7 @@ def runClient(soc, Counter, tol_dist, sendingDelay, station, host, port, personD
 	#Schedule shutdown
 	print "Getting shutdown time"
 	schShut = scheduleShutdown(offFile) 
+	print "Turn off at: ", schShut	
 
 	#Main Loop
 	while True:
