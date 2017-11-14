@@ -62,10 +62,10 @@ def init_client(initializationFile):
 	print host
 	print port
 	
-    # Initializes the client
+    	# Initializes the client
 	#signal.signal(signal.SIGPIPE, signal.SIG_IGN)
     
-    return [connectToServer(host, port), Counter, tol_dist, sendingDelay, Station, host, port, personDelay, shutdownSwitch]
+    	return [connectToServer(host, port), Counter, tol_dist, sendingDelay, Station, host, port, personDelay, shutdownSwitch]
 
 def connectToServer(host, port):
     # Connects to Server
@@ -248,7 +248,7 @@ def scheduleShutdown(file):
 				except:
 					timeRed = datetime.time(int(datasplit[i+count+1][0:2]), int(datasplit[i+count+1][3:5]))
 					#dayWeek = dayWeek + 1
-					continue
+					break
 
 			if case('Fri:') and dayWeek == 4:
 				try:
@@ -258,7 +258,7 @@ def scheduleShutdown(file):
 				except:
 					timeRed = datetime.time(int(datasplit[i+count+1][0:2]), int(datasplit[i+count+1][3:5]))
 					#dayWeek = dayWeek + 1
-					continue
+					break
 
 			if case('Sat:') and dayWeek == 5:
 				try:
@@ -268,7 +268,7 @@ def scheduleShutdown(file):
 				except:
 					timeRed = datetime.time(int(datasplit[i+count+1][0:2]), int(datasplit[i+count+1][3:5]))
 					#dayWeek = dayWeek + 1
-					continue
+					break
 
 			if case('Sun:') and dayWeek == 6:
 				try:
@@ -280,6 +280,7 @@ def scheduleShutdown(file):
 					#dayWeek = 0
 					timeRed =  datetime.time(int(datasplit[2][0:2]),int(datasplit[2][3:5]))
 
+	TodayDay = datetime.datetime.now()
 	return timeRed
 
 
@@ -293,10 +294,11 @@ def standbyRun(soc, Counter, onFile, offFile, filePath):
 	
 	print "Waking up at: ", onStart
 	# Do the wait
-	T = datetime.datetime.time(datetime.datetime.now())
+	T = datetime.datetime.now()
+	print "Current time is: ", T
 	while T >= onStart:
 		time.sleep(60*15)
-		T = datetime.datetime.time(datetime.datetime.now())
+		T = datetime.datetime(datetime.datetime.now())
 
 	# check new time to turn off
 	print "getting off time"
