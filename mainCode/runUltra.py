@@ -99,6 +99,7 @@ def runClient(soc, Counter, tol_dist, sendingDelay, station, host, port, personD
 	
 	#Schedule shutdown
 	schShut = scheduleShutdown("/home/pi/Documents/Python/PeopleTracker-C4C/mainCode/shutdownTime") #datetime.time(11,35,0,0)
+	print schShut
 
 	#Main Loop
 	while True:
