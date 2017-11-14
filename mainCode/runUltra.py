@@ -113,7 +113,7 @@ def runClient(soc, Counter, tol_dist, sendingDelay, station, host, port, personD
 			if shutdownSwitch:
 			# break if it does
 				break
-			schShut, soc, Counter, host, port, station = standby()
+			schShut, soc, Counter, host, port, station = standbyRun(soc, Counter, onFile, offFile)
 			# get on standby funtion
 			# get new schShut
 
@@ -180,15 +180,17 @@ def sendData(soc, host, port, Station, masterCount, previousTotal):
 	return [masterCount, T]
 	
 def cleanup(soc, Counter, switchOff):
-    # Close GPIO
-    Counter.close()
+	# Close GPIO
+	print "Cleaning GPIO"
+	Counter.close()
 
-    # Close Socket
-    if (soc > 0):
-        soc.close()
-    # Shutdown pi
-    if switchOff:
-    	shutdownRPi()
+    	# Close Socket
+    	if (soc > 0):
+		print "Closing Connection"
+        	soc.close()
+    	# Shutdown pi
+    	if switchOff:
+    		shutdownRPi()
 
 def shutdownRPi():
     	print "Shutting down"
@@ -281,26 +283,28 @@ def scheduleShutdown(file):
 	return timeRed
 
 
-def standbyRun(soc, Couter, onFile, offFile):
+def standbyRun(soc, Counter, onFile, offFile):
 	# Check when it needs to turn on
 	print "getting on time"
-	onStart = scheduleShutdown(onfile) # On file
+	onStart = scheduleShutdown(onFile) # On file
 	
 	#Close connection and GPIO
 	cleanup(soc, Counter, False)
-
+	
+	print "Waking up at: ", onStart
 	# Do the wait
+	T = datetime.datetime.time(datetime.datetime.now())
 	while T >= onStart:
-		time.delay(60*15)
+		time.sleep(60*15)
 		T = datetime.datetime.time(datetime.datetime.now())
 
 	# check new time to turn off
 	print "getting off time"
-	offStart = scheduleShutdown() # Off file
+	offStart = scheduleShutdown(offFile) # Off file
 
 	# initialize code again
-	[soc, Counter, tol_dist, delay, station, host, port, personDelay] = init_client(filePath)
-	return offStart
+	[soc, Counter, tol_dist, delay, station, host, port, personDelay, shutdownSwitch] = init_client(filePath)
+	return [offStart, soc, Counter, host, port, shutdownSwitch] 
 
 ##########################################################################################	
 ##################################### New Main ###########################################
