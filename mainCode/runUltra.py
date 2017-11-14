@@ -212,64 +212,69 @@ def scheduleShutdown(file):
 				try:
 					while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
 						count = count + 1
-				
-					timeRed =  datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
+					timeRed = datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
 				except:
-					print datasplit[i+count+1]
-					dayWeek = dayWeek + 1
+					timeRed = datasplit[i+count+1]
+					#dayWeek = dayWeek + 1
 					break
 
 			if case('Tue:') and dayWeek == 1:
 				try:
 					while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
 						count = count + 1
-					timeRed =  datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
+					timeRed = datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
 				except:
-					dayWeek = dayWeek + 1
+					timeRed = datasplit[i+count+1]
+					#dayWeek = dayWeek + 1
 					break
 
 			if case('Wen:') and dayWeek == 2:
-				while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
-					count = count + 1
 				try:
+					while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
+						count = count + 1
 					timeRed =  datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
 				except:
-					dayWeek = dayWeek + 1
-					continue
+					timeRed = datasplit[i+count+1]
+					#dayWeek = dayWeek + 1
+					break
 
 			if case('Thu:' )and dayWeek == 3:
-				while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
-					count = count + 1	
 				try:
+					while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
+						count = count + 1
 					timeRed =  datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
 				except:
-					dayWeek = dayWeek + 1
+					timeRed = datasplit[i+count+1]
+					#dayWeek = dayWeek + 1
 					continue
 
 			if case('Fri:') and dayWeek == 4:
-				while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
-					count = count + 1
 				try:
+					while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
+						count = count + 1
 					timeRed =  datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
 				except:
-					dayWeek = dayWeek + 1
+					timeRed = datasplit[i+count+1]
+					#dayWeek = dayWeek + 1
 					continue
 
 			if case('Sat:') and dayWeek == 5:
-				while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
-					count = count + 1
 				try:
+					while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
+						count = count + 1
 					timeRed =  datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
 				except:
-					dayWeek = dayWeek + 1
+					timeRed = datasplit[i+count+1]
+					#dayWeek = dayWeek + 1
 					continue
 
 			if case('Sun:') and dayWeek == 6:
-				while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
-					count = count + 1
 				try:
+					while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
+						count = count + 1
 					timeRed =  datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
 				except:
+					#timeRed = datasplit[i+count+1]
 					#dayWeek = 0
 					timeRed =  datetime.time(int(datasplit[2][0:2]),int(datasplit[2][3:5]))
 
