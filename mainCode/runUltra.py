@@ -208,7 +208,6 @@ def scheduleShutdown(file):
 	for i in xrange(len(datasplit)):
 		with Switch(datasplit[i]) as case:
 			if case('Mon:') and dayWeek == 0:
-				
 				try:
 					while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
 						count = count + 1
