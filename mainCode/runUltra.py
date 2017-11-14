@@ -180,15 +180,17 @@ def sendData(soc, host, port, Station, masterCount, previousTotal):
 	return [masterCount, T]
 	
 def cleanup(soc, Counter, switchOff):
-    # Close GPIO
-    Counter.close()
+	# Close GPIO
+	print "Cleaning GPIO"
+	Counter.close()
 
-    # Close Socket
-    if (soc > 0):
-        soc.close()
-    # Shutdown pi
-    if switchOff:
-    	shutdownRPi()
+    	# Close Socket
+    	if (soc > 0):
+		print "Closing Connection"
+        	soc.close()
+    	# Shutdown pi
+    	if switchOff:
+    		shutdownRPi()
 
 def shutdownRPi():
     	print "Shutting down"
@@ -298,11 +300,11 @@ def standbyRun(soc, Counter, onFile, offFile):
 
 	# check new time to turn off
 	print "getting off time"
-	offStart = scheduleShutdown() # Off file
+	offStart = scheduleShutdown(offFile) # Off file
 
 	# initialize code again
-	[soc, Counter, tol_dist, delay, station, host, port, personDelay] = init_client(filePath)
-	return offStart
+	[soc, Counter, tol_dist, delay, station, host, port, personDelay, shutdownSwitch] = init_client(filePath)
+	return [offStart, soc, Counter, host, port, shutdownSwitch] 
 
 ##########################################################################################	
 ##################################### New Main ###########################################
