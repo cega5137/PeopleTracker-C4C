@@ -214,7 +214,7 @@ def scheduleShutdown(file):
 						count = count + 1
 					timeRed = datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
 				except:
-					timeRed = datasplit[i+count+1]
+					timeRed = datatime.time(int(datasplit[i+count+1][0:2]), int(datasplit[i+count+1][3:5]))
 					#dayWeek = dayWeek + 1
 					break
 
@@ -224,7 +224,7 @@ def scheduleShutdown(file):
 						count = count + 1
 					timeRed = datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
 				except:
-					timeRed = datasplit[i+count+1]
+					timeRed = datatime.time(int(datasplit[i+count+1][0:2]), int(datasplit[i+count+1][3:5]))
 					#dayWeek = dayWeek + 1
 					break
 
@@ -234,7 +234,7 @@ def scheduleShutdown(file):
 						count = count + 1
 					timeRed =  datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
 				except:
-					timeRed = datasplit[i+count+1]
+					timeRed = datatime.time(int(datasplit[i+count+1][0:2]), int(datasplit[i+count+1][3:5]))
 					#dayWeek = dayWeek + 1
 					break
 
@@ -244,7 +244,7 @@ def scheduleShutdown(file):
 						count = count + 1
 					timeRed =  datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
 				except:
-					timeRed = datasplit[i+count+1]
+					timeRed = datatime.time(int(datasplit[i+count+1][0:2]), int(datasplit[i+count+1][3:5]))
 					#dayWeek = dayWeek + 1
 					continue
 
@@ -254,7 +254,7 @@ def scheduleShutdown(file):
 						count = count + 1
 					timeRed =  datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
 				except:
-					timeRed = datasplit[i+count+1]
+					timeRed = datatime.time(int(datasplit[i+count+1][0:2]), int(datasplit[i+count+1][3:5]))
 					#dayWeek = dayWeek + 1
 					continue
 
@@ -264,7 +264,7 @@ def scheduleShutdown(file):
 						count = count + 1
 					timeRed =  datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
 				except:
-					timeRed = datasplit[i+count+1]
+					timeRed = datatime.time(int(datasplit[i+count+1][0:2]), int(datasplit[i+count+1][3:5]))
 					#dayWeek = dayWeek + 1
 					continue
 
