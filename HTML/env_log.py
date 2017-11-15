@@ -60,9 +60,9 @@ class client_thread(Thread):
 		print "The Thread Count is: ", activeCount()
 
 	def run(self):
-        # Setting up the prevoius time 
-       	firstRun = True
-
+		# Setting up the prevoius time 
+		firstRun = True
+		
 		while True:
 			msg = self.conn.recv(self.bufferSize)
 			print "Server receive data: ", msg
@@ -129,7 +129,7 @@ def init(host, Port):
 	serversocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 	serversocket.bind((host, Port))
 	serversocket.listen(5)
-	signal.signal(signal.SIGPIPE, signal.SIG_IGN) # Off for windows
+	#signal.signal(signal.SIGPIPE, signal.SIG_IGN) # Off for windows
 	return serversocket
 	
 def run(serversocket, host, port):
@@ -150,7 +150,8 @@ def cleanup(serversocket):
 
 ####################################################
 print "Startin application"
-hostIP = "10.202.18.51"
+#hostIP = "10.202.18.51"
+hostIP = "10.0.0.133"
 port = 5003
 serversocket = init(hostIP, port)
 run(serversocket, hostIP, port)

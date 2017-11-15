@@ -96,13 +96,13 @@ def variableDeclaration():
 	print "The on time is ", T
 	return [masterCount, previousTimeCount, isPerson, t_actual]
 
-def runClient(soc, Counter, tol_dist, sendingDelay, station, host, port, personDelay, shutdownSwitch, onFile, offFile, filePath):
+def runClient(soc, Counter, tol_dist, sendingDelay, station, host, port, personDelay, shutdownSwitch, scheduleFile, filePath):
 	#set up variable declaration
 	[masterCount, previousTotal, isPerson, t_actual] = variableDeclaration()
 	
 	#Schedule shutdown
 	print "Getting shutdown time"
-	onTime, schShut = scheduleShutdown(offFile) 
+	onTime, schShut = scheduleShutdown(scheduleFile) 
 	print "Turn off at: ", schShut	
 
 	#Main Loop
@@ -110,11 +110,12 @@ def runClient(soc, Counter, tol_dist, sendingDelay, station, host, port, personD
         # Take Measurment
 		T = datetime.datetime.time(datetime.datetime.now())
 		if T >= schShut or T <= onTime:
+			[previousTotal, T] = sendData(soc, host, port, station, masterCount, previousTotal)
 			# Check if needs to turn off
 			# Break if it does
 			if shutdownSwitch:
 				break
-			schShut, soc, Counter, host, port, station = standbyRun(soc, Counter, onFile, offFile, filePath)
+			schShut, soc, Counter, host, port, station = standbyRun(soc, Counter, scheduleFile, filePath)
 			# get on standby funtion
 			# get new schShut
 
@@ -490,21 +491,21 @@ def scheduleShutdown(file):
 
 	return timeON, timeOFF, status
 
-def standbyRun(soc, Counter, onFile, offFile, filePath):
+def standbyRun(soc, Counter, scheduleFile, filePath):
 	# Check when it needs to turn on
 	print "getting on time"
-	onStart = scheduleShutdown(onFile) # On file
+	onStart, OffStart = scheduleShutdown(scheduleFile) # On file
 	
 	#Close connection and GPIO
 	cleanup(soc, Counter, False)
 	
 	print "Waking up at: ", onStart
 	# Do the wait
-	T = datetime.datetime.now()
+	T = datetime.datetime.time(datetime.datetime.now())
 	print "Current time is: ", T
 	while T >= onStart:
 		time.sleep(60*15)
-		T = datetime.datetime(datetime.datetime.now())
+		T = datetime.datetime.time(datetime.datetime.now())
 
 	# check new time to turn off
 	print "getting off time"
@@ -520,12 +521,11 @@ def standbyRun(soc, Counter, onFile, offFile, filePath):
 
 # Read initialization file
 filePath = "/home/pi/Documents/Python/PeopleTracker-C4C/mainCode/initializationFile.ini"
-onFile = "/home/pi/Documents/Python/PeopleTracker-C4C/mainCode/startTime.ini"
-offFile = "/home/pi/Documents/Python/PeopleTracker-C4C/mainCode/shutdownTime.ini"
+scheduleFile = "/home/pi/Documents/Python/PeopleTracker-C4C/mainCode/stationSchedule.ini"
 
 # Initalize Client
 [soc, Counter, tol_dist, delay, station, host, port, personDelay, shutdownSwitch] = init_client(filePath)
-runClient(soc, Counter, tol_dist, delay, station, host, port, personDelay, shutdownSwitch, onFile, offFile, filePath)
+runClient(soc, Counter, tol_dist, delay, station, host, port, personDelay, shutdownSwitch, scheduleFile, filePath)
 cleanup(soc, Counter, True)
 
 
