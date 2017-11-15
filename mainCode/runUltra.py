@@ -102,7 +102,7 @@ def runClient(soc, Counter, tol_dist, sendingDelay, station, host, port, personD
 	
 	#Schedule shutdown
 	print "Getting shutdown time"
-	onTime, schShut = scheduleShutdown(scheduleFile) 
+	[onTime, schShut, statusDATA] = scheduleShutdown(scheduleFile) 
 	print "Turn off at: ", schShut	
 
 	#Main Loop
@@ -110,14 +110,22 @@ def runClient(soc, Counter, tol_dist, sendingDelay, station, host, port, personD
         # Take Measurment
 		T = datetime.datetime.time(datetime.datetime.now())
 		if T >= schShut or T <= onTime:
+			print "sending data before sleep"
 			[previousTotal, T] = sendData(soc, host, port, station, masterCount, previousTotal)
 			# Check if needs to turn off
 			# Break if it does
 			if shutdownSwitch:
 				break
+			timeB = datetime.datetime.now()
 			schShut, soc, Counter, host, port, station = standbyRun(soc, Counter, scheduleFile, filePath)
+			timeA = datetime.datetime.now()
 			# get on standby funtion
 			# get new schShut
+			
+			# Restart masterCount
+			if timeA.day > timeB.day or timeA.month > timeB.month or timeA.year > timeB.year:
+				masterCount = 0
+				previousTotal = 0
 
    		if T.minute == 0 or T.minute == 15 or T.minute == 30 or T.minute == 45:
 			if T.second == sendingDelay:
@@ -164,7 +172,7 @@ def runClient(soc, Counter, tol_dist, sendingDelay, station, host, port, personD
 def sendData(soc, host, port, Station, masterCount, previousTotal):
 	# Creating message
 	previousTimeCount = masterCount - previousTotal
-	msg = Station + " {} {} ".format(previousTimeCount, masterCount)
+	msg = "Asia 15 20" #Station + " {} {} " .format(previousTimeCount, masterCount)
 	print "Sending: ", msg
 	# Send Data
 	while True:
@@ -494,26 +502,37 @@ def scheduleShutdown(file):
 def standbyRun(soc, Counter, scheduleFile, filePath):
 	# Check when it needs to turn on
 	print "getting on time"
-	onStart, OffStart = scheduleShutdown(scheduleFile) # On file
+	onStart, OffStart, STATUSdata = scheduleShutdown(scheduleFile) # On file
 	
 	#Close connection and GPIO
 	cleanup(soc, Counter, False)
 	
 	print "Waking up at: ", onStart
 	# Do the wait
-	T = datetime.datetime.time(datetime.datetime.now())
+	T = datetime.datetime.now()#(datetime.datetime.now())
+	timeON = datetime.datetime(T.year,T.month,T.day, onStart.hour, onStart.minute)
+	if T >= timeON:
+		try:
+			timeON = datetime.datetime(T.year, T.month, T.day+1, onStart.hour, onStart.minute)
+		except:
+			try:
+				timeON = datetime.datetime(T.year,T.month+1,1, onStart.hour, onStart.minute)
+			except:
+				timeON = datetime.datetime(T.year+1,1,1, onStart.hour, onStart.minute)
+
 	print "Current time is: ", T
-	while T >= onStart:
+	print "ontime: ", timeON
+	while T <= timeON:
 		time.sleep(60*15)
-		T = datetime.datetime.time(datetime.datetime.now())
+		T = datetime.datetime.now()
 
 	# check new time to turn off
 	print "getting off time"
-	offStart = scheduleShutdown(offFile) # Off file
+	#offStart = scheduleShutdown(offFile) # Off file
 
 	# initialize code again
 	[soc, Counter, tol_dist, delay, station, host, port, personDelay, shutdownSwitch] = init_client(filePath)
-	return [offStart, soc, Counter, host, port, shutdownSwitch] 
+	return [OffStart, soc, Counter, host, port, shutdownSwitch] 
 
 ##########################################################################################	
 ##################################### New Main ###########################################
