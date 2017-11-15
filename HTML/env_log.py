@@ -94,7 +94,7 @@ class client_thread(Thread):
 			
 	
 	def log_values(self, Header, currn, total):
-		#conn=sqlite3.connect('C:\User\cesar\Documents\Projects\PeopleTracker-C4C\HTML\mainDatabase.db')
+		#conn=sqlite3.connect('/home/pi/Documents/PeopleTracker-C4C/HTML/mainDatabase.db')
 		conn=sqlite3.connect('/var/www/html/PeopleTracker-C4C/HTML/mainDatabase.db')  #It is important to provide an
                 	                                             #absolute path to the database
                         	                                     #file, otherwise Cron won't be
@@ -151,7 +151,7 @@ def cleanup(serversocket):
 ####################################################
 print "Startin application"
 #hostIP = "10.202.18.51"
-hostIP = "10.0.0.227"
+hostIP = "10.202.18.51"
 port = 5003
 serversocket = init(hostIP, port)
 run(serversocket, hostIP, port)
