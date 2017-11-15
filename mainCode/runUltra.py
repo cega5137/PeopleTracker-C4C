@@ -129,7 +129,11 @@ def runClient(soc, Counter, tol_dist, sendingDelay, station, host, port, personD
 
    		if T.minute == 0 or T.minute == 15 or T.minute == 30 or T.minute == 45:
 			if T.second == sendingDelay:
-				[previousTotal, T] = sendData(soc, host, port, station, masterCount, previousTotal)
+				if lastSend.minute == T.minute and lastSend.second == T.second:
+					continue
+				else:
+					[previousTotal, T] = sendData(soc, host, port, station, masterCount, previousTotal)
+					lastSend = datetime.datetime.now()
 
 		print "Begining of Main Loop", T,
 		print "\nMaster Count = ", masterCount,
@@ -172,7 +176,12 @@ def runClient(soc, Counter, tol_dist, sendingDelay, station, host, port, personD
 def sendData(soc, host, port, Station, masterCount, previousTotal):
 	# Creating message
 	previousTimeCount = masterCount - previousTotal
-	msg = "Asia 15 20" #Station + " {} {} " .format(previousTimeCount, masterCount)
+	if previousTimeCount == 0:
+		previousTimeCount = "0"
+	if masterCount == 0:
+		masterCount = "0"
+	msg = Station + " {} {} " .format(previousTimeCount, masterCount)
+	masterCount = int(masterCount)
 	print "Sending: ", msg
 	# Send Data
 	while True:
