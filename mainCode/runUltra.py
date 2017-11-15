@@ -111,8 +111,8 @@ def runClient(soc, Counter, tol_dist, sendingDelay, station, host, port, personD
 		T = datetime.datetime.now() #time(datetime.datetime.now())
 		if T >= schShut:
 			# Check if needs to turn off
+			# Break if it does
 			if shutdownSwitch:
-			# break if it does
 				break
 			schShut, soc, Counter, host, port, station = standbyRun(soc, Counter, onFile, offFile, filePath)
 			# get on standby funtion
@@ -131,7 +131,6 @@ def runClient(soc, Counter, tol_dist, sendingDelay, station, host, port, personD
 
 		if distance > 400:
 			continue
-
 		
 		# print "isPerson:", isPerson, "tol_dist =", tol_dist
 		# No person previously standing in front of sensor
@@ -202,138 +201,294 @@ def shutdownRPi():
 
 def scheduleShutdown(file):
 	fid = open(file,"r")
-	data = fid.read()
-	datasplit = data.split()
+	data = fid.readlines()
+	fid.close()
+	#print data
+	
+	#datasplit = data.split()
 	T = datetime.datetime.time(datetime.datetime.today())
+	print "Current date: ", datetime.datetime.today()
 	dayWeek = datetime.datetime.today().weekday()
 	count = 1	
 
-	for i in xrange(len(datasplit)):
-		
-		with Switch(datasplit[i]) as case:
+	for i in xrange(len(data)):		
+		Data = data[i].split("\n")
+		with Switch(Data[0]) as case:
 			if case('Mon:') and dayWeek == 0:
-				try:
-					while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
-						count = count + 1
-
-					TodayDay = datetime.datetime.now()
-					timeOff = datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
-					timeRed = datetime.datetime(TodayDay.year, TodayDay.month, TodayDay.day, timeOff.hour, timeOff.minute)
-				except:
-					TodayDay = datetime.datetime.now()
-					timeOff = datetime.time(int(datasplit[i+count+1][0:2]), int(datasplit[i+count+1][3:5]))
+				while True:
+					if data[i+count] == "\n":
+						dayWeek = dayWeek + 1
+						T = datetime.time(0,0)
+						count = 1
+						break
 					try:
-						timeRed = datetime.datetime(TodayDay.year, TodayDay.month, TodayDay.day+1, timeOff.hour, timeOff.minute)
+						dataSplit = data[i+count].split("-")
 					except:
-						timeRed = datetime.datetime(TodayDay.year, TodayDay.month+1, 1, timeOff.hour, timeOff.minute)
-					#dayWeek = dayWeek + 1
-					break
+						dayWeek = dayWeek + 1
+						T = datetime.time(0,0)
+						count = 1
+						break
+					#print "Data split: ", dataSplit
+					dataOn = dataSplit[0].split(":")
+					dataOff = dataSplit[1].split(":")
+					dataOn = datetime.time(int(dataOn[0]) , int(dataOn[1]))
+					dataOff = datetime.time(int(dataOff[0]), int(dataOff[1]))
+					
+					# Check if the time is outside the range
+					# if it is outside move to the next line
+					if T > dataOff: 
+						# move to the next line
+						count = count + 1
+						continue
+					# if time is inside the range 
+					else:
+						# Check if dataOn is greater than time for status
+						if T > dataOn:
+							status = True
+						else:
+							status = False
+						# set timeON and timeOFF values for the line and break from the while loop
+						timeON = dataOn
+						timeOFF = dataOff
+						break
 
 			if case('Tue:') and dayWeek == 1:
-				try:
-					while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
-						count = count + 1
-					TodayDay = datetime.datetime.now()
-					timeOff = datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
-					timeRed = datetime.datetime(TodayDay.year, TodayDay.month, TodayDay.day, timeOff.hour, timeOff.minute)
-				except:
-					TodayDay = datetime.datetime.now()
-					timeOff = datetime.time(int(datasplit[i+count+1][0:2]), int(datasplit[i+count+1][3:5]))
+				#print "On Tuesday"
+				while True:
+					if data[i+count] == "\n":
+						dayWeek = dayWeek + 1
+						T = datetime.time(0,0)
+						count = 1
+						break
 					try:
-						timeRed = datetime.datetime(TodayDay.year, TodayDay.month, TodayDay.day+1, timeOff.hour, timeOff.minute)
+						dataSplit = data[i+count].split("-")
 					except:
-						timeRed = datetime.datetime(TodayDay.year, TodayDay.month+1, 1, timeOff.hour, timeOff.minute)
-					#dayWeek = dayWeek + 1
-					break
+						dayWeek = dayWeek + 1
+						T = datetime.time(0,0)
+						count = 1
+						break
+					#print "Data split: ", dataSplit
+					dataOn = dataSplit[0].split(":")
+					dataOff = dataSplit[1].split(":")
+					dataOn = datetime.time(int(dataOn[0]) , int(dataOn[1]))
+					dataOff = datetime.time(int(dataOff[0]), int(dataOff[1]))
+					
+					# Check if the time is outside the range
+					# if it is outside move to the next line
+					if T > dataOff: 
+						# move to the next line
+						count = count + 1
+						continue
+					# if time is inside the range 
+					else:
+						# Check if dataOn is greater than time for status
+						if T > dataOn:
+							status = True
+						else:
+							status = False
+						# set timeON and timeOFF values for the line and break from the while loop
+						timeON = dataOn
+						timeOFF = dataOff
+						break
 
 			if case('Wen:') and dayWeek == 2:
-				try:
-					while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
-						count = count + 1
-					TodayDay = datetime.datetime.now()
-					timeOff = datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
-					timeRed = datetime.datetime(TodayDay.year, TodayDay.month, TodayDay.day, timeOff.hour, timeOff.minute)
-				except:
-					TodayDay = datetime.datetime.now()
-					timeOff = datetime.time(int(datasplit[i+count+1][0:2]), int(datasplit[i+count+1][3:5]))
+				#print "On Wendsday"
+				while True:
+					if data[i+count] == "\n":
+						dayWeek = dayWeek + 1
+						T = datetime.time(0,0)
+						count = 1
+						break
 					try:
-						timeRed = datetime.datetime(TodayDay.year, TodayDay.month, TodayDay.day+1, timeOff.hour, timeOff.minute)
+						dataSplit = data[i+count].split("-")
 					except:
-						timeRed = datetime.datetime(TodayDay.year, TodayDay.month+1, 1, timeOff.hour, timeOff.minute)
-					#dayWeek = dayWeek + 1
-					break
+						dayWeek = dayWeek + 1
+						T = datetime.time(0,0)
+						count = 1
+						break
+					#print "Data split: ", dataSplit
+					dataOn = dataSplit[0].split(":")
+					dataOff = dataSplit[1].split(":")
+					dataOn = datetime.time(int(dataOn[0]) , int(dataOn[1]))
+					dataOff = datetime.time(int(dataOff[0]), int(dataOff[1]))
+					
+					# Check if the time is outside the range
+					# if it is outside move to the next line
+					if T > dataOff: 
+						# move to the next line
+						count = count + 1
+						continue
+					# if time is inside the range 
+					else:
+						# Check if dataOn is greater than time for status
+						if T > dataOn:
+							status = True
+						else:
+							status = False
+						# set timeON and timeOFF values for the line and break from the while loop
+						timeON = dataOn
+						timeOFF = dataOff
+						break
 
 			if case('Thu:' )and dayWeek == 3:
-				try:
-					while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
-						count = count + 1
-					TodayDay = datetime.datetime.now()
-					timeOff = datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
-					timeRed = datetime.datetime(TodayDay.year, TodayDay.month, TodayDay.day, timeOff.hour, timeOff.minute)
-				except:
-					TodayDay = datetime.datetime.now()
-					timeOff = datetime.time(int(datasplit[i+count+1][0:2]), int(datasplit[i+count+1][3:5]))
+				while True:
+					if data[i+count] == "\n":
+						dayWeek = dayWeek + 1
+						T = datetime.time(0,0)
+						count = 1
+						break
 					try:
-						timeRed = datetime.datetime(TodayDay.year, TodayDay.month, TodayDay.day+1, timeOff.hour, timeOff.minute)
+						dataSplit = data[i+count].split("-")
 					except:
-						timeRed = datetime.datetime(TodayDay.year, TodayDay.month+1, 1, timeOff.hour, timeOff.minute)
-					#dayWeek = dayWeek + 1
-					break
+						dayWeek = dayWeek + 1
+						T = datetime.time(0,0)
+						count = 1
+						break
+					#print "Data split: ", dataSplit
+					dataOn = dataSplit[0].split(":")
+					dataOff = dataSplit[1].split(":")
+					dataOn = datetime.time(int(dataOn[0]) , int(dataOn[1]))
+					dataOff = datetime.time(int(dataOff[0]), int(dataOff[1]))
+					
+					# Check if the time is outside the range
+					# if it is outside move to the next line
+					if T > dataOff: 
+						# move to the next line
+						count = count + 1
+						continue
+					# if time is inside the range 
+					else:
+						# Check if dataOn is greater than time for status
+						if T > dataOn:
+							status = True
+						else:
+							status = False
+						# set timeON and timeOFF values for the line and break from the while loop
+						timeON = dataOn
+						timeOFF = dataOff
+						break
 
 			if case('Fri:') and dayWeek == 4:
-				try:
-					while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
-						count = count + 1
-					TodayDay = datetime.datetime.now()
-					timeOff = datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
-					timeRed = datetime.datetime(TodayDay.year, TodayDay.month, TodayDay.day, timeOff.hour, timeOff.minute)
-				except:
-					TodayDay = datetime.datetime.now()
-					timeOff = datetime.time(int(datasplit[i+count+1][0:2]), int(datasplit[i+count+1][3:5]))
+				while True:
+					if data[i+count] == "\n":
+						dayWeek = dayWeek + 1
+						T = datetime.time(0,0)
+						count = 1
+						break
 					try:
-						timeRed = datetime.datetime(TodayDay.year, TodayDay.month, TodayDay.day+1, timeOff.hour, timeOff.minute)
+						dataSplit = data[i+count].split("-")
 					except:
-						timeRed = datetime.datetime(TodayDay.year, TodayDay.month+1, 1, timeOff.hour, timeOff.minute)
-					#dayWeek = dayWeek + 1
-					break
+						dayWeek = dayWeek + 1
+						T = datetime.time(0,0)
+						count = 1
+						break
+					#print "Data split: ", dataSplit
+					dataOn = dataSplit[0].split(":")
+					dataOff = dataSplit[1].split(":")
+					dataOn = datetime.time(int(dataOn[0]) , int(dataOn[1]))
+					dataOff = datetime.time(int(dataOff[0]), int(dataOff[1]))
+					
+					# Check if the time is outside the range
+					# if it is outside move to the next line
+					if T > dataOff: 
+						# move to the next line
+						count = count + 1
+						continue
+					# if time is inside the range 
+					else:
+						# Check if dataOn is greater than time for status
+						if T > dataOn:
+							status = True
+						else:
+							status = False
+						# set timeON and timeOFF values for the line and break from the while loop
+						timeON = dataOn
+						timeOFF = dataOff
+						break
 
 			if case('Sat:') and dayWeek == 5:
-				try:
-					while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
-						count = count + 1
-					TodayDay = datetime.datetime.now()
-					timeOff = datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
-					timeRed = datetime.datetime(TodayDay.year, TodayDay.month, TodayDay.day, timeOff.hour, timeOff.minute)
-				except:
-					TodayDay = datetime.datetime.now()
-					timeOff = datetime.time(int(datasplit[i+count+1][0:2]), int(datasplit[i+count+1][3:5]))
+				while True:
+					if data[i+count] == "\n":
+						dayWeek = dayWeek + 1
+						T = datetime.time(0,0)
+						count = 1
+						break
 					try:
-						timeRed = datetime.datetime(TodayDay.year, TodayDay.month, TodayDay.day+1, timeOff.hour, timeOff.minute)
+						dataSplit = data[i+count].split("-")
 					except:
-						timeRed = datetime.datetime(TodayDay.year, TodayDay.month+1, 1, timeOff.hour, timeOff.minute)
-					#dayWeek = dayWeek + 1
-					break
+						dayWeek = dayWeek + 1
+						T = datetime.time(0,0)
+						count = 1
+						break
+					#print "Data split: ", dataSplit
+					dataOn = dataSplit[0].split(":")
+					dataOff = dataSplit[1].split(":")
+					dataOn = datetime.time(int(dataOn[0]) , int(dataOn[1]))
+					dataOff = datetime.time(int(dataOff[0]), int(dataOff[1]))
+					
+					# Check if the time is outside the range
+					# if it is outside move to the next line
+					if T > dataOff: 
+						# move to the next line
+						count = count + 1
+						continue
+					# if time is inside the range 
+					else:
+						# Check if dataOn is greater than time for status
+						if T > dataOn:
+							status = True
+						else:
+							status = False
+						# set timeON and timeOFF values for the line and break from the while loop
+						timeON = dataOn
+						timeOFF = dataOff
+						break
 
 			if case('Sun:') and dayWeek == 6:
-				try:
-					while datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5])) < T:
-						count = count + 1
-					TodayDay = datetime.datetime.now()
-					timeOff = datetime.time(int(datasplit[i+count][0:2]),int(datasplit[i+count][3:5]))
-					timeRed = datetime.datetime(TodayDay.year, TodayDay.month, TodayDay.day, timeOff.hour, timeOff.minute)
-				except:
-					#timeRed = datasplit[i+count+1]
-					#dayWeek = 0
-					timeOff =  datetime.time(int(datasplit[2][0:2]),int(datasplit[2][3:5]))
-					TodayDay = datetime.datetime.now()
+				while True:
+					if data[i+count] == "\n":
+						dataSplit = data[2].split("-")
+						dataOn = dataSplit[0].split(":")
+						dataOff = dataSplit[1].split(":")
+						dataOn = datetime.time(int(dataOn[0]) , int(dataOn[1]))
+						dataOff = datetime.time(int(dataOff[0]), int(dataOff[1]))	
+						timeON = dataOn
+						timeOFF = dataOff
+						break
+
 					try:
-						timeRed = datetime.datetime(TodayDay.year, TodayDay.month, TodayDay.day+1, timeOff.hour, timeOff.minute)
+						dataSplit = data[i+count].split("-")
 					except:
-						timeRed = datetime.datetime(TodayDay.year, TodayDay.month+1, 1, timeOff.hour, timeOff.minute)
+						dayWeek = dayWeek + 1
+						T = datetime.time(0,0)
+						count = 1
+						break
+					#print "Data split: ", dataSplit
+					dataOn = dataSplit[0].split(":")
+					dataOff = dataSplit[1].split(":")
+					dataOn = datetime.time(int(dataOn[0]) , int(dataOn[1]))
+					dataOff = datetime.time(int(dataOff[0]), int(dataOff[1]))
+					
+					# Check if the time is outside the range
+					# if it is outside move to the next line
+					if T > dataOff: 
+						# move to the next line
+						count = count + 1
+						continue
+					# if time is inside the range 
+					else:
+						# No need to check if dataOn is greater than time
+						if T > dataOn:
+							status = True
+						else:
+							status = False
+							
+						# set timeON and timeOFF values for the line and break from the while loop
+						timeON = dataOn
+						timeOFF = dataOff
+						break
 
-	TodayDay = datetime.datetime.now()
-	return timeRed
-
+	return timeON, timeOFF, status
 
 def standbyRun(soc, Counter, onFile, offFile, filePath):
 	# Check when it needs to turn on
