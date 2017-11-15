@@ -103,6 +103,7 @@ def runClient(soc, Counter, tol_dist, sendingDelay, station, host, port, personD
 	#Schedule shutdown
 	print "Getting shutdown time"
 	[onTime, schShut, statusDATA] = scheduleShutdown(scheduleFile) 
+	lastSend = datetime.datetime.now()
 	print "Turn off at: ", schShut	
 
 	#Main Loop
