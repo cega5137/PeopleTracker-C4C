@@ -129,7 +129,11 @@ def runClient(soc, Counter, tol_dist, sendingDelay, station, host, port, personD
 
    		if T.minute == 0 or T.minute == 15 or T.minute == 30 or T.minute == 45:
 			if T.second == sendingDelay:
-				[previousTotal, T] = sendData(soc, host, port, station, masterCount, previousTotal)
+				if lastSend.minute == T.minute and lastSend.second == T.second:
+					continue
+				else:
+					[previousTotal, T] = sendData(soc, host, port, station, masterCount, previousTotal)
+					lastSend = datetime.datetime.now()
 
 		print "Begining of Main Loop", T,
 		print "\nMaster Count = ", masterCount,
