@@ -176,7 +176,12 @@ def runClient(soc, Counter, tol_dist, sendingDelay, station, host, port, personD
 def sendData(soc, host, port, Station, masterCount, previousTotal):
 	# Creating message
 	previousTimeCount = masterCount - previousTotal
+	if previousTimeCount == 0:
+		previousTimeCount = "0"
+	if masterCount == 0:
+		masterCount = "0"
 	msg = Station + " {} {} " .format(previousTimeCount, masterCount)
+	masterCount = int(masterCount)
 	print "Sending: ", msg
 	# Send Data
 	while True:
