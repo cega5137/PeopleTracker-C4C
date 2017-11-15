@@ -116,9 +116,16 @@ def runClient(soc, Counter, tol_dist, sendingDelay, station, host, port, personD
 			# Break if it does
 			if shutdownSwitch:
 				break
+			timeB = datetime.datetime.now()
 			schShut, soc, Counter, host, port, station = standbyRun(soc, Counter, scheduleFile, filePath)
+			timeA = datetime.datetime.now()
 			# get on standby funtion
 			# get new schShut
+			
+			# Restart masterCount
+			if timeA.day > timeB.day or timeA.month > timeB.month or timeA.year > timeB.year:
+				masterCount = 0
+				previousTotal = 0
 
    		if T.minute == 0 or T.minute == 15 or T.minute == 30 or T.minute == 45:
 			if T.second == sendingDelay:
