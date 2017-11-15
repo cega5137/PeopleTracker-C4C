@@ -102,14 +102,14 @@ def runClient(soc, Counter, tol_dist, sendingDelay, station, host, port, personD
 	
 	#Schedule shutdown
 	print "Getting shutdown time"
-	schShut = scheduleShutdown(offFile) 
+	onTime, schShut = scheduleShutdown(offFile) 
 	print "Turn off at: ", schShut	
 
 	#Main Loop
 	while True:
         # Take Measurment
-		T = datetime.datetime.now() #time(datetime.datetime.now())
-		if T >= schShut:
+		T = datetime.datetime.time(datetime.datetime.now())
+		if T >= schShut or T <= onTime:
 			# Check if needs to turn off
 			# Break if it does
 			if shutdownSwitch:
@@ -125,7 +125,7 @@ def runClient(soc, Counter, tol_dist, sendingDelay, station, host, port, personD
 		print "Begining of Main Loop", T,
 		print "\nMaster Count = ", masterCount,
 		print "\nCurrent Count = ", (masterCount - previousTotal),
-    		distance = Counter.getDistance()
+		distance = Counter.getDistance()
 		#Commenting line
 		print "\nDistance:",distance,"cm"
 
