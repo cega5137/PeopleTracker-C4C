@@ -46,6 +46,10 @@ import datetime
 import time
 import numpy as np
 #import Adafruit_DHT
+from random import randint
+#from socket import *
+#import time
+#import datetime
 
 
 def log_values(Header, currn, total):
@@ -82,31 +86,87 @@ def addingTest():
 	La = random.randint(1,100)
 	log_values("Latin", La, La)
 
+def createDatabase():
+	conn=sqlite3.connect("C:/User/cesar/Documents/Projects/testDatabase.db")
+	
+	curs=conn.cursor()
+	curs.execute('''CREATE TABLE Persian (date text, curr, Total)''')
+	curs.execute('''CREATE TABLE Asian (date text, currn, Total)''')
+	curs.execute('''CREATE TABLE American (date text, currn, Total)''')
+	curs.execute('''CREATE TABLE Latin (date text, currn, Total)''' )
+	curs.execute('''CREATE TABLE Italian (date text, currn, Total)''' )
 
-def getDay(station):
-	conn = sqlite3.connect("/var/www/html/PeopleTracker-C4C/HTML/mainDatabase.db")
+	conn.commit()
+	conn.close()
+
+def sampleData(station, fromDate, toDate):
+	conn = sqlite3.connect("C:/User/cesar/Documents/Projects/testDatabase.db")
+	curs = conn.cursor()
+
+	minutes = [00, 15, 30, 45]
+	hours = [7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+	dateCurrent = fromDate
+	Data = []
+
+	while dateCurrent < toDate:
+		for timeHour in hours:
+			for timeMinute in minutes:
+				if timeHour == 20 and timeMinute != 0:
+					continue
+				log_date = datetime.datetime(dateCurrent.year, dateCurrent.month, dateCurrent.day, timeHour, timeMinute)
+				print log_date
+				Data.append([log_date, randint(0,100), randint(0,500)])
+		try: 
+			dateCurrent = datetime.datetime(dateCurrent.year, dateCurrent.month, dateCurrent.day+1)
+		except:
+			try:
+				dateCurrent = datetime.datetime(dateCurrent.year, dateCurrent.month+1, 1)
+			except:
+					dateCurrent = datetime.datetime(dateCurrent.year+1, 1, 1)
+
+	with Switch(Station) as case:
+		if case('Asian'):
+			curs = exceutemany('INSERT INTO Asian VALUES (?,?,?)', Data)
+		
+		if case('American'):
+			curs = exceutemany('INSERT INTO American VALUES (?,?,?)', Data)
+			
+		if case('Persian'):
+			curs = exceutemany('INSERT INTO Persian VALUES (?,?,?)', Data)
+
+		if case('Italian'):
+			curs = exceutemany('INSERT INTO Italian VALUES (?,?,?)', Data)
+
+		if case('Latin'):
+			curs = exceutemany('INSERT INTO Latin VALUES (?,?,?)', Data)
+
+	conn.commit()
+	conn.close()	
+
+def getDay(station, fromDate, toDate):
+	conn = sqlite3.connect("C:/User/cesar/Documents/Projects/testDatabase.db")
 	curs = conn.cursor()
 
 	with Switch(Station) as case:
 		if case('Asian'):
-			#curs.execute("SELECT * FROM Asian WHERE date BETWEEN ? AND ?", (from_date_utc.format('YYYY-MM-DD HH:mm'), to_date_utc.format('YYYY-MM-DD HH:mm')))
-			curs.execute("SELECT * FROM Asian")
+			curs.execute("SELECT * FROM Asian WHERE date BETWEEN ? AND ?", (fromDate.format('YYYY-MM-DD HH:mm'), toDate.format('YYYY-MM-DD HH:mm')))
+			#curs.execute("SELECT * FROM Asian")
 			data = curs.fetchall()
 		if case('American'):
-			#curs.execute("SELECT * FROM American WHERE date BETWEEN ? AND ?", (from_date_utc.format('YYYY-MM-DD HH:mm'), to_date_utc.format('YYYY-MM-DD HH:mm')))
-			curs.execute("SELECT * FROM American")
+			curs.execute("SELECT * FROM American WHERE date BETWEEN ? AND ?", (fromDate.format('YYYY-MM-DD HH:mm'), toDate.format('YYYY-MM-DD HH:mm')))
+			#curs.execute("SELECT * FROM American")
 			data = curs.fetchall()
 		if case('Persian'):
-			#curs.execute("SELECT * FROM Persian WHERE date BETWEEN ? AND ?", (from_date_utc.format('YYYY-MM-DD HH:mm'), to_date_utc.format('YYYY-MM-DD HH:mm')))
-			curs.execute("SELECT * FROM Persian")
+			curs.execute("SELECT * FROM Persian WHERE date BETWEEN ? AND ?", (fromDate.format('YYYY-MM-DD HH:mm'), toDate.format('YYYY-MM-DD HH:mm')))
+			#curs.execute("SELECT * FROM Persian")
 			data = curs.fetchall()
 		if case('Italian'):
-			#curs.execute("SELECT * FROM Italian WHERE date BETWEEN ? AND ?", (from_date_utc.format('YYYY-MM-DD HH:mm'), to_date_utc.format('YYYY-MM-DD HH:mm')))
-			curs.execute("SELECT * FROM Italian"),
+			curs.execute("SELECT * FROM Italian WHERE date BETWEEN ? AND ?", (fromDate.format('YYYY-MM-DD HH:mm'), toDate.format('YYYY-MM-DD HH:mm')))
+			#curs.execute("SELECT * FROM Italian"),
 			data = curs.fetchall()
 		if case('Latin'):
-			#curs.execute("SELECT * FROM Latin WHERE date BETWEEN ? AND ?", (from_date_utc.format('YYYY-MM-DD HH:mm'), to_date_utc.format('YYYY-MM-DD HH:mm')))
-			curs.execute("SELECT * FROM Latin")
+			curs.execute("SELECT * FROM Latin WHERE date BETWEEN ? AND ?", (fromDate.format('YYYY-MM-DD HH:mm'), toDate.format('YYYY-MM-DD HH:mm')))
+			#curs.execute("SELECT * FROM Latin")
 			data = curs.fetchall()
 
 	#print "Data: ", data[0][0]
@@ -161,42 +221,45 @@ def getTimeDate(Data):
 		if case('9'):
 			return 9
 		if case('10'):
-                        return 10
-                if case('11'):
-                        return 11
-                if case('12'):
-                        return 12
+			return 10
+		if case('11'):
+			return 11
+		if case('12'):
+			return 12
 		if case('13'):
-                        return 13
-                if case('14'):
-                        return 14
-                if case('15'):
-                        return 15
-                if case('16'):
-                        return 16
-                if case('17'):
-                        return 17
-                if case('18'):
-                        return 18
+			return 13
+		if case('14'):
+			return 14
+		if case('15'):
+			return 15
+		if case('16'):
+			return 16
+		if case('17'):
+			return 17
+		if case('18'):
+			return 18
 		if case('19'):
-                        return 19
-                if case('20'):
-                        return 20
+			return 19
+		if case('20'):
+			return 20
 
 
 
 
+if __name__ == '__main__':
+	print "Startin application"
+	createDatabase()
+	#American = getDay('American')
+	#Asian =  getDay('Asian')
+	#Latin = getDay('Latin')
+	#Persian = getDay('Persian')
+	#Italian = getDay('Italian')
+	startDate = datetime.datetime(2017,9,01,00,00)
+	endDate = datetime.datetime(2017,12,01,20,00)
+	sampleData('American',startDate, endDate)
+	sampleData('Asian',startDate, endDate)
+	sampleData('Latin',startDate, endDate)
+	sampleData('Persian',startDate, endDate)
+	sampleData('Italian',startDate, endDate)
 
-import random
-#from socket import *
-import time
-import datetime
-
-print "Startin application"
-American = getDay('American')
-Asian =  getDay('Asian')
-Latin = getDay('Latin')
-Persian = getDay('Persian')
-Italian = getDay('Italian')
-
-print "End application"
+	print "End application"
